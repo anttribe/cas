@@ -5,7 +5,9 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<!-- 内容抓取任务 org.anttribe.cas.cis.runtime.jobs.ContentCrawlJob -->
-	<bean id="contentCrawlJob" class="org.anttribe.cas.cis.runtime.jobs.ContentCrawlJob"></bean>
+	<bean id="contentCrawlJob" class="org.anttribe.cas.cis.runtime.jobs.ContentCrawlJob">
+	    <property name="threadNum" value="${crawl.threadNum}" />
+	</bean>
 
 	<bean id="jobDetail"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -16,7 +18,7 @@
 	<bean id="cronTrigger"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="jobDetail" />
-		<property name="cronExpression" value="0 */10 * * * ?" />
+		<property name="cronExpression" value="${crawl.job.cron}" />
 	</bean>
 
 	<bean id="schedulerFactory"

@@ -7,10 +7,20 @@
  */
 package org.anttribe.cas.base.application;
 
+import java.util.List;
+
+import org.anttribe.cas.base.core.entity.Website;
+
 /**
  * @author zhaoyong
  * @version 2015年7月22日
  */
 public interface WebsiteApplication
 {
+    /**
+     * 列表所有可用的站点
+     * 
+     * @return
+     */
+    List<Website> listAvailableWebsites();
 }

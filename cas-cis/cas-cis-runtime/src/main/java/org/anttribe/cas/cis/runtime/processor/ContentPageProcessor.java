@@ -10,6 +10,7 @@ package org.anttribe.cas.cis.runtime.processor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anttribe.cas.base.application.ContentAttrXPathApplication;
 import org.anttribe.cas.base.core.entity.ContentAttrXPath;
 import org.anttribe.cas.base.core.entity.Website;
 import org.apache.commons.collections.CollectionUtils;
@@ -32,6 +33,11 @@ public class ContentPageProcessor implements PageProcessor
      * logger
      */
     private static Logger logger = LoggerFactory.getLogger(ContentPageProcessor.class);
+    
+    /**
+     * contentAttrXPathApplication
+     */
+    private ContentAttrXPathApplication contentAttrXPathApplication;
     
     /**
      * web网站实体对象
@@ -58,7 +64,7 @@ public class ContentPageProcessor implements PageProcessor
                 "Creating new ContentPageProcessor, website is null or the domain is empty.");
         }
         this.website = website;
-        this.contentAttrXPath = null;
+        this.contentAttrXPath = contentAttrXPathApplication.getContentAttrXPathByWebsite(website);
     }
     
     @Override

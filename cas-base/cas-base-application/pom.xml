@@ -16,5 +16,10 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.anttribe.cas</groupId>
+			<artifactId>cas-base-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

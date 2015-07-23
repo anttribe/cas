@@ -61,8 +61,7 @@ public class ContentCrawlJob
         {
             for (Website website : websites)
             {
-                ContentPageProcessor pageProcessor = new ContentPageProcessor(website);
-                Spider.create(pageProcessor)
+                Spider.create(new ContentPageProcessor(website))
                     .addUrl(website.getDomain())
                     .addPipeline(new ContentPersistentPipeline())
                     .thread(this.getThreadNum())

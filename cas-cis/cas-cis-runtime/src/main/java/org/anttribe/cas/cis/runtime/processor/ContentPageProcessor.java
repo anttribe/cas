@@ -17,6 +17,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -37,6 +38,7 @@ public class ContentPageProcessor implements PageProcessor
     /**
      * contentAttrXPathApplication
      */
+    @Autowired
     private ContentAttrXPathApplication contentAttrXPathApplication;
     
     /**
@@ -81,6 +83,14 @@ public class ContentPageProcessor implements PageProcessor
                 page.setSkip(true);
                 return;
             }
+            
+            page.putField("title", title);
+            page.putField("content", page.getHtml().xpath(contentAttrXPath.getContentXpath()).toString());
+            page.putField("thumbnail", page.getHtml().xpath(contentAttrXPath.getThumbnailXpath()).toString());
+            page.putField("publishTime", page.getHtml().xpath(contentAttrXPath.getPublishTimeXpath()).toString());
+            page.putField("author", page.getHtml().xpath(contentAttrXPath.getAuthorXpath()).toString());
+            page.putField("link", link);
+            page.putField("site", this.website);
         }
     }
     
@@ -92,7 +102,7 @@ public class ContentPageProcessor implements PageProcessor
     private void processTargetRequests(Page page)
     {
         List<String> acceptLinks = new ArrayList<String>();
-        // 页面上所有链接
+        // 页面上所有内容链接
         List<String> links =
             page.getHtml()
                 .xpath(this.contentAttrXPath.getContentsXpath())
@@ -103,12 +113,13 @@ public class ContentPageProcessor implements PageProcessor
         {
             for (String link : links)
             {
+                // 排除重复的链接
                 acceptLinks.add(link);
             }
         }
         
-        logger.debug("Target request urls: " + acceptLinks);
         
+        logger.debug("Adding target request urls to fetch: " + acceptLinks);
         if (!CollectionUtils.isEmpty(acceptLinks))
         {
             page.addTargetRequests(acceptLinks);

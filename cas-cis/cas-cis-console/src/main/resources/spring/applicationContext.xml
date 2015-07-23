@@ -14,6 +14,12 @@
 		<property name="properties" ref="application" />
 	</bean>
 
+	<!-- Autowired注解处理 -->
+	<bean
+		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+
 	<!-- import other layer definitions -->
 	<import resource="applicationContext-quatz.xml" />
+	<import resource="applicationContext-datasource.xml" />
+	<import resource="applicationContext-application.xml" />
 </beans>

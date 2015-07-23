@@ -7,11 +7,13 @@
  */
 package org.anttribe.cas.base.core.entity;
 
+import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+
 /**
  * @author zhaoyong
  * @version 2015年7月22日
  */
-public class ContentAttrXPath
+public class ContentAttrXPath extends MybatisAbstractEntity
 {
     /**
      * 编号
@@ -21,7 +23,7 @@ public class ContentAttrXPath
     /**
      * 所属站点
      */
-    public String siteId;
+    public Website website;
     
     /**
      * 内容列表
@@ -78,14 +80,14 @@ public class ContentAttrXPath
         this.id = id;
     }
     
-    public String getSiteId()
+    public Website getWebsite()
     {
-        return siteId;
+        return website;
     }
     
-    public void setSiteId(String siteId)
+    public void setWebsite(Website website)
     {
-        this.siteId = siteId;
+        this.website = website;
     }
     
     public String getContentsXpath()

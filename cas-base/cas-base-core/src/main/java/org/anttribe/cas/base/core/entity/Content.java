@@ -7,7 +7,6 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import java.sql.Clob;
 import java.sql.Timestamp;
 
 import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
@@ -51,7 +50,7 @@ public class Content extends MybatisAbstractEntity
     /**
      * 内容
      */
-    private Clob content;
+    private String content;
     
     /**
      * 发布时间
@@ -128,12 +127,12 @@ public class Content extends MybatisAbstractEntity
         this.author = author;
     }
     
-    public Clob getContent()
+    public String getContent()
     {
         return content;
     }
     
-    public void setContent(Clob content)
+    public void setContent(String content)
     {
         this.content = content;
     }

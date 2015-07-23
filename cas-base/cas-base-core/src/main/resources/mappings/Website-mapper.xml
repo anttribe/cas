@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.entity.Website">
+	<resultMap id="Website-resultMap" type="org.anttribe.cas.base.core.entity.Website">
+		<result property="siteId" column="siteId" />
+		<result property="siteName" column="siteName" />
+		<result property="domain" column="domain" />
+		<result property="logo" column="logo" />
+		<result property="charset" column="charset" />
+		<result property="userAgent" column="userAgent" />
+		<result property="intervalTime" column="intervalTime" />
+		<result property="retryTimes" column="retryTimes" />
+		<result property="timeout" column="timeout" />
+	</resultMap>
+
+	<!-- queryAll: 查询所有站点数据 -->
+	<select id="queryAll" resultMap="Website-resultMap">
+		<![CDATA[
+		SELECT siteId, siteName, domain, logo, charset, userAgent, intervalTime, retryTimes, timeout
+		    FROM t_cas_website t
+		]]>
+	</select>
+
+	<!-- queryByCriteria: 根据条件查询数据 -->
+	<select id="queryByCriteria" resultMap="Website-resultMap"
+		parameterType="map">
+		<![CDATA[
+		SELECT siteId, siteName, domain, logo, charset, userAgent, intervalTime, retryTimes, timeout
+		    FROM t_cas_website t
+		]]>
+	</select>
+</mapper>

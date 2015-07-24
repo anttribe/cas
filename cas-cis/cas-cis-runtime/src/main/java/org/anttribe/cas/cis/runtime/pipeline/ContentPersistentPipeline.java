@@ -7,6 +7,19 @@
  */
 package org.anttribe.cas.cis.runtime.pipeline;
 
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.anttribe.cas.base.core.entity.Content;
+import org.anttribe.cas.base.core.entity.ContentType;
+import org.anttribe.cas.cis.runtime.constants.Constants;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
@@ -19,9 +32,82 @@ import us.codecraft.webmagic.pipeline.Pipeline;
  */
 public class ContentPersistentPipeline implements Pipeline
 {
+    /**
+     * logger
+     */
+    private static Logger logger = LoggerFactory.getLogger(ContentPersistentPipeline.class);
+    
+    /**
+     * html标签正则对象
+     */
+    private static final Pattern HTML_TAG_PATTERN = Pattern.compile(Constants.REGEX_HTML_TAG, Pattern.CASE_INSENSITIVE);
     
     @Override
-    public void process(ResultItems resultItems, Task task)
+    synchronized public void process(ResultItems resultItems, Task task)
     {
+        logger.debug("ContentPersistentPipeline processing resultItems to content, and persist content to DB.");
+        
+        Map<String, Object> attrs = resultItems.getAll();
+        if (!MapUtils.isEmpty(attrs))
+        {
+            Content content = new Content();
+            try
+            {
+                BeanUtils.populate(content, attrs);
+                // 构造摘要信息
+                this.populateBrief(content);
+                
+                // 保存数据到数据库
+                content.save();
+            }
+            catch (Exception e)
+            {
+                logger.error("ContentPersistentPipeline processing resultItems to content get error, cause: ", e);
+            }
+        }
+    }
+    
+    /**
+     * 构造brief字段的值
+     * 
+     * @param content Content
+     */
+    private void populateBrief(Content content)
+    {
+        if (ContentType.Article == content.getContentType())
+        {
+            // 得到内容
+            String contentBody = content.getContent();
+            if (!StringUtils.isEmpty(contentBody))
+            {
+                // 根据内容，截取默认第一段的内容(第一个<p>包含的内容)或者固定长度内容
+                content.setBrief(populateBrief(contentBody));
+            }
+        }
+    }
+    
+    /**
+     * 根据内容主体获取对应的摘要内容
+     * 
+     * @param contentBody String
+     * @return String
+     */
+    private String populateBrief(String contentBody)
+    {
+        String brief = "";
+        int lengthIndex = Constants.DEFAULT_BRIEF_LENGTH;
+        if (-1 != contentBody.indexOf("</p>"))
+        {
+            lengthIndex = contentBody.indexOf("</p>");
+        }
+        brief = contentBody.substring(0, lengthIndex);
+        // 去除html标签元素
+        Matcher htmlMatcher = HTML_TAG_PATTERN.matcher(brief);
+        brief = htmlMatcher.replaceAll("");
+        if (StringUtils.isEmpty(brief))
+        {
+            brief = populateBrief(contentBody.substring(lengthIndex));
+        }
+        return brief;
     }
 }

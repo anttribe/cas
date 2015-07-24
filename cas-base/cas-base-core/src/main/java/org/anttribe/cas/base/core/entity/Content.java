@@ -7,8 +7,6 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import java.sql.Timestamp;
-
 import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
 
 /**
@@ -55,7 +53,7 @@ public class Content extends MybatisAbstractEntity
     /**
      * 发布时间
      */
-    private Timestamp publishTime;
+    private String publishTime;
     
     /**
      * 原链接
@@ -65,7 +63,7 @@ public class Content extends MybatisAbstractEntity
     /**
      * 所属站点
      */
-    private Website site;
+    private Website website;
     
     public String getContentId()
     {
@@ -137,16 +135,16 @@ public class Content extends MybatisAbstractEntity
         this.content = content;
     }
     
-    public Timestamp getPublishTime()
+    public String getPublishTime()
     {
         return publishTime;
     }
-    
-    public void setPublishTime(Timestamp publishTime)
+
+    public void setPublishTime(String publishTime)
     {
         this.publishTime = publishTime;
     }
-    
+
     public String getLink()
     {
         return link;
@@ -157,13 +155,13 @@ public class Content extends MybatisAbstractEntity
         this.link = link;
     }
     
-    public Website getSite()
+    public Website getWebsite()
     {
-        return site;
+        return website;
     }
     
-    public void setSite(Website site)
+    public void setWebsite(Website website)
     {
-        this.site = site;
+        this.website = website;
     }
 }

@@ -25,6 +25,8 @@
 		<jstl.version>1.2</jstl.version>
 		<mysql.version>5.1.22</mysql.version>
 		<spring.version>4.1.4.RELEASE</spring.version>
+		<spring.data.redis.version>1.5.1.RELEASE</spring.data.redis.version>
+		<redis.version>2.7.3</redis.version>
 		<mybatis.version>3.2.7</mybatis.version>
 		<mybatis-spring.version>1.2.2</mybatis-spring.version>
 		<ehcache.version>2.9.0</ehcache.version>
@@ -50,6 +52,11 @@
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
 				<version>1.9</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.8.3</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-dbcp</groupId>
@@ -120,6 +127,16 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-tx</artifactId>
 				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-redis</artifactId>
+				<version>${spring.data.redis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				<version>${redis.version}</version>
 			</dependency>
 
 			<dependency>

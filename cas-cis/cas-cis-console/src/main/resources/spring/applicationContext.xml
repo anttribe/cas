@@ -21,5 +21,6 @@
 	<!-- import other layer definitions -->
 	<import resource="applicationContext-quatz.xml" />
 	<import resource="applicationContext-datasource.xml" />
+	<import resource="applicationContext-redis.xml" />
 	<import resource="applicationContext-application.xml" />
 </beans>

@@ -13,11 +13,15 @@ import java.util.List;
 import org.anttribe.cas.base.application.ContentAttrXPathApplication;
 import org.anttribe.cas.base.core.entity.ContentAttrXPath;
 import org.anttribe.cas.base.core.entity.Website;
+import org.anttribe.cas.cis.runtime.constants.Constants;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.dayatang.domain.InstanceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -36,10 +40,18 @@ public class ContentPageProcessor implements PageProcessor
     private static Logger logger = LoggerFactory.getLogger(ContentPageProcessor.class);
     
     /**
+     * redisTemplate
+     */
+    @Autowired
+    @SuppressWarnings("unchecked")
+    private RedisTemplate<String, Object> redisTemplate = InstanceFactory.getInstance(RedisTemplate.class);;
+    
+    /**
      * contentAttrXPathApplication
      */
     @Autowired
-    private ContentAttrXPathApplication contentAttrXPathApplication;
+    private ContentAttrXPathApplication contentAttrXPathApplication =
+        InstanceFactory.getInstance(ContentAttrXPathApplication.class);
     
     /**
      * web网站实体对象
@@ -54,7 +66,7 @@ public class ContentPageProcessor implements PageProcessor
     /**
      * <默认构造器>
      * 
-     * @param website
+     * @param website Website
      */
     public ContentPageProcessor(Website website)
     {
@@ -111,13 +123,18 @@ public class ContentPageProcessor implements PageProcessor
                 .all();
         if (!CollectionUtils.isEmpty(links))
         {
+            SetOperations<String, Object> set = redisTemplate.opsForSet();
             for (String link : links)
             {
                 // 排除重复的链接
+                if (set.isMember(Constants.REDIS_KEY_CRAWL_TARGET_URLS, link))
+                {
+                    continue;
+                }
                 acceptLinks.add(link);
             }
+            set.add(Constants.REDIS_KEY_CRAWL_TARGET_URLS, acceptLinks);
         }
-        
         
         logger.debug("Adding target request urls to fetch: " + acceptLinks);
         if (!CollectionUtils.isEmpty(acceptLinks))

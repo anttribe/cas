@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.entity.Content">
+	<cache readOnly="true" />
+	<resultMap id="Content-resultMap" type="org.anttribe.cas.base.core.entity.Content">
+		<result property="contentId" column="contentId" />
+		<result property="contentType" column="contentType"
+			javaType="org.anttribe.cas.base.core.entity.ContentType" />
+		<result property="title" column="title" />
+		<result property="brief" column="brief" />
+		<result property="thumbnail" column="thumbnail" />
+		<result property="author" column="author" />
+		<result property="content" column="content" />
+		<result property="publishTime" column="publishTime" />
+		<result property="link" column="link" />
+		<association property="website" column="{siteId = website}"
+			javaType="org.anttribe.cas.base.core.entity.Website" select="org.anttribe.cas.base.core.entity.Website.queryById" />
+	</resultMap>
+
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Content">
+		<selectKey keyProperty="contentId" resultType="string" order="AFTER"></selectKey>
+		<![CDATA[
+		insert into t_cas_content(title, author, publishTime, thumbnail, brief, content, website, link, contentType)
+		    values(#{title}, #{author}, #{publishTime}, #{thumbnail}, #{brief}, #{content}, #{website.siteId}, #{link}, #{contentType})
+		]]>
+	</insert>
+
+	<!-- queryAll: 查询所有内容数据 -->
+	<select id="queryAll" resultMap="Content-resultMap">
+		<![CDATA[
+		SELECT contentId, title, author, publishTime, tags, thumbnail, brief, content, topic, website, link, contentType
+		    FROM t_cas_content t
+		]]>
+	</select>
+
+	<!-- queryById: 根据id查询单条数据 -->
+	<select id="queryById" resultMap="Content-resultMap">
+		<![CDATA[
+		SELECT contentId, title, author, publishTime, tags, thumbnail, brief, content, topic, website, link, contentType
+		    FROM t_cas_content t
+		    where t.contentId = #{contentId}
+		]]>
+	</select>
+
+	<!-- queryByCriteria: 根据条件查询数据 -->
+	<select id="queryByCriteria" resultMap="Content-resultMap"
+		parameterType="map">
+		<![CDATA[
+		SELECT contentId, title, author, publishTime, tags, thumbnail, brief, content, topic, website, link, contentType
+		    FROM t_cas_content t
+		    where t.contentId = #{contentId}
+		]]>
+	</select>
+</mapper>

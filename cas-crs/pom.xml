@@ -6,15 +6,33 @@
 	<parent>
 		<groupId>org.anttribe.cas</groupId>
 		<artifactId>cas</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${project.version}</version>
 	</parent>
 	<artifactId>cas-crs</artifactId>
 	<name>cas-crs</name>
+	<packaging>pom</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<dependencies>
-	</dependencies>
+	<modules>
+		<module>cas-crs-facade</module>
+		<module>cas-crs-web</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-application</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

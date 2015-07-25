@@ -14,4 +14,6 @@
 		cache-period="3600" />
 	<mvc:resources mapping="/themes/**" location="/themes/"
 		cache-period="3600" />
+	<mvc:resources mapping="/static/**" location="/static/"
+		cache-period="3600" />
 </beans> 

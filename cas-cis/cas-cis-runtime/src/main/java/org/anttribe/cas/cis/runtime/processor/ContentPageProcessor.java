@@ -90,11 +90,17 @@ public class ContentPageProcessor implements PageProcessor
             
             String link = page.getUrl().toString();
             String title = page.getHtml().xpath(contentAttrXPath.getTitleXpath()).toString();
-            if (StringUtils.isEmpty(title))
+            String redis_title = title + "_" + website.getContentType();
+            // 如果标题不存在，或者在redis中已经存在相同的标题名，则不处理
+            if (StringUtils.isEmpty(title)
+                || redisTemplate.opsForSet().isMember(Constants.REDIS_KEY_CRAWL_CONTENT_TITLES, redis_title))
             {
                 page.setSkip(true);
                 return;
             }
+            
+            // 将内容title放入redis数据中
+            redisTemplate.opsForSet().add(Constants.REDIS_KEY_CRAWL_CONTENT_TITLES, redis_title);
             
             page.putField("title", title);
             page.putField("content", page.getHtml().xpath(contentAttrXPath.getContentXpath()).toString());
@@ -102,7 +108,7 @@ public class ContentPageProcessor implements PageProcessor
             page.putField("publishTime", page.getHtml().xpath(contentAttrXPath.getPublishTimeXpath()).toString());
             page.putField("author", page.getHtml().xpath(contentAttrXPath.getAuthorXpath()).toString());
             page.putField("link", link);
-            page.putField("site", this.website);
+            page.putField("website", this.website);
         }
     }
     
@@ -132,8 +138,9 @@ public class ContentPageProcessor implements PageProcessor
                     continue;
                 }
                 acceptLinks.add(link);
+                
+                set.add(Constants.REDIS_KEY_CRAWL_TARGET_URLS, link);
             }
-            set.add(Constants.REDIS_KEY_CRAWL_TARGET_URLS, acceptLinks);
         }
         
         logger.debug("Adding target request urls to fetch: " + acceptLinks);

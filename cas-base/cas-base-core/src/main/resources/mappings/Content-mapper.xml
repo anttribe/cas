@@ -19,10 +19,9 @@
 
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Content">
-		<selectKey keyProperty="contentId" resultType="string" order="AFTER"></selectKey>
 		<![CDATA[
-		insert into t_cas_content(title, author, publishTime, thumbnail, brief, content, website, link, contentType)
-		    values(#{title}, #{author}, #{publishTime}, #{thumbnail}, #{brief}, #{content}, #{website.siteId}, #{link}, #{contentType})
+		insert into t_cas_content(contentId, title, author, publishTime, thumbnail, brief, content, website, link, contentType)
+		    values(#{contentId}, #{title}, #{author}, #{publishTime}, #{thumbnail}, #{brief}, #{content}, #{website.siteId}, #{link}, #{contentType})
 		]]>
 	</insert>
 

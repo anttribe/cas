@@ -66,12 +66,22 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.anttribe.components</groupId>
+			<artifactId>component-lang</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.anttribe.cas</groupId>
 			<artifactId>cas-base-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.anttribe.cas</groupId>
 			<artifactId>cas-base-application</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

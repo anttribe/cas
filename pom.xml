@@ -34,6 +34,8 @@
 
 		<components.version>0.0.1-SNAPSHOT</components.version>
 		<opengadget.version>0.0.1-SNAPSHOT</opengadget.version>
+
+		<junit.version>4.11</junit.version>
 	</properties>
 
 	<dependencyManagement>
@@ -140,6 +142,11 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.anttribe.components</groupId>
+				<artifactId>component-lang</artifactId>
+				<version>${components.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.anttribe.opengadget</groupId>
 				<artifactId>opengadget-core</artifactId>
 				<version>${opengadget.version}</version>
@@ -161,6 +168,13 @@
 				<artifactId>jsp-api</artifactId>
 				<version>2.1</version>
 				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

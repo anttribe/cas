@@ -29,4 +29,9 @@ public class Constants
      * 抓取的目标utl地址列表
      */
     public static final String REDIS_KEY_CRAWL_TARGET_URLS = "crawl_target_urls";
+    
+    /**
+     * 抓取的内容标题列表
+     */
+    public static final String REDIS_KEY_CRAWL_CONTENT_TITLES = "crawl_content_titles";
 }

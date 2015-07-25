@@ -33,32 +33,37 @@ public class Website extends MybatisAbstractEntity
     /**
      * 网站logo
      */
-    public String logo;
+    private String logo;
     
     /**
      * 字符集
      */
-    public String charset;
+    private String charset;
     
     /**
      * 用户代理
      */
-    public String userAgent;
+    private String userAgent;
     
     /**
      * 处理2个page之间的间隔时间
      */
-    public int intervalTime;
+    private int intervalTime;
     
     /**
      * 处理失败之后的重复次数
      */
-    public int retryTimes;
+    private int retryTimes;
     
     /**
      * 超时时长
      */
-    public int timeout;
+    private int timeout;
+    
+    /**
+     * 内容类型
+     */
+    private ContentType contentType;
     
     public String getSiteId()
     {
@@ -148,5 +153,15 @@ public class Website extends MybatisAbstractEntity
     public void setTimeout(int timeout)
     {
         this.timeout = timeout;
+    }
+    
+    public ContentType getContentType()
+    {
+        return contentType;
+    }
+    
+    public void setContentType(ContentType contentType)
+    {
+        this.contentType = contentType;
     }
 }

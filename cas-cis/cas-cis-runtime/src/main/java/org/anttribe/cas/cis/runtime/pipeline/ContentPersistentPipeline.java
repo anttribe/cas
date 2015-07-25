@@ -12,8 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.anttribe.cas.base.core.entity.Content;
-import org.anttribe.cas.base.core.entity.ContentType;
 import org.anttribe.cas.cis.runtime.constants.Constants;
+import org.anttribe.component.lang.UUIDUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -54,9 +54,9 @@ public class ContentPersistentPipeline implements Pipeline
             try
             {
                 BeanUtils.populate(content, attrs);
-                // 构造摘要信息
-                this.populateBrief(content);
-                
+                content.setContentId(UUIDUtils.getRandomUUID());
+                // 根据内容，截取默认第一段的内容(第一个<p>包含的内容)或者固定长度内容
+                content.setBrief(populateBrief(content.getContent()));
                 // 保存数据到数据库
                 content.save();
             }
@@ -68,45 +68,29 @@ public class ContentPersistentPipeline implements Pipeline
     }
     
     /**
-     * 构造brief字段的值
-     * 
-     * @param content Content
-     */
-    private void populateBrief(Content content)
-    {
-        if (ContentType.Article == content.getContentType())
-        {
-            // 得到内容
-            String contentBody = content.getContent();
-            if (!StringUtils.isEmpty(contentBody))
-            {
-                // 根据内容，截取默认第一段的内容(第一个<p>包含的内容)或者固定长度内容
-                content.setBrief(populateBrief(contentBody));
-            }
-        }
-    }
-    
-    /**
      * 根据内容主体获取对应的摘要内容
      * 
      * @param contentBody String
      * @return String
      */
-    private String populateBrief(String contentBody)
+    public String populateBrief(String contentBody)
     {
         String brief = "";
-        int lengthIndex = Constants.DEFAULT_BRIEF_LENGTH;
-        if (-1 != contentBody.indexOf("</p>"))
+        if (!StringUtils.isEmpty(contentBody))
         {
-            lengthIndex = contentBody.indexOf("</p>");
-        }
-        brief = contentBody.substring(0, lengthIndex);
-        // 去除html标签元素
-        Matcher htmlMatcher = HTML_TAG_PATTERN.matcher(brief);
-        brief = htmlMatcher.replaceAll("");
-        if (StringUtils.isEmpty(brief))
-        {
-            brief = populateBrief(contentBody.substring(lengthIndex));
+            int lengthIndex = Constants.DEFAULT_BRIEF_LENGTH;
+            if (-1 != contentBody.indexOf("</p>"))
+            {
+                lengthIndex = contentBody.indexOf("</p>");
+            }
+            brief = contentBody.substring(0, lengthIndex);
+            // 去除html标签元素
+            Matcher htmlMatcher = HTML_TAG_PATTERN.matcher(brief);
+            brief = StringUtils.trimToEmpty(htmlMatcher.replaceAll(""));
+            if (StringUtils.isEmpty(brief))
+            {
+                brief = populateBrief(contentBody.substring(lengthIndex + 4));
+            }
         }
         return brief;
     }

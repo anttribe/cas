@@ -1,0 +1,15 @@
+@charset "utf-8";
+body { padding: 0; background: #FFFFFF; color: rgba(0,0,0,.75); font-size: 13px; font-family: '微软雅黑','Helvetica Neue',sans-serif,SimHei; }
+.navbar-top { height: 50px; padding: 0; background: rgba(255,255,255,.6)!important; border: none; box-shadow: 0 0 0 1px rgba(0,0,0,.1); -webkit-box-shadow: 0 0 0 1px rgba(0,0,0,.1); }
+.navbar-bottom { color: rgba(255,255,255,.6); }
+.navbar-brand { padding: 2px!important; }
+
+/* header */
+#header .tools {}
+#header .tools .tool-item { cursor: pointer; white-space: nowrap;}
+#header .tools .tool-item .icon { display: block; font-size: 20px; font-weight: 400; vertical-align: middle; text-align: center; }
+#header .tools .tool-item a.avatar { padding: 6px 10px; }
+#header .tools .tool-item .avatar img { display: inline; border-radius: 80px; width: 38px; height: 38px; vertical-align: middle; }
+#header .tools .tool-item .dropdown-menu { min-width: 100px; }
+#header .tools .tool-item .dropdown-menu>li>a { padding: 0 6px; height:30px; line-height: 30px; }
+#header .tools .tool-item .dropdown-menu .icon { display: inline; font-size: 14px; text-align: center; padding: 0px 6px; top: 0; vertical-align: middle; }

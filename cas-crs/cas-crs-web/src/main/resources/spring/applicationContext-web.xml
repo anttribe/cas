@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd   
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd   
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<!-- 页面过滤 -->
+	<bean id="pageFilter" class="org.anttribe.opengadget.runtime.render.PageFilter"
+		scope="singleton">
+		<property name="siteFactory" ref="siteFactory" />
+		<property name="pageEngine" ref="pageEngine" />
+	</bean>
+
+	<bean id="siteFactory"
+		class="org.anttribe.opengadget.runtime.render.factory.xml.XmlSiteFactory"
+		init-method="loadSiteConfigs">
+		<property name="siteConfigLocations" value="/sites/*-site.xml" />
+	</bean>
+
+	<bean id="pageEngine"
+		class="org.anttribe.opengadget.runtime.render.engine.gadget.GadgetPageEngine">
+		<property name="themeFactory" ref="themeFactory" />
+	</bean>
+
+	<bean id="themeFactory"
+		class="org.anttribe.opengadget.runtime.render.theme.DefaultThemeFactory"
+		init-method="loadThemeConfigs">
+		<property name="defaultThemeName" value="default" />
+		<property name="themeDirectory" value="/themes" />
+	</bean>
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource"
+		p:defaultEncoding="UTF-8">
+		<property name="basenames" value="messages.message" />
+	</bean>
+</beans>

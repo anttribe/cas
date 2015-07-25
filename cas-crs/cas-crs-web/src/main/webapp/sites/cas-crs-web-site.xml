@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sites>
+	<site siteName="cas-crs-web">
+		<page name="signin" title="signin" layout="sigleGadgetLayout.jsp">
+			<position name="center">
+				<gadget gadgetId="signin" action="/signin/index" />
+			</position>
+		</page>
+		<page name="signup" title="signup" layout="sigleGadgetLayout.jsp">
+			<position name="center">
+				<gadget gadgetId="signup" action="/signup/index" />
+			</position>
+		</page>
+		<!-- page允许嵌套，但是最多允许嵌套3层 -->
+		<page name="user" layout="layout.jsp">
+			<page name="dashboard" title="dashboard" iconClass="glyphicon glyphicon-home"
+				weight="0">
+				<position name="sidebar">
+					<gadget gadgetId="sidebar" action="/nav/sidebar" />
+				</position>
+				<position name="center">
+					<gadget gadgetId="latestProject" action="/project/latest" />
+					<gadget gadgetId="tweetBox" action="/tweet" />
+				</position>
+			</page>
+			<page name="project" title="project" iconClass="glyphicon glyphicon-folder-open"
+				weight="1">
+				<position name="sidebar">
+					<gadget gadgetId="sidebar" action="/nav/sidebar" />
+				</position>
+				<position name="center">
+				</position>
+			</page>
+			<page name="issue" title="issue" iconClass="glyphicon glyphicon-tasks"
+				weight="2">
+				<position name="sidebar">
+					<gadget gadgetId="sidebar" action="/nav/sidebar" />
+				</position>
+				<position name="center">
+				</position>
+			</page>
+			<page name="discuss" title="discuss" iconClass="glyphicon glyphicon-user"
+				weight="3">
+				<position name="sidebar">
+					<gadget gadgetId="sidebar" action="/nav/sidebar" />
+				</position>
+				<position name="center">
+				</position>
+			</page>
+			<page name="message" title="message" iconClass="glyphicon glyphicon-envelope"
+				weight="4">
+				<position name="sidebar">
+					<gadget gadgetId="sidebar" action="/nav/sidebar" />
+				</position>
+				<position name="center">
+				</position>
+			</page>
+			<page name="share" title="share" iconClass="glyphicon glyphicon-share"
+				weight="5">
+				<position name="sidebar">
+					<gadget gadgetId="sidebar" action="/nav/sidebar" />
+				</position>
+				<position name="center">
+				</position>
+			</page>
+			<page name="settings" title="settings" iconClass="glyphicon glyphicon-cog"
+				weight="6">
+				<position name="sidebar">
+					<gadget gadgetId="sidebar" action="/nav/sidebar" />
+				</position>
+				<position name="center">
+					<gadget gadgetId="settings" action="/settings/index" />
+				</position>
+				<page name="teamBase" title="team.teamBase" weight="0"
+					layout="sigleGadgetWithoutHeaderLayout.jsp">
+					<position name="center">
+						<gadget gadgetId="teamBase" action="/team/base" />
+					</position>
+				</page>
+				<page name="teamIntroduce" title="team.teamIntroduce" weight="1"
+					layout="sigleGadgetWithoutHeaderLayout.jsp">
+					<position name="center">
+						<gadget gadgetId="teamIntroduce" action="/team/introduce" />
+					</position>
+				</page>
+				<page name="userPersonalInfo" title="user.personal" weight="2"
+					layout="sigleGadgetWithoutHeaderLayout.jsp">
+					<position name="center">
+						<gadget gadgetId="userPersonalInfo" action="/userInfo/personal" />
+					</position>
+				</page>
+				<page name="userSecurityInfo" title="user.security" weight="2"
+					layout="sigleGadgetWithoutHeaderLayout.jsp">
+					<position name="center">
+						<gadget gadgetId="userSecurityInfo" action="/userInfo/security" />
+					</position>
+				</page>
+			</page>
+		</page>
+	</site>
+</sites>

@@ -22,4 +22,5 @@
 	<import resource="applicationContext-datasource.xml" />
 	<import resource="applicationContext-redis.xml" />
 	<import resource="applicationContext-application.xml" />
+	<import resource="applicationContext-web.xml" />
 </beans>

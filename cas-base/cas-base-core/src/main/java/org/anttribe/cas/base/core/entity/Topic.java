@@ -7,6 +7,9 @@
  */
 package org.anttribe.cas.base.core.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
 
 /**
@@ -21,12 +24,54 @@ public class Topic extends MybatisAbstractEntity
     private String topicId;
     
     /**
-     * 主题名称
+     * 话题名称
      */
     private String topicName;
     
     /**
-     * 优先级
+     * 父话题
      */
-    private String priority;
+    private Topic parent;
+    
+    /**
+     * 列表所有父话题
+     * 
+     * @return List<Topic
+     */
+    public static List<Topic> listAllParentTopics()
+    {
+        List<Topic> topics = new ArrayList<Topic>();
+        topics = Topic.getSqlSessionTemplate().selectList(Topic.class.getCanonicalName() + ".queryAllParent");
+        return topics;
+    }
+    
+    public String getTopicId()
+    {
+        return topicId;
+    }
+    
+    public void setTopicId(String topicId)
+    {
+        this.topicId = topicId;
+    }
+    
+    public String getTopicName()
+    {
+        return topicName;
+    }
+    
+    public void setTopicName(String topicName)
+    {
+        this.topicName = topicName;
+    }
+    
+    public Topic getParent()
+    {
+        return parent;
+    }
+    
+    public void setParent(Topic parent)
+    {
+        this.parent = parent;
+    }
 }

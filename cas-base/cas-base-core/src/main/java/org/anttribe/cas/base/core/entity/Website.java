@@ -65,6 +65,11 @@ public class Website extends MybatisAbstractEntity
      */
     private ContentType contentType;
     
+    /**
+     * 站点所属分类
+     */
+    private WebsiteCategory category;
+    
     public String getSiteId()
     {
         return siteId;
@@ -163,5 +168,15 @@ public class Website extends MybatisAbstractEntity
     public void setContentType(ContentType contentType)
     {
         this.contentType = contentType;
+    }
+    
+    public WebsiteCategory getCategory()
+    {
+        return category;
+    }
+    
+    public void setCategory(WebsiteCategory category)
+    {
+        this.category = category;
     }
 }

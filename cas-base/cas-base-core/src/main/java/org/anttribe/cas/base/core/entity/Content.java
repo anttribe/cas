@@ -7,6 +7,8 @@
  */
 package org.anttribe.cas.base.core.entity;
 
+import java.util.List;
+
 import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
 
 /**
@@ -64,6 +66,11 @@ public class Content extends MybatisAbstractEntity
      * 所属站点
      */
     private Website website;
+    
+    /**
+     * 一篇内容属于的多个主题
+     */
+    private List<Topic> topics;
     
     public String getContentId()
     {
@@ -139,12 +146,12 @@ public class Content extends MybatisAbstractEntity
     {
         return publishTime;
     }
-
+    
     public void setPublishTime(String publishTime)
     {
         this.publishTime = publishTime;
     }
-
+    
     public String getLink()
     {
         return link;
@@ -163,5 +170,15 @@ public class Content extends MybatisAbstractEntity
     public void setWebsite(Website website)
     {
         this.website = website;
+    }
+
+    public List<Topic> getTopics()
+    {
+        return topics;
+    }
+
+    public void setTopics(List<Topic> topics)
+    {
+        this.topics = topics;
     }
 }

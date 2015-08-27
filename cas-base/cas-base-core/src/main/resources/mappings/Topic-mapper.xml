@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.entity.Topic">
+	<cache readOnly="true" />
+	<resultMap id="Topic-resultMap" type="org.anttribe.cas.base.core.entity.Topic">
+		<result property="topicId" column="topicId" />
+		<result property="topicName" column="topicName" />
+		<association property="parent" column="{topicId = parentId}"
+			javaType="org.anttribe.cas.base.core.entity.Topic" select="org.anttribe.cas.base.core.entity.Topic.queryById" />
+	</resultMap>
+
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Topic">
+		<![CDATA[
+		]]>
+	</insert>
+
+	<!-- queryAll: 查询所有内容数据 -->
+	<select id="queryAll" resultMap="Topic-resultMap">
+		<![CDATA[
+		SELECT topicId, topicName, parentId 
+		    FROM t_cas_topic
+		]]>
+	</select>
+
+	<!-- queryById: 根据id查询单条数据 -->
+	<select id="queryById" resultMap="Topic-resultMap">
+		<![CDATA[
+		SELECT topicId, topicName, parentId 
+		    FROM t_cas_topic t
+		    WHERE t.topicId = #{topicId}
+		]]>
+	</select>
+
+	<!-- queryByCriteria: 根据条件查询数据 -->
+	<select id="queryByCriteria" resultMap="Topic-resultMap"
+		parameterType="map">
+		<![CDATA[
+		]]>
+	</select>
+
+	<!-- queryAllParent: 获取所有父节点 -->
+	<select id="queryAllParent" resultMap="Topic-resultMap"
+		parameterType="map">
+		<![CDATA[
+		SELECT topicId, topicName, parentId 
+		    FROM t_cas_topic t
+		    WHERE t.parentId is null or parentId = ''
+		]]>
+	</select>
+</mapper>

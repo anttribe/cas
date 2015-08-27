@@ -37,7 +37,6 @@ public class ArticleGadget
     public String index()
     {
         // 加载topic数据
-        
         return "article/articles";
     }
     

@@ -13,6 +13,10 @@
 	<logger name="org.apache">
 		<level value="WARN" />
 	</logger>
+	
+	<logger name="org.springframework">
+		<level value="WARN" />
+	</logger>
 
 	<root>
 		<priority value="DEBUG" />

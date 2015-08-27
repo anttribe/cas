@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sites>
-	<site siteName="cas-crs-web">
+	<site name="cas-crs-web">
 		<page name="index" title="index" layout="layout.jsp">
 			<page name="article" title="article" weight="0">
 				<position name="center">

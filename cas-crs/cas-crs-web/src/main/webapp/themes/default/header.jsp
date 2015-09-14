@@ -1,38 +1,61 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="gadget" uri="/gadget" %>
-<div id="header" class="navbar-default navbar-fixed-top navbar-top">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse">
-            <div class="navbar-header">
-                <a href="#none" class="navbar-brand">
-                    <img src="<c:url value='/static/${currentSite.theme.themePath}/img/logo.png' />">
-                </a>
-            </div>
-            <div class="navbar-right pr10">
-                <c:choose>
-                    <c:when test="${null != USER_SESSION}">
-                        <ul class="nav navbar-nav tools">
-                            <li class="tool-item"><a href="#" title='<spring:message code="teamwork.page.message" />'><i class="icon glyphicon glyphicon-envelope"></i></a></li>
-                            <li class="dropdown tool-item">
-                                <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown" role="button" aria-expanded="false" title="${USER_SESSION.username}">
-                                    <img alt="${USER_SESSION.username}" src="${contextPath}${USER_SESSION.avatar}" />
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#"><i class="icon glyphicon glyphicon-cog"></i>settings</a></li>
-                                    <li><a href="<gadget:actionUrl mode="/signin/signout" />"><i class="icon glyphicon glyphicon-log-out"></i><spring:message code="app.user.title.logout" /></a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </c:when>
-                    <c:otherwise>
-                        <a type="button" href="${contextPath}/${currentSite.name}/signin" class="btn btn-primary navbar-btn"><spring:message code="app.user.title.signin" /></a>
-                        <a type="button" href="${contextPath}/${currentSite.name}/signup" class="btn btn-success navbar-btn"><spring:message code="app.user.title.signup" /></a>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </div>
+
+<!-- header -->
+<div class="navbar navbar-default">
+    <div class="navbar-inner">
+        <a class="navbar-brand" href="${contextPath}">
+            <img alt="CAS Logo" src="<c:url value='/static/static/img/logo.png' />" class="hidden-xs"/>
+            <span><spring:message code="app.name" /></span>
+        </a>
+        
+        <c:choose>
+            <c:when test="${null != USER_SESSION}">
+                <!-- user profile -->
+                <div class="btn-group pull-right">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-user"></i><span class="hidden-sm hidden-xs"> user</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><spring:message code="app.user.title.profile" /></a></li>
+                        <li class="divider"></li>
+                        <li><a href=""><spring:message code="app.user.title.logout" /></a></li>
+                    </ul>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="btn-group pull-right">
+                    <a href="${contextPath}/signin"><spring:message code="app.user.title.signin" /></a>
+                    <a href="${contextPath}/signup"><spring:message code="app.user.title.signup" /></a>
+                </div>
+            </c:otherwise>
+        </c:choose>
+
+        <!-- theme selector -->
+        <ul class="nav navbar-nav pull-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-tint"></i></a>
+                <ul class="dropdown-menu" id="themes">
+                    <c:forEach var="theme" items="${themes}">
+                        <li><a data-value="${theme.themeId}" href="#"><i class="whitespace"></i> <spring:message code="${theme.themeName}" /></a></li>
+                    </c:forEach>
+                </ul>
+            </li>
+        </ul>
+
+        <ul class="collapse navbar-collapse nav navbar-nav top-menu">
+            <li><a class="fb" href="${contextPath}/article"><spring:message code="app.article.title.article" /></a></li>
+            <li><a class="fb" href="${contextPath}/site"><spring:message code="app.site.title.site" /></a></li>
+            <li><a class="fb" href="${contextPath}/topic"><spring:message code="app.topic.title.topic" /></a></li>
+            <li><a class="fb" href="${contextPath}/course"><spring:message code="app.course.title.course" /></a></li>
+            <li>
+                <form class="navbar-search pull-left">
+                    <input placeholder="Search" class="search-query form-control col-md-10" name="query" type="text">
+                </form>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="clearfix"></div>

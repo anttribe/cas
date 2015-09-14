@@ -2,8 +2,8 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <link id="theme-css" href="" rel="stylesheet">
-<!-- Bootstrap -->
-<link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap/css/bootstrap.min.css" />
+<!-- charisma -->
+<link rel="stylesheet" href="${contextPath}/assets/charisma/css/charisma.css">
 
 <link rel="stylesheet" type="text/css" href="${contextPath}/static/${currentSite.theme.themePath}/css/base.css" />
 <link rel="stylesheet" type="text/css" href="${contextPath}/static/${currentSite.theme.themePath}/css/common.css" />

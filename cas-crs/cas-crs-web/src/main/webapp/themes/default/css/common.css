@@ -2,7 +2,6 @@
 body { padding: 0; background: #FFFFFF; color: rgba(0,0,0,.75); font-size: 13px; font-family: '微软雅黑','Helvetica Neue',sans-serif,SimHei; }
 .navbar-top { height: 50px; padding: 0; background: rgba(255,255,255,.6)!important; border: none; box-shadow: 0 0 0 1px rgba(0,0,0,.1); -webkit-box-shadow: 0 0 0 1px rgba(0,0,0,.1); }
 .navbar-bottom { color: rgba(255,255,255,.6); }
-.navbar-brand { padding: 2px!important; }
 
 /* header */
 #header .tools {}

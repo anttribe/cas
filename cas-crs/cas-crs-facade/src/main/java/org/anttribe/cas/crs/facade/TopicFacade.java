@@ -7,11 +7,15 @@
  */
 package org.anttribe.cas.crs.facade;
 
+import java.util.List;
+
+import org.anttribe.cas.base.core.entity.Topic;
+
 /**
  * @author zhaoyong
  * @version 2015年8月4日
  */
 public interface TopicFacade
 {
-    void listArticleTopics();
+    List<Topic> listAllTopics();
 }

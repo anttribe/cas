@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sites>
 	<site name="cas-crs-web">
-		<page name="index" title="index" layout="layout.jsp">
+		<page name="index" title="index" layout="layout.jsp" weight="0">
 			<page name="article" title="article" weight="0">
 				<position name="center">
 					<gadget gadgetId="articles" action="/article/index" />
@@ -13,12 +13,12 @@
 				</position>
 			</page>
 		</page>
-		<page name="signin" title="signin" layout="sigleGadgetLayout.jsp">
+		<page name="signin" title="signin" layout="sigleGadgetLayout.jsp" weight="1">
 			<position name="center">
 				<gadget gadgetId="signin" action="/signin/index" />
 			</position>
 		</page>
-		<page name="signup" title="signup" layout="sigleGadgetLayout.jsp">
+		<page name="signup" title="signup" layout="sigleGadgetLayout.jsp" weight="2">
 			<position name="center">
 				<gadget gadgetId="signup" action="/signup/index" />
 			</position>

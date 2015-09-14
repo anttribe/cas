@@ -20,6 +20,7 @@
 		class="org.anttribe.opengadget.runtime.render.factory.xml.XmlSiteFactory"
 		init-method="loadSiteConfigs">
 		<property name="siteConfigLocations" value="/sites/*-site.xml" />
+		<property name="defaultSiteName" value="cas-crs-web" />
 	</bean>
 
 	<bean id="pageEngine"

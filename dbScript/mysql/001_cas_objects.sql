@@ -92,7 +92,7 @@ INSERT INTO t_cas_theme VALUES ('charisma-united', '7', '1', 'app.themes.charism
 -- ----------------------------
 DROP TABLE IF EXISTS `t_cas_topic`;
 CREATE TABLE `t_cas_topic` (
-  `topicId` varchar(32) NOT NULL DEFAULT '' COMMENT 'topicid',
+  `id` varchar(32) NOT NULL DEFAULT '' COMMENT 'id',
   `topicName` varchar(256) DEFAULT '' COMMENT '主题名称',
   `parent` varchar(32) DEFAULT NULL COMMENT '父分类',
   `type` varchar(128) NOT NULL DEFAULT '' COMMENT '分类类型',

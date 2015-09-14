@@ -3,7 +3,7 @@
 <mapper namespace="org.anttribe.cas.base.core.entity.Topic">
 	<cache readOnly="true" />
 	<resultMap id="Topic-resultMap" type="org.anttribe.cas.base.core.entity.Topic">
-		<result property="topicId" column="topicId" />
+		<result property="topicId" column="id" />
 		<result property="topicName" column="topicName" />
 		<association property="parent" column="{topicId = parentId}"
 			javaType="org.anttribe.cas.base.core.entity.Topic" select="org.anttribe.cas.base.core.entity.Topic.queryById" />
@@ -18,7 +18,7 @@
 	<!-- queryAll: 查询所有内容数据 -->
 	<select id="queryAll" resultMap="Topic-resultMap">
 		<![CDATA[
-		SELECT topicId, topicName, parentId 
+		SELECT id, topicName, parentId 
 		    FROM t_cas_topic
 		]]>
 	</select>
@@ -26,7 +26,7 @@
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="Topic-resultMap">
 		<![CDATA[
-		SELECT topicId, topicName, parentId 
+		SELECT id, topicName, parentId 
 		    FROM t_cas_topic t
 		    WHERE t.topicId = #{topicId}
 		]]>
@@ -43,7 +43,7 @@
 	<select id="queryAllParent" resultMap="Topic-resultMap"
 		parameterType="map">
 		<![CDATA[
-		SELECT topicId, topicName, parentId 
+		SELECT id, topicName, parentId 
 		    FROM t_cas_topic t
 		    WHERE t.parentId is null or parentId = ''
 		]]>

@@ -48,7 +48,7 @@ public class ArticleGadget
     public ModelAndView index()
     {
         // 加载topic数据
-        List<Topic> topics = topicFacade.listAllTopics();
+        List<Topic> topics = topicFacade.listAllParentTopics();
         
         ModelAndView mv = new ModelAndView();
         mv.setViewName("article/articles");

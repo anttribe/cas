@@ -18,4 +18,11 @@ import org.anttribe.cas.base.core.entity.Topic;
 public interface TopicFacade
 {
     List<Topic> listAllTopics();
+    
+    /**
+     * 获取所有父主题
+     * 
+     * @return List<Topic>
+     */
+    List<Topic> listAllParentTopics();
 }

@@ -30,5 +30,11 @@ public class TopicFacadeImpl implements TopicFacade
     {
         return topicApplication.listAllTopics();
     }
+
+    @Override
+    public List<Topic> listAllParentTopics()
+    {
+        return topicApplication.listAllParentTopics();
+    }
     
 }

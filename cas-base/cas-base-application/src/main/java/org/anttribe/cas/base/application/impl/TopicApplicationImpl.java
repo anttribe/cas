@@ -25,4 +25,10 @@ public class TopicApplicationImpl implements TopicApplication
     {
         return Topic.findAll(Topic.class);
     }
+    
+    @Override
+    public List<Topic> listAllParentTopics()
+    {
+        return Topic.listAllParentTopics();
+    }
 }

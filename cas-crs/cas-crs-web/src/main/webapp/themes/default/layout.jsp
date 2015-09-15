@@ -15,7 +15,7 @@
     </head>
     <body>
         <%@include file="header.jsp" %>
-        <div class="sa-container center-block pt50">
+        <div class="sa-container center-block">
             <div>
                 <layout:position name="sidebar">
                     <layout:positionRender />

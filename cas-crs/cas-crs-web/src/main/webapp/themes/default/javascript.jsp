@@ -3,7 +3,7 @@
 
 <!-- jQuery -->
 <script type="text/javascript" src="${contextPath}/static/assets/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="${contextPath}/assets/jquery-cookie/jquery.cookie.js"></script>
+<script type="text/javascript" src="${contextPath}/static/assets/jquery-cookie/jquery.cookie.js"></script>
 <!-- Bootstrap -->
 <script type="text/javascript" src="${contextPath}/static/assets/bootstrap/js/bootstrap.min.js"></script>
 

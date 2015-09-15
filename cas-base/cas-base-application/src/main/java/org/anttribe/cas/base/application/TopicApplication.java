@@ -23,4 +23,11 @@ public interface TopicApplication
      * @return List<Topic>
      */
     List<Topic> listAllTopics();
+    
+    /**
+     * 列表所有父Topic
+     * 
+     * @return List<Topic>
+     */
+    List<Topic> listAllParentTopics();
 }

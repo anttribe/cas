@@ -2,9 +2,26 @@
 <sites>
 	<site name="cas-crs-web">
 		<page name="article" title="article">
-		    <position name="center">
-		        <gadget gadgetId="articles" action="/article/index" />
-			</position>
+			<page name="index">
+				<position name="center">
+					<gadget gadgetId="articles" action="/article/index" />
+				</position>
+			</page>
+			<page name="recommend" layout="sigleGadgetWithoutHeaderLayout.jsp">
+				<position name="center">
+					<gadget gadgetId="articles" action="/article/recommend" />
+				</position>
+			</page>
+			<page name="hotArticles" layout="sigleGadgetWithoutHeaderLayout.jsp">
+				<position name="center">
+					<gadget gadgetId="articles" action="/article/hotArticles" />
+				</position>
+			</page>
+			<page name="topicArticles" layout="sigleGadgetWithoutHeaderLayout.jsp">
+				<position name="center">
+					<gadget gadgetId="articles" action="/article/topicArticles" />
+				</position>
+			</page>
 		</page>
 		<page name="website" title="website">
 			<position name="center">

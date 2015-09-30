@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="gadget" uri="/gadget" %>
 
 <div id="content" class="pb20">
     <ul id="topicTabs" class="nav nav-flat f14">
@@ -28,7 +29,6 @@
     $(document).ready(function(){
 	    $('#topicTabs a').click(function (e) {
 	        e.preventDefault();
-	    
 	        $(this).tab('show');
 	    });
     });

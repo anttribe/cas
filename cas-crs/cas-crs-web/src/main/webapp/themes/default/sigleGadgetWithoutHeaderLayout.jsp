@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@taglib prefix="layout" uri="/layout" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="layout" uri="/layout" %>
 
 <!DOCTYPE HTML>
 <html lang="en">
     <head>
         <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
         <meta content="IE=edge" http-equiv="X-UA-Compatible">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <title><spring:message code="teamwork.appname" /></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><spring:message code="app.name" /> - <spring:message code="app.description" /></title>
         <%@include file="stylesheet.jsp" %>
         <%@include file="javascript.jsp" %>
     </head>

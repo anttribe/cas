@@ -56,15 +56,40 @@ public class ArticleGadget
         return mv;
     }
     
+    /**
+     * 推荐文章
+     */
+    @RequestMapping("/recommend")
+    public ModelAndView recommend()
+    {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("article/recommend");
+        return mv;
+    }
+    
+    /**
+     * 热门文章
+     */
+    @RequestMapping("/hotArticles")
+    public ModelAndView hotArticles()
+    {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("article/hotArticles");
+        return mv;
+    }
+    
     public List<Content> latestArticles()
     {
         // 最新的文章列表
         return null;
     }
     
-    public List<Content> topicArticles()
+    @RequestMapping("/topicArticles")
+    public ModelAndView topicArticles()
     {
         // topic对应的文章列表
-        return null;
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("article/topicArticles");
+        return mv;
     }
 }

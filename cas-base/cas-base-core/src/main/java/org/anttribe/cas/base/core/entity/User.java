@@ -20,7 +20,7 @@ public class User extends MybatisAbstractEntity
     /**
      * 用户编号: 唯一
      */
-    private String userId;
+    private String id;
     
     /**
      * 用户名
@@ -77,14 +77,14 @@ public class User extends MybatisAbstractEntity
      */
     private boolean available;
     
-    public String getUserId()
+    public String getId()
     {
-        return userId;
+        return id;
     }
     
-    public void setUserId(String userId)
+    public void setId(String id)
     {
-        this.userId = userId;
+        this.id = id;
     }
     
     public String getUsername()

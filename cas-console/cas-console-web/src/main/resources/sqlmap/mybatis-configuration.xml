@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- settings元素指定全局配置选项 -->
+	<!-- cacheEnabled属性指定使全局的映射器启用或禁用缓存。 默认为true -->
+	<!-- lazyLoadingEnabled属性指定全局启用或禁用延迟加载。当禁用时, 所有关联对象都会即时加载。默认为true -->
+	<!-- localCacheScope属性指定本地缓存数据的作用域 -->
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="aggressiveLazyLoading" value="false" />
+		<setting name="localCacheScope" value="SESSION" />
+	</settings>
+
+	<!-- 类型别名 -->
+	<typeAliases>
+		<!-- 基本类型 -->
+		<typeAlias alias="Timestamp" type="java.sql.Timestamp" />
+	</typeAliases>
+</configuration>

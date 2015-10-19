@@ -19,7 +19,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `t_cas_content`;
 CREATE TABLE `t_cas_content` (
-  `contentId` varchar(32) NOT NULL COMMENT '内容id',
+  `id` varchar(32) NOT NULL COMMENT '内容id',
   `title` varchar(256) NOT NULL COMMENT '标题',
   `author` varchar(32) DEFAULT NULL COMMENT '作者',
   `publishTime` varchar(32) DEFAULT NULL COMMENT '发布时间',

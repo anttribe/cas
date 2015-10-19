@@ -36,7 +36,7 @@ public class Topic extends MybatisAbstractEntity
     /**
      * 列表所有父话题
      * 
-     * @return List<Topic
+     * @return List<Topic>
      */
     public static List<Topic> listAllParentTopics()
     {

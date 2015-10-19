@@ -6,15 +6,46 @@
 	<parent>
 		<groupId>org.anttribe.cas</groupId>
 		<artifactId>cas</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${project.version}</version>
 	</parent>
 	<artifactId>cas-console</artifactId>
 	<name>cas-console</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>cas-console-facade</module>
+		<module>cas-console-web</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sitemeth.version>3.0.0</sitemeth.version>
 	</properties>
 
-	<dependencies>
-	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-application</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-infra</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- sitemeth -->
+			<dependency>
+				<groupId>org.sitemesh</groupId>
+				<artifactId>sitemesh</artifactId>
+				<version>${sitemeth.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

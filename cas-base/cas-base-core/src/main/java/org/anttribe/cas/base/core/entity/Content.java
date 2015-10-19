@@ -20,7 +20,7 @@ public class Content extends MybatisAbstractEntity
     /**
      * 内容id
      */
-    private String contentId;
+    private String id;
     
     /**
      * 内容类型
@@ -72,14 +72,14 @@ public class Content extends MybatisAbstractEntity
      */
     private List<Topic> topics;
     
-    public String getContentId()
+    public String getId()
     {
-        return contentId;
+        return id;
     }
     
-    public void setContentId(String contentId)
+    public void setId(String id)
     {
-        this.contentId = contentId;
+        this.id = id;
     }
     
     public ContentType getContentType()
@@ -171,12 +171,12 @@ public class Content extends MybatisAbstractEntity
     {
         this.website = website;
     }
-
+    
     public List<Topic> getTopics()
     {
         return topics;
     }
-
+    
     public void setTopics(List<Topic> topics)
     {
         this.topics = topics;

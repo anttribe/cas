@@ -16,9 +16,9 @@ import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
 public class Website extends MybatisAbstractEntity
 {
     /**
-     * siteId
+     * id
      */
-    private String siteId;
+    private String id;
     
     /**
      * 网站名
@@ -68,16 +68,16 @@ public class Website extends MybatisAbstractEntity
     /**
      * 站点所属分类
      */
-    private WebsiteCategory category;
+    private Category category;
     
-    public String getSiteId()
+    public String getId()
     {
-        return siteId;
+        return id;
     }
     
-    public void setSiteId(String siteId)
+    public void setId(String id)
     {
-        this.siteId = siteId;
+        this.id = id;
     }
     
     public String getSiteName()
@@ -170,12 +170,12 @@ public class Website extends MybatisAbstractEntity
         this.contentType = contentType;
     }
     
-    public WebsiteCategory getCategory()
+    public Category getCategory()
     {
         return category;
     }
     
-    public void setCategory(WebsiteCategory category)
+    public void setCategory(Category category)
     {
         this.category = category;
     }

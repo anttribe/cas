@@ -36,7 +36,7 @@ public class ContentAttrXPathApplicationImpl implements ContentAttrXPathApplicat
         }
         
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put("website", website.getSiteId());
+        criteria.put("website", website.getId());
         // 添加参数
         List<ContentAttrXPath> tempList = ContentAttrXPath.find(ContentAttrXPath.class, criteria);
         if (!CollectionUtils.isEmpty(tempList))

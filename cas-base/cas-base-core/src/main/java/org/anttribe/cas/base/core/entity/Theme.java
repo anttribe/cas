@@ -18,7 +18,7 @@ public class Theme extends MybatisAbstractEntity
     /**
      * 主题id
      */
-    private String themeId;
+    private String id;
     
     /**
      * 主题名称
@@ -35,14 +35,14 @@ public class Theme extends MybatisAbstractEntity
      */
     private boolean available;
     
-    public String getThemeId()
+    public String getId()
     {
-        return themeId;
+        return id;
     }
     
-    public void setThemeId(String themeId)
+    public void setId(String id)
     {
-        this.themeId = themeId;
+        this.id = id;
     }
     
     public String getThemeName()

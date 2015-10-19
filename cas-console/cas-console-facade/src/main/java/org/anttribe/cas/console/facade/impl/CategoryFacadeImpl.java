@@ -40,4 +40,24 @@ public class CategoryFacadeImpl implements CategoryFacade
         return CategoryAssembler.toDTO(categories);
     }
     
+    @Override
+    public void editCategory(CategoryDTO categoryDTO)
+    {
+        Category category = CategoryAssembler.toEntity(categoryDTO);
+        if (null != category)
+        {
+            categoryApplication.persistentCategory(category);
+        }
+    }
+    
+    @Override
+    public void deleteCategory(CategoryDTO categoryDTO)
+    {
+        Category category = CategoryAssembler.toEntity(categoryDTO);
+        if (null != category)
+        {
+            categoryApplication.deleteCategory(category);
+        }
+    }
+    
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.entity.Category">
+	<cache readOnly="true" />
+	<resultMap id="Category-resultMap" type="org.anttribe.cas.base.core.entity.Category">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="ordinal" column="ordinal" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+		<association property="parent"
+			javaType="org.anttribe.cas.base.core.entity.Category">
+			<id property="id" column="parent_id" />
+		</association>
+	</resultMap>
+
+	<!-- select -->
+	<sql id="select">
+        <![CDATA[
+            SELECT id, name, orginal, parent_id, create_time, update_time
+              FROM cas_t_core_category
+        ]]>
+	</sql>
+
+	<!-- where -->
+	<sql id="where">
+		<where>
+			<if test="null != id and id != ''">AND id = #{id}</if>
+			<if test="null != name and name != ''">AND name LIKE CONCAT('%', '${name}', '%')</if>
+			<if test="null != parent">AND parent_id = #{parent.id}</if>
+		</where>
+	</sql>
+
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Category">
+		<![CDATA[
+		    INSERT INTO cas_t_core_category(id, name, ordinal, parent_id, create_time, update_time)
+		      VALUES(#{id}, #{name}, #{ordinal}, #{parent.id}, #{createTime}, #{updateTime})
+		]]>
+	</insert>
+
+	<!-- update: 更新单条数据 -->
+	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Category">
+        <![CDATA[
+            UPDATE cas_t_core_category
+        ]]>
+		<set>
+			<if test="null != name and name != ''">
+				name = #{name},
+			</if>
+			<if test="null != ordinal and ordinal != ''">
+				ordinal = #{ordinal},
+			</if>
+			<if test="null != parent and parent != ''">
+				parent_id = #{parent.id},
+			</if>
+			<if test="null != updateTime and updateTime != ''">
+				update_time = #{updateTime},
+			</if>
+		</set>
+		<include refid="where"></include>
+	</update>
+
+	<!-- delete: 删除单条数据 -->
+	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Category">
+	    <![CDATA[
+            DELETE FROM cas_t_core_category
+        ]]>
+		<include refid="where"></include>
+	</delete>
+
+	<!-- queryAll: 查询所有数据 -->
+	<select id="queryAll" resultMap="Category-resultMap">
+		<include refid="select"></include>
+		ORDER BY update_time, create_time
+	</select>
+
+	<!-- queryById: 根据id查询单条数据 -->
+	<select id="queryById" resultMap="Category-resultMap">
+		<include refid="select"></include>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByCriteria: 根据条件查询数据 -->
+	<select id="queryByCriteria" resultMap="Category-resultMap"
+		parameterType="map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		ORDER BY update_time, create_time
+	</select>
+</mapper>

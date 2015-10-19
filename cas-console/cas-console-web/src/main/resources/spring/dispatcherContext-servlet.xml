@@ -12,11 +12,11 @@
 	<context:component-scan base-package="org.anttribe.cas.console.web" />
 
 	<!-- 使用ResourceHttpRequestHandler -->
-	<mvc:resources mapping="/static/assets/**" location="/assets/"
+	<mvc:resources mapping="static/assets/**" location="/assets/"
 		cache-period="3600" />
-	<mvc:resources mapping="/static/themes/**" location="/themes/"
+	<mvc:resources mapping="static/themes/**" location="/themes/"
 		cache-period="3600" />
-	<mvc:resources mapping="/static/static/**" location="/static/"
+	<mvc:resources mapping="static/static/**" location="/static/"
 		cache-period="3600" />
 
 	<mvc:annotation-driven />

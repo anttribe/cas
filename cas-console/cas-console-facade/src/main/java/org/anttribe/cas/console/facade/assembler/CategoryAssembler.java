@@ -56,4 +56,21 @@ public class CategoryAssembler
         }
         return null;
     }
+    
+    public static Category toEntity(CategoryDTO categoryDTO)
+    {
+        if (null != categoryDTO)
+        {
+            Category category = new Category();
+            category.setId(categoryDTO.getId());
+            category.setName(categoryDTO.getName());
+            category.setOrdinal(categoryDTO.getOrdinal());
+            category.setParent(new Category(categoryDTO.getParent()));
+            category.setCreateTime(categoryDTO.getCreateTime());
+            category.setUpdateTime(category.getUpdateTime());
+            
+            return category;
+        }
+        return null;
+    }
 }

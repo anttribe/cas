@@ -53,6 +53,21 @@ public class Category extends MybatisAbstractEntity
     private Date updateTime;
     
     /**
+     * <构造器>
+     */
+    public Category()
+    {
+    }
+    
+    /**
+     * <构造器>
+     */
+    public Category(String id)
+    {
+        this.id = id;
+    }
+    
+    /**
      * 根据父分类获取自分类信息
      * 
      * @param parent 父分类id
@@ -61,7 +76,7 @@ public class Category extends MybatisAbstractEntity
     public static List<Category> listCategoriesByParent(String parent)
     {
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put("parent", parent);
+        criteria.put("parent", new Category(parent));
         return Category.getSqlSessionTemplate().selectList(Category.class.getCanonicalName() + ".queryByCriteria",
             criteria);
     }

@@ -23,5 +23,19 @@ public interface CategoryFacade
      * @param categoryDTO
      * @return List<CategoryDTO>
      */
-    public List<CategoryDTO> listCategories(CategoryDTO categoryDTO);
+    List<CategoryDTO> listCategories(CategoryDTO categoryDTO);
+    
+    /**
+     * 添加分类信息
+     * 
+     * @param categoryDTO CategoryDTO
+     */
+    void editCategory(CategoryDTO categoryDTO);
+    
+    /**
+     * 删除分类信息
+     * 
+     * @param categoryDTO
+     */
+    void deleteCategory(CategoryDTO categoryDTO);
 }

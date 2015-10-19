@@ -23,5 +23,19 @@ public interface CategoryApplication
      * @param parent
      * @return List<Category>
      */
-    public List<Category> listCategories(String parent);
+    List<Category> listCategories(String parent);
+    
+    /**
+     * 持久化分类信息
+     * 
+     * @param category Category
+     */
+    void persistentCategory(Category category);
+    
+    /**
+     * 删除分类信息
+     * 
+     * @param category Category
+     */
+    void deleteCategory(Category category);
 }

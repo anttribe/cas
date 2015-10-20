@@ -17,7 +17,7 @@
 	<!-- select -->
 	<sql id="select">
         <![CDATA[
-            SELECT id, name, orginal, parent_id, create_time, update_time
+            SELECT id, name, ordinal, parent_id, create_time, update_time
               FROM cas_t_core_category
         ]]>
 	</sql>

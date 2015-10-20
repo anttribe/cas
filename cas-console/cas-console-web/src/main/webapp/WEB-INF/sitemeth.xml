@@ -7,7 +7,7 @@
 	<!-- <mime-type>application/xhtml+xml</mime-type> -->
 
 	<!-- 默认装饰器, 当下面的路径都不匹配时, 启用该装饰器进行装饰 -->
-	<mapping decorator="/default-decorator.html" />
+	<mapping decorator="/decorators/layout.jsp" />
 
 	<!-- 对不同的路径, 启用不同的装饰器 -->
 	<!-- <mapping path="/admin/*" decorator="/another-decorator.html" /> -->

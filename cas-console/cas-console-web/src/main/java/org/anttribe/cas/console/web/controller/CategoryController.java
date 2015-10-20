@@ -11,12 +11,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.anttribe.cas.base.infra.common.Result;
 import org.anttribe.cas.console.facade.CategoryFacade;
 import org.anttribe.cas.console.facade.dto.CategoryDTO;
+import org.anttribe.cas.console.web.constants.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author zhaoyong
@@ -30,31 +32,28 @@ public class CategoryController
     @Autowired
     private CategoryFacade categoryFacade;
     
+    @RequestMapping("/index")
+    public String index(HttpServletRequest request, CategoryDTO categoryDTO)
+    {
+        return "/category/list";
+    }
+    
     @RequestMapping("/list")
-    public ModelAndView listCategories(HttpServletRequest request, CategoryDTO categoryDTO)
+    @ResponseBody
+    public Result<List<CategoryDTO>> listCategories(HttpServletRequest request, CategoryDTO categoryDTO)
     {
         List<CategoryDTO> categories = categoryFacade.listCategories(categoryDTO);
         
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("categories", categories);
-        mv.setViewName("/category/list");
-        return mv;
+        Result<List<CategoryDTO>> result = new Result<List<CategoryDTO>>();
+        result.setResultCode(Constants.DEFAULT_RESULT_CODE);
+        result.setData(categories);
+        return result;
     }
     
     @RequestMapping("/goAdd")
     public String goAddCategory()
     {
         return "/category/edit";
-    }
-    
-    @RequestMapping("/add")
-    public String doAddCategory(HttpServletRequest request, CategoryDTO categoryDTO)
-    {
-        if (null != categoryDTO)
-        {
-            categoryFacade.editCategory(categoryDTO);
-        }
-        return "redirect:/category/list";
     }
     
     @RequestMapping("/goEdit")
@@ -70,7 +69,7 @@ public class CategoryController
         {
             categoryFacade.editCategory(categoryDTO);
         }
-        return "redirect:/category/list";
+        return "redirect:/category/index";
     }
     
     @RequestMapping("/delete")
@@ -80,6 +79,6 @@ public class CategoryController
         {
             categoryFacade.deleteCategory(categoryDTO);
         }
-        return "redirect:/category/list";
+        return "redirect:/category/index";
     }
 }

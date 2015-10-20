@@ -14,7 +14,7 @@
             <h3>分类管理</h3>
             <ul class="breadcrumb">
                 <li><a href="#">Dashboard</a></li>
-                <li class="active"> 分类管理</li>
+                <li class="active"> 新增分类</li>
             </ul>
         </div>
         <!-- page heading end-->
@@ -25,34 +25,27 @@
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            <span>分类列表</span>
-                            <span class="tools pull-right">
-                                <a href="${contextPath}/category/goAdd" title="新建分类" class="fa fa-plus-square"></a>
-                            </span>
+                            <span>新增分类</span>
                         </header>
                         <div class="panel-body">
-                            <div class="adv-table">
-                                <table class="display table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Rendering engine</th>
-                                            <th>Browser</th>
-                                            <th>Platform(s)</th>
-                                            <th class="hidden-phone">Engine version</th>
-                                            <th class="hidden-phone">CSS grade</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <form role="form" method="post" action="${contextPath}/category/edit">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">分类名称</label>
+                                    <input type="text" class="form-control" name="name" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">父分类</label>
+                                    <select class="form-control" name="parent">
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </form>
                         </div>
                     </section>
                 </div>
             </div>
         </div>
         <!--body wrapper end-->
-        
         <script type="text/javascript">
 	        var cas = cas || {
 	        	category: {
@@ -63,7 +56,7 @@
 	        	        	success: function(result){
 	        	        		if(result && result['resultCode'] == '000000'){
 	        	        			var datas = result['data'];
-	        	        			if(callback && $.isFuntion(callback)){
+	        	        			if(callback){
 	    	        					callback.apply(datas);
 	    	        				}
 	        	        		}
@@ -78,6 +71,7 @@
 	        		console.log(datas);
 	        		if(datas && datas.length>0){
 	        			for(var i=0; i<datas.length; i++){
+	        				
 	        			}
 	        		}
 	        	});

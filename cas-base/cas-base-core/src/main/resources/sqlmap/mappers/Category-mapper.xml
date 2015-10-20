@@ -25,9 +25,18 @@
 	<!-- where -->
 	<sql id="where">
 		<where>
-			<if test="null != id and id != ''">AND id = #{id}</if>
-			<if test="null != name and name != ''">AND name LIKE CONCAT('%', '${name}', '%')</if>
-			<if test="null != parent">AND parent_id = #{parent.id}</if>
+			<if test="null != id and id != ''">
+			    AND id = #{id}
+			</if>
+			<if test="null != name and name != ''">
+			    AND name LIKE CONCAT('%', '${name}', '%')
+			</if>
+			<if test="null == parent">
+			    AND parent_id is null
+			</if>
+			<if test="null != parent and '' != parent">
+			    AND parent_id = #{parent.id}
+			</if>
 		</where>
 	</sql>
 

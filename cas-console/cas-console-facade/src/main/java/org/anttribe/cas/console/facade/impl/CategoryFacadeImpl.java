@@ -14,6 +14,7 @@ import org.anttribe.cas.base.core.entity.Category;
 import org.anttribe.cas.console.facade.CategoryFacade;
 import org.anttribe.cas.console.facade.assembler.CategoryAssembler;
 import org.anttribe.cas.console.facade.dto.CategoryDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class CategoryFacadeImpl implements CategoryFacade
     public List<CategoryDTO> listCategories(CategoryDTO categoryDTO)
     {
         String parent = "";
-        if (null != categoryDTO)
+        if (null != categoryDTO && !StringUtils.isEmpty(categoryDTO.getParent()))
         {
             parent = categoryDTO.getParent();
         }

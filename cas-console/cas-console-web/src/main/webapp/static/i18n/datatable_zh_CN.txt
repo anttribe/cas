@@ -1,0 +1,13 @@
+{
+    "sLengthMenu": "每页显示 _MENU_ 条记录",
+	"sZeroRecords": "没有检索到数据",
+	"sInfo": "共 _TOTAL_ 条数据",
+	"sInfoEmpty": "",
+	"sInfoFiltered": "",
+	"oPaginate": {
+	    "sFirst": "首页",
+	    "sPrevious": "上一页",
+	    "sNext": "下一页",
+	    "sLast": "尾页"
+	}
+}

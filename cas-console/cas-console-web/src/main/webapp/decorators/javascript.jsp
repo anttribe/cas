@@ -3,6 +3,9 @@
 <!-- jQuery -->
 <script type="text/javascript" src="${contextPath}/static/assets/jquery/jquery-1.11.1.js"></script>
 
+<!-- Bootstrap -->
+<script type="text/javascript" src="${contextPath}/static/assets/bootstrap/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
     var contextPath = '${contextPath}';
 </script>

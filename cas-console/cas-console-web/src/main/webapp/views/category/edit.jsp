@@ -46,35 +46,10 @@
             </div>
         </div>
         <!--body wrapper end-->
+        
+        <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
-	        var cas = cas || {
-	        	category: {
-	        		listCategoriesByParent : function(parent, callback){
-	        	        $.ajax({
-	        	        	type: 'POST',
-	        	        	url: '${contextPath}/category/list',
-	        	        	success: function(result){
-	        	        		if(result && result['resultCode'] == '000000'){
-	        	        			var datas = result['data'];
-	        	        			if(callback){
-	    	        					callback.apply(datas);
-	    	        				}
-	        	        		}
-	        	        	}
-	        	        });
-	        		}
-	        	}
-	        };
 	        $(function(){
-	        	// 初始化父分类
-	        	cas.category.listCategoriesByParent('', function(datas){
-	        		console.log(datas);
-	        		if(datas && datas.length>0){
-	        			for(var i=0; i<datas.length; i++){
-	        				
-	        			}
-	        		}
-	        	});
 	        });
 	    </script>
     </body>

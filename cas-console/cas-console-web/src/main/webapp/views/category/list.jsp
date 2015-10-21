@@ -6,6 +6,8 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.appname" /></title>
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-datatable/css/jquery.dataTables.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -32,17 +34,14 @@
                         </header>
                         <div class="panel-body">
                             <div class="adv-table">
-                                <table class="display table table-bordered table-striped">
+                                <table class="display table table-bordered table-striped table-hidden-detail">
                                     <thead>
                                         <tr>
-                                            <th>Rendering engine</th>
-                                            <th>Browser</th>
-                                            <th>Platform(s)</th>
-                                            <th class="hidden-phone">Engine version</th>
-                                            <th class="hidden-phone">CSS grade</th>
+                                            <th>分类名称</th>
+                                            <th>操作</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="categories">
                                     </tbody>
                                 </table>
                             </div>
@@ -53,32 +52,38 @@
         </div>
         <!--body wrapper end-->
         
+        <script type="text/javascript" src="${contextPath}/static/assets/jquery-datatable/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
-	        var cas = cas || {
-	        	category: {
-	        		listCategoriesByParent : function(parent, callback){
-	        	        $.ajax({
-	        	        	type: 'POST',
-	        	        	url: '${contextPath}/category/list',
-	        	        	success: function(result){
-	        	        		if(result && result['resultCode'] == '000000'){
-	        	        			var datas = result['data'];
-	        	        			if(callback && $.isFuntion(callback)){
-	    	        					callback.apply(datas);
-	    	        				}
-	        	        		}
-	        	        	}
-	        	        });
-	        		}
-	        	}
-	        };
 	        $(function(){
 	        	// 初始化父分类
 	        	cas.category.listCategoriesByParent('', function(datas){
-	        		console.log(datas);
 	        		if(datas && datas.length>0){
+	        			var $html = '';
 	        			for(var i=0; i<datas.length; i++){
+	        				var data = datas[i];
+	        				if(!data){
+	        					continue;
+	        				}
+	        				$html += '<tr data-id="' + data['id'] + '">'
+	        				       + '<td>' + (data['name'] || '') + '</td>'
+	        				       + '<td></td>'
+	        				       + '</tr>';
 	        			}
+	        			$('#categories').append($html);
+	        			
+	        			// 初始化页面表格
+	        			var oTable = $('.table-hidden-detail').dataTable({
+	        				'bAutoWidth': true,
+	        				'bStateSave': true,
+	        				'bSort': false,
+	        				'bFilter': false,
+	        				'oLanguage': {
+	        					'sUrl': contextPath + '/static/static/i18n/datatable_zh_CN.txt'
+	        				},
+	        				'bRowDetail': true
+	    	            });
 	        		}
 	        	});
 	        });

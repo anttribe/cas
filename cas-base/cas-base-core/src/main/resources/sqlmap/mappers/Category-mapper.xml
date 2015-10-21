@@ -31,10 +31,10 @@
 			<if test="null != name and name != ''">
 			    AND name LIKE CONCAT('%', '${name}', '%')
 			</if>
-			<if test="null == parent">
+			<if test="null == parent or parent.id == null or parent.id == ''">
 			    AND parent_id is null
 			</if>
-			<if test="null != parent and '' != parent">
+			<if test="null != parent and '' != parent.id">
 			    AND parent_id = #{parent.id}
 			</if>
 		</where>

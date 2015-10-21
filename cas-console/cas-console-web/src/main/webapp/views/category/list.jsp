@@ -37,6 +37,7 @@
                                 <table class="display table table-bordered table-striped table-hidden-detail">
                                     <thead>
                                         <tr>
+                                            <th>分类id</th>
                                             <th>分类名称</th>
                                             <th>操作</th>
                                         </tr>
@@ -67,23 +68,49 @@
 	        					continue;
 	        				}
 	        				$html += '<tr data-id="' + data['id'] + '">'
+	        				       + '<td>' + (data['id'] || '') + '</td>'
 	        				       + '<td>' + (data['name'] || '') + '</td>'
 	        				       + '<td></td>'
 	        				       + '</tr>';
 	        			}
 	        			$('#categories').append($html);
 	        			
-	        			// 初始化页面表格
-	        			var oTable = $('.table-hidden-detail').dataTable({
-	        				'bAutoWidth': true,
-	        				'bStateSave': true,
-	        				'bSort': false,
-	        				'bFilter': false,
-	        				'oLanguage': {
-	        					'sUrl': contextPath + '/static/static/i18n/datatable_zh_CN.txt'
-	        				},
-	        				'bRowDetail': true
-	    	            });
+	        			initialDataTable('.table-hidden-detail');
+	        			function initialDataTable(tableSelector){
+		        			$(tableSelector).dataTable({
+		        				'bAutoWidth': true,
+		        				'bStateSave': true,
+		        				"aoColumnDefs": [
+		        				    { "bVisible": false, "aTargets": [ 0 ] }
+		        				],
+		        				'bSort': false,
+		        				'bFilter': false,
+		        				'oLanguage': {
+		        					'sUrl': contextPath + '/static/static/i18n/datatable_zh_CN.txt'
+		        				},
+		        				'bRowDetail': true,
+		        				'bRowDetailCallback': function(category){
+		        					if(category && category[0]){
+		        						cas.category.listCategoriesByParent(category[0], function(datas, nTr){
+		        			        		if(datas && datas.length>0){
+		        			        			var $html = '<table id="table_' + category[0] + '">';
+		        			        			for(var i=0; i<datas.length; i++){
+		        			        				var data = datas[i];
+		        			        				if(!data){
+		        			        					continue;
+		        			        				}
+		        			        				$html += '<tr data-id="' + data['id'] + '">'
+		        			        				       + '<td>' + (data['id'] || '') + '</td>'
+		        			        				       + '<td>' + (data['name'] || '') + '</td>'
+		        			        				       + '<td></td>'
+		        			        				       + '</tr>';
+		        			        			}
+		        			        		}
+		        						});
+		        					}
+		        				}
+		    	            });
+	        			};
 	        		}
 	        	});
 	        });

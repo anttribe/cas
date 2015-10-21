@@ -6,34 +6,39 @@ $.extend( true, $.fn.dataTable.defaults, {
 		"sLengthMenu": "_MENU_ records per page"
 	},
 	"fnInitComplete": function(oSettings, json) {
-		if(oSettings.oInit.bRowDetail){
-			var oTable = this;
-			if(oTable){
-				var thead = $('thead', oTable);
-				if(thead){
-					$('<th>').insertBefore($('th:first-child', $('tr', thead)));
-				}
-				var tbody = $('tbody', oTable);
-				if(!tbody){
-					tbody = oTable;
-				}
-				$('<td>', {
-					'class': 'details-open'
-				}).insertBefore($('td:first-child', $('tr', tbody))).click(function(){
-					if($(this).hasClass('details-open')){
-						$(this).removeClass('details-open').addClass('details-close');
-			            oTable.fnOpen($(this), function(){
-			            }, 'details');
-					} else{
-						$(this).removeClass('details-close').addClass('details-open');
-			            oTable.fnClose();
-					}
-				});
-			}
-		}
+		var oTable = this;
+		fnInitComplete(oSettings, json, oTable);
 	}
 } );
 
+var fnInitComplete = function(oSettings, json, oTable){
+	if(oTable && oSettings.oInit.bRowDetail){
+		var thead = $('thead', oTable);
+		if(thead){
+			$('<th>').insertBefore($('th:first-child', $('tr', thead)));
+		}
+		var tbody = $('tbody', oTable);
+		if(!tbody){
+			tbody = oTable;
+		}
+		$('<td>', {
+			'class': 'details-open'
+		}).insertBefore($('td:first-child', $('tr', tbody))).click(function(){
+			var nTr = $(this).parents('tr')[0];
+			if (oTable.fnIsOpen(nTr)){
+				$(this).removeClass('details-close').addClass('details-open');
+	            oTable.fnClose(nTr);
+	        } else{
+	        	$(this).removeClass('details-open').addClass('details-close');
+	            oTable.fnOpen(nTr, function(){
+	            	if(oSettings.oInit.bRowDetailCallback){
+	            		return oSettings.oInit.bRowDetailCallback.call(this, oTable.fnGetData(nTr), nTr);
+	            	}
+	            }, 'details');
+			}
+		});
+	}
+};
 
 /* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {

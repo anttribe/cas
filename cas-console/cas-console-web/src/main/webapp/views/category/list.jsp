@@ -78,9 +78,12 @@
 	        			
 	        			initialDataTable('.table-hidden-detail');
 	        			function initialDataTable(tableSelector){
-		        			$(tableSelector).datatable_ext({
+		        			$(tableSelector).dataTable_ext({
 		        				'bAutoWidth': true,
-		        				'bStateSave': true,
+		        				'bStateSave': false,
+		        				'aoColumnDefs': [
+		        				    {'bVisible': false, "aTargets": [ 1 ] }
+		        				],
 		        				'bSort': false,
 		        				'bFilter': false,
 		        				'oLanguage': {
@@ -88,25 +91,26 @@
 		        				},
 		        				'bRowChild': true,
 		        				'fnRowChildCallback': function(category){
-		        					console.log(category);
-// 		        					if(category && category[0]){
-// 		        						cas.category.listCategoriesByParent(category[0], function(datas, nTr){
-// 		        			        		if(datas && datas.length>0){
-// 		        			        			var $html = '<table id="table_' + category[0] + '">';
-// 		        			        			for(var i=0; i<datas.length; i++){
-// 		        			        				var data = datas[i];
-// 		        			        				if(!data){
-// 		        			        					continue;
-// 		        			        				}
-// 		        			        				$html += '<tr data-id="' + data['id'] + '">'
-// 		        			        				       + '<td>' + (data['id'] || '') + '</td>'
-// 		        			        				       + '<td>' + (data['name'] || '') + '</td>'
-// 		        			        				       + '<td></td>'
-// 		        			        				       + '</tr>';
-// 		        			        			}
-// 		        			        		}
-// 		        						});
-// 		        					}
+		        					if(category && category[1]){
+		        						cas.category.listCategoriesByParent(category[1], function(datas, nTr){
+		        			        		if(datas && datas.length>0){
+		        			        			var $html = '<table id="table_' + category[0] + '">';
+		        			        			for(var i=0; i<datas.length; i++){
+		        			        				var data = datas[i];
+		        			        				if(!data){
+		        			        					continue;
+		        			        				}
+		        			        				$html += '<tr data-id="' + data['id'] + '">'
+		        			        				       + '<td>' + (data['id'] || '') + '</td>'
+		        			        				       + '<td>' + (data['name'] || '') + '</td>'
+		        			        				       + '<td></td>'
+		        			        				       + '</tr>';
+		        			        			}
+		        			        			console.log(nTr);
+		        			        			//$($html).insertAfter(nTr);
+		        			        		}
+		        						});
+		        					}
 		        				}
 		    	            });
 	        			};

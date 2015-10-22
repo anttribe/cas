@@ -5,13 +5,15 @@
 				if(item && (oSettings.bRowChild || oSettings.bRowDetail)){
 					$('<th>').insertBefore($('th:first-child', $('tr', item)));
 					var tbody = $('tbody', item);
-					if(!tbody){
-						tbody = oTable;
+					if(tbody){
+						$('<td>', {
+							'class': 'details-open'
+						}).insertBefore($('td:first-child', $('tr', tbody)));
 					}
-					$('<td>', {
-						'class': 'details-open'
-					}).insertBefore($('td:first-child', $('tr', tbody))).click(function(){
-						oTable = $(this).parents('table')[0];
+				}
+				var oTable = $(this).dataTable(oSettings);
+				if(item && (oSettings.bRowChild || oSettings.bRowDetail)){
+					$('td.details-open', item).on('click', function(){
 						if(oSettings.bRowChild){
 							_fnRowChildCallback(oSettings, $(this), oTable);
 						} else if(oSettings.bRowDetail){
@@ -19,8 +21,6 @@
 						}
 					});
 				}
-				
-				return $(this).dataTable(oSettings);
 			});
 		}
 		
@@ -29,7 +29,7 @@
 		}
 		
         function _fnRowChildCallback(oSettings, nTd, oTable){
-        	var nTr = $(this).parents('tr')[0];
+        	var nTr = $(nTd).parents('tr')[0];
         	if ($(nTd).hasClass('details-close')){
 				$(nTd).removeClass('details-close').addClass('details-open');
 	        } else{
@@ -42,4 +42,6 @@
 	};
 	
 	$.fn.datatable_ext = datatable_ext;
+	$.fn.dataTable_ext = datatable_ext;
+	$.fn.DataTable_ext = datatable_ext;
 })(jQuery, window);

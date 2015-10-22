@@ -55,6 +55,7 @@
         
         <script type="text/javascript" src="${contextPath}/static/assets/jquery-datatable/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/static/js/datatable_ext.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
 	        $(function(){
@@ -77,37 +78,35 @@
 	        			
 	        			initialDataTable('.table-hidden-detail');
 	        			function initialDataTable(tableSelector){
-		        			$(tableSelector).dataTable({
+		        			$(tableSelector).datatable_ext({
 		        				'bAutoWidth': true,
 		        				'bStateSave': true,
-		        				"aoColumnDefs": [
-		        				    { "bVisible": false, "aTargets": [ 0 ] }
-		        				],
 		        				'bSort': false,
 		        				'bFilter': false,
 		        				'oLanguage': {
 		        					'sUrl': contextPath + '/static/static/i18n/datatable_zh_CN.txt'
 		        				},
-		        				'bRowDetail': true,
-		        				'bRowDetailCallback': function(category){
-		        					if(category && category[0]){
-		        						cas.category.listCategoriesByParent(category[0], function(datas, nTr){
-		        			        		if(datas && datas.length>0){
-		        			        			var $html = '<table id="table_' + category[0] + '">';
-		        			        			for(var i=0; i<datas.length; i++){
-		        			        				var data = datas[i];
-		        			        				if(!data){
-		        			        					continue;
-		        			        				}
-		        			        				$html += '<tr data-id="' + data['id'] + '">'
-		        			        				       + '<td>' + (data['id'] || '') + '</td>'
-		        			        				       + '<td>' + (data['name'] || '') + '</td>'
-		        			        				       + '<td></td>'
-		        			        				       + '</tr>';
-		        			        			}
-		        			        		}
-		        						});
-		        					}
+		        				'bRowChild': true,
+		        				'fnRowChildCallback': function(category){
+		        					console.log(category);
+// 		        					if(category && category[0]){
+// 		        						cas.category.listCategoriesByParent(category[0], function(datas, nTr){
+// 		        			        		if(datas && datas.length>0){
+// 		        			        			var $html = '<table id="table_' + category[0] + '">';
+// 		        			        			for(var i=0; i<datas.length; i++){
+// 		        			        				var data = datas[i];
+// 		        			        				if(!data){
+// 		        			        					continue;
+// 		        			        				}
+// 		        			        				$html += '<tr data-id="' + data['id'] + '">'
+// 		        			        				       + '<td>' + (data['id'] || '') + '</td>'
+// 		        			        				       + '<td>' + (data['name'] || '') + '</td>'
+// 		        			        				       + '<td></td>'
+// 		        			        				       + '</tr>';
+// 		        			        			}
+// 		        			        		}
+// 		        						});
+// 		        					}
 		        				}
 		    	            });
 	        			};

@@ -4,41 +4,9 @@ $.extend( true, $.fn.dataTable.defaults, {
 	"sPaginationType": "bootstrap",
 	"oLanguage": {
 		"sLengthMenu": "_MENU_ records per page"
-	},
-	"fnInitComplete": function(oSettings, json) {
-		var oTable = this;
-		fnInitComplete(oSettings, json, oTable);
 	}
 } );
 
-var fnInitComplete = function(oSettings, json, oTable){
-	if(oTable && oSettings.oInit.bRowDetail){
-		var thead = $('thead', oTable);
-		if(thead){
-			$('<th>').insertBefore($('th:first-child', $('tr', thead)));
-		}
-		var tbody = $('tbody', oTable);
-		if(!tbody){
-			tbody = oTable;
-		}
-		$('<td>', {
-			'class': 'details-open'
-		}).insertBefore($('td:first-child', $('tr', tbody))).click(function(){
-			var nTr = $(this).parents('tr')[0];
-			if (oTable.fnIsOpen(nTr)){
-				$(this).removeClass('details-close').addClass('details-open');
-	            oTable.fnClose(nTr);
-	        } else{
-	        	$(this).removeClass('details-open').addClass('details-close');
-	            oTable.fnOpen(nTr, function(){
-	            	if(oSettings.oInit.bRowDetailCallback){
-	            		return oSettings.oInit.bRowDetailCallback.call(this, oTable.fnGetData(nTr), nTr);
-	            	}
-	            }, 'details');
-			}
-		});
-	}
-};
 
 /* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {
@@ -75,8 +43,8 @@ $.extend( $.fn.dataTableExt.oPagination, {
 
 			$(nPaging).addClass('pagination').append(
 				'<ul>'+
-					'<li class="prev disabled"><a href="#" title="' + oLang.sPrevious + '"><i class="fa fa-angle-double-left"></i></a></li>'+
-					'<li class="next disabled"><a href="#" title="' + oLang.sNext + '"><i class="fa fa-angle-double-right"></i></a></li>'+
+					'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
+					'<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
 				'</ul>'
 			);
 			var els = $('a', nPaging);

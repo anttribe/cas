@@ -13,30 +13,40 @@
 				}
 				var oTable = $(this).dataTable(oSettings);
 				if(item && (oSettings.bRowChild || oSettings.bRowDetail)){
-					$('td.details-open', item).on('click', function(){
-						if(oSettings.bRowChild){
-							_fnRowChildCallback(oSettings, $(this), oTable);
-						} else if(oSettings.bRowDetail){
-							_fnRowDetailCallback();
+					$('td.details-open', item).on('click', function(oTable){
+						return function(){
+							if(oSettings.bRowChild){
+							    _fnRowChildCallback(oSettings, $(this), oTable);
+						    } else if(oSettings.bRowDetail){
+							    _fnRowDetailCallback();
+						    }
 						}
-					});
+					}(oTable));
 				}
 			});
 		}
 		
 		function _fnRowDetailCallback(oSettings, nTd){
-			var nTr = $(this).parents('tr')[0];
+			var nTr = $(this).closest('tr')[0];
 		}
 		
         function _fnRowChildCallback(oSettings, nTd, oTable){
-        	var nTr = $(nTd).parents('tr')[0];
+        	var nTr = $(nTd).closest('tr')[0];
+        	if(!$(nTr).next().hasClass('child-table')){
+        		$('<td colspan="' + (oTable._fnVisbleColumns()) + '">').appendTo($('<tr class="child-table">').insertAfter(nTr));
+        	} else if($('td', $(nTr).next()).length<=0){
+        		$('<td colspan="' + (oTable._fnVisbleColumns()) + '">').appendTo($(nTr).next());
+        	}
+        	var newTd = $('td', $(nTr).next('.child-table'));
         	if ($(nTd).hasClass('details-close')){
 				$(nTd).removeClass('details-close').addClass('details-open');
+				$(newTd).hide();
 	        } else{
 	        	$(nTd).removeClass('details-open').addClass('details-close');
 	        	if(oSettings.fnRowChildCallback){
-            		return oSettings.fnRowChildCallback.call(this, oTable.fnGetData(nTr));
+            		oSettings.fnRowChildCallback.call(this, oTable.fnGetData(nTr), newTd);
             	}
+	        	$(newTd).show();
 			}
 		}
 	};

@@ -6,7 +6,7 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.appname" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-datatable/css/jquery.dataTables.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-datatable/css/jquery.dataTables.min.css" >
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.css" >
     </head>
     <body>
@@ -53,7 +53,7 @@
         </div>
         <!--body wrapper end-->
         
-        <script type="text/javascript" src="${contextPath}/static/assets/jquery-datatable/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/assets/jquery-datatable/js/jquery.dataTables.js"></script>
         <script type="text/javascript" src="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/datatable_ext.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
@@ -78,11 +78,11 @@
 	        			
 	        			initialDataTable('.table-hidden-detail');
 	        			function initialDataTable(tableSelector){
-		        			$(tableSelector).dataTable_ext({
+		        			$(tableSelector).dataTable({
 		        				'bAutoWidth': true,
 		        				'bStateSave': false,
 		        				'aoColumnDefs': [
-		        				    {'bVisible': false, "aTargets": [ 1 ] }
+		        				    {'bVisible': false, "aTargets": [ 0 ] }
 		        				],
 		        				'bSort': false,
 		        				'bFilter': false,
@@ -90,26 +90,33 @@
 		        					'sUrl': contextPath + '/static/static/i18n/datatable_zh_CN.txt'
 		        				},
 		        				'bRowChild': true,
-		        				'fnRowChildCallback': function(category){
-		        					if(category && category[1]){
-		        						cas.category.listCategoriesByParent(category[1], function(datas, nTr){
-		        			        		if(datas && datas.length>0){
-		        			        			var $html = '<table id="table_' + category[0] + '">';
-		        			        			for(var i=0; i<datas.length; i++){
-		        			        				var data = datas[i];
-		        			        				if(!data){
-		        			        					continue;
-		        			        				}
-		        			        				$html += '<tr data-id="' + data['id'] + '">'
-		        			        				       + '<td>' + (data['id'] || '') + '</td>'
-		        			        				       + '<td>' + (data['name'] || '') + '</td>'
-		        			        				       + '<td></td>'
-		        			        				       + '</tr>';
-		        			        			}
-		        			        			console.log(nTr);
-		        			        			//$($html).insertAfter(nTr);
-		        			        		}
-		        						});
+		        				'fnRowChildCallback': function(category, nTd){
+		        					if(nTd && category){
+		        						var categoryId = category[1];
+		        						if(categoryId){
+		        							var childTableId = 'table_' + categoryId;
+		        							if($('#' + childTableId).length<=0){
+		        								cas.category.listCategoriesByParent(categoryId, function(datas){
+				        							if(datas && datas.length>0){
+				        								var childTableId = 'table_' + categoryId;
+				        			        			var $html = '<table id="' + childTableId + '">';
+				        			        			for(var i=0; i<datas.length; i++){
+				        			        				var data = datas[i];
+				        			        				if(!data){
+				        			        					continue;
+				        			        				}
+				        			        				$html += '<tr data-id="' + data['id'] + '">'
+				        			        				       + '<td>' + (data['id'] || '') + '</td>'
+				        			        				       + '<td>' + (data['name'] || '') + '</td>'
+				        			        				       + '<td></td>'
+				        			        				       + '</tr>';
+				        			        			}
+				        			        			$($html).appendTo(nTd);
+				        			        			//initialDataTable('#' + childTableId);
+				        			        		}
+				        						});
+		        							}
+		        						}
 		        					}
 		        				}
 		    	            });

@@ -6,6 +6,7 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.appname" /></title>
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -35,8 +36,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">父分类</label>
-                                    <select class="form-control" name="parent">
-                                    </select>
+                                    <input type="text" class="form-control" name="parent" placeholder="">
                                 </div>
                                 <button type="submit" class="btn btn-primary">提交</button>
                             </form>
@@ -47,9 +47,23 @@
         </div>
         <!--body wrapper end-->
         
+        <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
 	        $(function(){
+	        	$('input[name="parent"]').bind({
+	        		'click': function(){
+	        			var categorySelector = new BootstrapDialog({
+	        				size: BootstrapDialog.SIZE_SMALL,
+	        				type: BootstrapDialog.TYPE_DEFAULT,
+	        				draggable: true,
+	        				closable: true,
+	        	            title: '<div class="model-header-title"><i class="glyphicon glyphicon-search"></i> 选择分类</div>',
+	        	            message: $('<div></div>').load('${contextPath}/category/select.tool')
+	        	        });
+	        			categorySelector.open();
+	        		}
+	        	});
 	        });
 	    </script>
     </body>

@@ -50,6 +50,12 @@ public class CategoryController
         return result;
     }
     
+    @RequestMapping("/select.tool")
+    public String select(HttpServletRequest request, CategoryDTO categoryDTO)
+    {
+        return "/category/selector.tool";
+    }
+    
     @RequestMapping("/goAdd")
     public String goAddCategory()
     {

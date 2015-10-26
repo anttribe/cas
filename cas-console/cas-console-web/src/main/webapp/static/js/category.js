@@ -4,6 +4,7 @@ $.extend(cas, {
 		listCategoriesByParent : function(parent, callback){
 	        $.ajax({
 	        	type: 'POST',
+	        	async: false,
 	        	url: contextPath + '/category/list',
 	        	data: {parent: parent},
 	        	success: function(result){

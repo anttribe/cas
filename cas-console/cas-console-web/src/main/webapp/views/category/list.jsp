@@ -78,11 +78,11 @@
 	        			
 	        			initialDataTable('.table-hidden-detail');
 	        			function initialDataTable(tableSelector){
-		        			$(tableSelector).dataTable({
+		        			$(tableSelector).dataTable_ext({
 		        				'bAutoWidth': true,
 		        				'bStateSave': false,
 		        				'aoColumnDefs': [
-		        				    {'bVisible': false, "aTargets": [ 0 ] }
+		        				    {'bVisible': false, "aTargets": [ 1 ] }
 		        				],
 		        				'bSort': false,
 		        				'bFilter': false,
@@ -106,7 +106,7 @@
 				        			        					continue;
 				        			        				}
 				        			        				$html += '<tr data-id="' + data['id'] + '">'
-				        			        				       + '<td>' + (data['id'] || '') + '</td>'
+				        			        				       + '<td></td>'
 				        			        				       + '<td>' + (data['name'] || '') + '</td>'
 				        			        				       + '<td></td>'
 				        			        				       + '</tr>';

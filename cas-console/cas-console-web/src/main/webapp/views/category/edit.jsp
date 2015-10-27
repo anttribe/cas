@@ -54,7 +54,7 @@
 	        	$('input[name="parent"]').bind({
 	        		'click': function(){
 	        			var categorySelector = new BootstrapDialog({
-	        				size: BootstrapDialog.SIZE_SMALL,
+	        				size: BootstrapDialog.SIZE_NORMAL,
 	        				type: BootstrapDialog.TYPE_DEFAULT,
 	        				draggable: true,
 	        				closable: true,

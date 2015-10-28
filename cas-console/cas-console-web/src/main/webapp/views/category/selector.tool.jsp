@@ -68,7 +68,7 @@
 		        				});
 	        					categories[(parentId || '-1')] = treeDatas;
 	        				}
-	        				callback({data: treeDatas});
+	        				callback({data: treeDatas || []});
 		        		}	
 	        		},
 	                loadingHTML: '<img src="${contextPath}/static/static/img/input-spinner.gif"/>',

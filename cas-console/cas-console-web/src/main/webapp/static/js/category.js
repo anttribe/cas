@@ -8,11 +8,8 @@ $.extend(cas, {
 	        	url: contextPath + '/category/list',
 	        	data: {parent: parent},
 	        	success: function(result){
-	        		if(result && result['resultCode'] == '000000'){
-	        			var datas = result['data'];
-	        			if(callback){
-        					callback.call(this, datas);
-        				}
+	        		if(result && callback){
+	        			callback.call(this, result);
 	        		}
 	        	}
 	        });

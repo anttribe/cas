@@ -11,10 +11,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.anttribe.cas.base.infra.common.Result;
 import org.anttribe.cas.console.facade.CategoryFacade;
 import org.anttribe.cas.console.facade.dto.CategoryDTO;
-import org.anttribe.cas.console.web.constants.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,14 +38,9 @@ public class CategoryController
     
     @RequestMapping("/list")
     @ResponseBody
-    public Result<List<CategoryDTO>> listCategories(HttpServletRequest request, CategoryDTO categoryDTO)
+    public List<CategoryDTO> listCategories(HttpServletRequest request, CategoryDTO categoryDTO)
     {
-        List<CategoryDTO> categories = categoryFacade.listCategories(categoryDTO);
-        
-        Result<List<CategoryDTO>> result = new Result<List<CategoryDTO>>();
-        result.setResultCode(Constants.DEFAULT_RESULT_CODE);
-        result.setData(categories);
-        return result;
+        return categoryFacade.listCategories(categoryDTO);
     }
     
     @RequestMapping("/select.tool")

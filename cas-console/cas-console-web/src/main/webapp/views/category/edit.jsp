@@ -50,10 +50,19 @@
         <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
+            $.extend((cas && cas.category), {
+            	categorySelector: null,
+            	selectCategory: function(category){
+            		if(category){
+            		}
+            	}
+            });
+        </script>
+        <script type="text/javascript">
 	        $(function(){
 	        	$('input[name="parent"]').bind({
 	        		'click': function(){
-	        			var categorySelector = new BootstrapDialog({
+	        			cas.category.categorySelector = new BootstrapDialog({
 	        				size: BootstrapDialog.SIZE_NORMAL,
 	        				type: BootstrapDialog.TYPE_DEFAULT,
 	        				draggable: true,
@@ -61,7 +70,7 @@
 	        	            title: '<div class="model-header-title"><i class="glyphicon glyphicon-search"></i> 选择分类</div>',
 	        	            message: $('<div></div>').load('${contextPath}/category/select.tool')
 	        	        });
-	        			categorySelector.open();
+	        			cas.category.categorySelector.open();
 	        		}
 	        	});
 	        });

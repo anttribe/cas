@@ -9,6 +9,7 @@ package org.anttribe.cas.console.facade.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhaoyong
@@ -40,6 +41,11 @@ public class CategoryDTO implements Serializable
      * 父分类
      */
     private String parent;
+    
+    /**
+     * 子分类
+     */
+    private List<CategoryDTO> children;
     
     /**
      * 数据创建时间
@@ -89,6 +95,16 @@ public class CategoryDTO implements Serializable
     public void setParent(String parent)
     {
         this.parent = parent;
+    }
+    
+    public List<CategoryDTO> getChildren()
+    {
+        return children;
+    }
+    
+    public void setChildren(List<CategoryDTO> children)
+    {
+        this.children = children;
     }
     
     public Date getCreateTime()

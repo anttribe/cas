@@ -43,6 +43,11 @@ public class Category extends MybatisAbstractEntity
     private Category parent;
     
     /**
+     * 子分类
+     */
+    private List<Category> children;
+    
+    /**
      * 数据创建时间
      */
     private Date createTime;
@@ -119,6 +124,16 @@ public class Category extends MybatisAbstractEntity
     public void setParent(Category parent)
     {
         this.parent = parent;
+    }
+    
+    public List<Category> getChildren()
+    {
+        return children;
+    }
+    
+    public void setChildren(List<Category> children)
+    {
+        this.children = children;
     }
     
     public Date getCreateTime()

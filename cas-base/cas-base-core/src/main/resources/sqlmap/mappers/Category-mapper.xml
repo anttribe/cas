@@ -12,13 +12,19 @@
 			javaType="org.anttribe.cas.base.core.entity.Category">
 			<id property="id" column="parent_id" />
 		</association>
+		<collection property="children" resultMap="Category-child-resultMap">
+		</collection>
+	</resultMap>
+
+	<resultMap id="Category-child-resultMap" type="org.anttribe.cas.base.core.entity.Category">
+		<id property="id" column="child_id" />
 	</resultMap>
 
 	<!-- select -->
 	<sql id="select">
         <![CDATA[
-            SELECT id, name, ordinal, parent_id, create_time, update_time
-              FROM cas_t_core_category
+            SELECT t.id, t.name, t.ordinal, t.parent_id, t.create_time, t.update_time
+              FROM cas_t_core_category t
         ]]>
 	</sql>
 
@@ -26,16 +32,16 @@
 	<sql id="where">
 		<where>
 			<if test="null != id and id != ''">
-			    AND id = #{id}
+				AND t.id = #{id}
 			</if>
 			<if test="null != name and name != ''">
-			    AND name LIKE CONCAT('%', '${name}', '%')
+				AND t.name LIKE CONCAT('%', '${name}', '%')
 			</if>
 			<if test="null == parent or parent.id == null or parent.id == ''">
-			    AND parent_id is null
+				AND t.parent_id is null
 			</if>
 			<if test="null != parent and '' != parent.id">
-			    AND parent_id = #{parent.id}
+				AND t.parent_id = #{parent.id}
 			</if>
 		</where>
 	</sql>
@@ -51,7 +57,7 @@
 	<!-- update: 更新单条数据 -->
 	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Category">
         <![CDATA[
-            UPDATE cas_t_core_category
+            UPDATE cas_t_core_category t
         ]]>
 		<set>
 			<if test="null != name and name != ''">
@@ -73,7 +79,7 @@
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Category">
 	    <![CDATA[
-            DELETE FROM cas_t_core_category
+            DELETE FROM cas_t_core_category t
         ]]>
 		<include refid="where"></include>
 	</delete>
@@ -81,7 +87,7 @@
 	<!-- queryAll: 查询所有数据 -->
 	<select id="queryAll" resultMap="Category-resultMap">
 		<include refid="select"></include>
-		ORDER BY update_time, create_time
+		ORDER BY t.update_time, t.create_time
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
@@ -93,8 +99,12 @@
 	<!-- queryByCriteria: 根据条件查询数据 -->
 	<select id="queryByCriteria" resultMap="Category-resultMap"
 		parameterType="map">
-		<include refid="select"></include>
+		<![CDATA[
+		    SELECT t.id, t.name, t.ordinal, t.parent_id, t.create_time, t.update_time, t1.id as child_id
+              FROM cas_t_core_category t
+		    LEFT JOIN cas_t_core_category t1 ON t1.parent_id = t.id 
+		]]>
 		<include refid="where"></include>
-		ORDER BY update_time, create_time
+		ORDER BY t.update_time, t.create_time
 	</select>
 </mapper>

@@ -31,6 +31,7 @@ public class CategoryAssembler
             categoryDTO.setOrdinal(category.getOrdinal());
             categoryDTO.setCreateTime(category.getCreateTime());
             categoryDTO.setUpdateTime(category.getUpdateTime());
+            categoryDTO.setChildren(CategoryAssembler.toDTO(category.getChildren()));
             
             return categoryDTO;
         }

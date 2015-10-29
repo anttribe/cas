@@ -1,3 +1,6 @@
 @charset "utf-8";
 html, body { height: 100%; }
 body { padding: 0; background: #FFFFFF; color: rgba(0,0,0,.75); font-size: 13px; font-family: '微软雅黑','Helvetica Neue',sans-serif,SimHei; }
+
+.table tbody td .details-open { background: url(../img/details_open.png) center center  no-repeat; }
+.table tbody td .details-close { background: url(../img/details_close.png) center center  no-repeat; }

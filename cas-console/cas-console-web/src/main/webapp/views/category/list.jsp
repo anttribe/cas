@@ -6,8 +6,8 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.appname" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-datatable/css/jquery.dataTables.min.css" >
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-treetable/css/jquery.treetable.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-treetable/css/jquery.treetable.theme.default.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -27,22 +27,23 @@
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            <span>分类列表</span>
-                            <span class="tools pull-right">
-                                <a href="${contextPath}/category/goAdd" title="新建分类" class="fa fa-plus-square"></a>
-                            </span>
+                                                        分类列表
+                            <span class="tools pull-right"></span>
                         </header>
                         <div class="panel-body">
-                            <div class="adv-table">
-                                <table class="display table table-bordered table-striped table-hidden-detail">
+                            <div class="btn-group mb10">
+                                <a href="${contextPath}/category/goAdd" class="btn btn-primary btn-sm" title="新增分类"><i class="fa fa-plus"></i> 新增分类</a>
+                            </div>
+                            <div class="">
+                                <table id="category-table" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>分类id</th>
+                                            <th>全选/全不选</th>
                                             <th>分类名称</th>
                                             <th>操作</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="categories">
+                                    <tbody>
                                     </tbody>
                                 </table>
                             </div>
@@ -53,76 +54,48 @@
         </div>
         <!--body wrapper end-->
         
-        <script type="text/javascript" src="${contextPath}/static/assets/jquery-datatable/js/jquery.dataTables.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/static/js/datatable_ext.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/assets/jquery-treetable/js/jquery.treetable.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
-	        $(function(){
-	        	// 初始化父分类
-	        	cas.category.listCategoriesByParent('', function(datas){
+            var listCategories = function(parentCategory){
+            	var $html = '';
+            	cas.category.listCategoriesByParent(parentCategory, function(datas){
 	        		if(datas && datas.length>0){
-	        			var $html = '';
 	        			for(var i=0; i<datas.length; i++){
 	        				var data = datas[i];
 	        				if(!data){
 	        					continue;
 	        				}
-	        				$html += '<tr data-id="' + data['id'] + '">'
-	        				       + '<td>' + (data['id'] || '') + '</td>'
+	        				$html += '<tr data-tt-id="' + data['id'] + '" data-tt-parent-id="' + data['parent'] + '" data-tt-branch=' + (data['children'] && data['children'].length>0 ? true : false) + '>'
+	        				       + '<td></td>'
 	        				       + '<td>' + (data['name'] || '') + '</td>'
 	        				       + '<td></td>'
 	        				       + '</tr>';
 	        			}
-	        			$('#categories').append($html);
-	        			
-	        			initialDataTable('.table-hidden-detail');
-	        			function initialDataTable(tableSelector){
-		        			$(tableSelector).dataTable_ext({
-		        				'bAutoWidth': true,
-		        				'bStateSave': false,
-		        				'aoColumnDefs': [
-		        				    {'bVisible': false, "aTargets": [ 1 ] }
-		        				],
-		        				'bSort': false,
-		        				'bFilter': false,
-		        				'oLanguage': {
-		        					'sUrl': contextPath + '/static/static/i18n/datatable_zh_CN.txt'
-		        				},
-		        				'bRowChild': true,
-		        				'fnRowChildCallback': function(category, nTd){
-		        					if(nTd && category){
-		        						var categoryId = category[1];
-		        						if(categoryId){
-		        							var childTableId = 'table_' + categoryId;
-		        							if($('#' + childTableId).length<=0){
-		        								cas.category.listCategoriesByParent(categoryId, function(datas){
-				        							if(datas && datas.length>0){
-				        								var childTableId = 'table_' + categoryId;
-				        			        			var $html = '<table id="' + childTableId + '">';
-				        			        			for(var i=0; i<datas.length; i++){
-				        			        				var data = datas[i];
-				        			        				if(!data){
-				        			        					continue;
-				        			        				}
-				        			        				$html += '<tr data-id="' + data['id'] + '">'
-				        			        				       + '<td></td>'
-				        			        				       + '<td>' + (data['name'] || '') + '</td>'
-				        			        				       + '<td></td>'
-				        			        				       + '</tr>';
-				        			        			}
-				        			        			$($html).appendTo(nTd);
-				        			        			//initialDataTable('#' + childTableId);
-				        			        		}
-				        						});
-		        							}
-		        						}
-		        					}
-		        				}
-		    	            });
-	        			};
 	        		}
 	        	});
+            	return $html;
+            }
+        </script>
+        <script type="text/javascript">
+	        $(function(){
+	        	var $html = listCategories('');
+    			if($html){
+    				console.log($html);
+    				$('tbody', '#category-table').html($html);
+    				
+    				// 表格treetable化
+    	        	$('#category-table').treetable({
+    	        		theme: 'vsStyle',
+    	        		column: 1,
+    	        		expandable: true,
+    	        		onInitialized: function(){
+    	        		},
+    	        		onNodeExpand: function(){
+    	        			console.log('onNodeExpand');
+    	        		}
+    	        	});
+    			}
 	        });
 	    </script>
     </body>

@@ -130,11 +130,11 @@
     color: #fff;
     border-radius: 0;
     -webkit-border-radius: 0;
-    border: none;
+    /*border: none;*/
 }
 
 .modal-header .close {
-    color: #fff;
+    /*color: #fff;*/
     opacity: .5;
 }
 .modal-header .close:hover {

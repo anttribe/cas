@@ -58,7 +58,7 @@
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
             var listCategories = function(parentCategory){
-            	var $html = '';
+            	var nTrs = [];
             	cas.category.listCategoriesByParent(parentCategory, function(datas){
 	        		if(datas && datas.length>0){
 	        			for(var i=0; i<datas.length; i++){
@@ -66,33 +66,48 @@
 	        				if(!data){
 	        					continue;
 	        				}
-	        				$html += '<tr data-tt-id="' + data['id'] + '" data-tt-parent-id="' + data['parent'] + '" data-tt-branch=' + (data['children'] && data['children'].length>0 ? true : false) + '>'
-	        				       + '<td></td>'
-	        				       + '<td>' + (data['name'] || '') + '</td>'
-	        				       + '<td></td>'
-	        				       + '</tr>';
+	        				nTrs.push($('<tr>', {
+	        					'data-tt-id': data['id'],
+	        					'data-tt-parent-id': data['parent'],
+	        					'data-tt-branch': (data['children'] && data['children'].length>0 ? true : false),
+	        					'html': '<td></td>'
+		        				      + '<td>' + (data['name'] || '') + '</td>'
+		        				      + '<td></td>'
+	        				}));
 	        			}
 	        		}
 	        	});
-            	return $html;
+            	return nTrs;
             }
         </script>
         <script type="text/javascript">
 	        $(function(){
-	        	var $html = listCategories('');
-    			if($html){
-    				console.log($html);
-    				$('tbody', '#category-table').html($html);
+	        	var nTrs = listCategories('');
+    			if(nTrs){
+    				$('tbody', '#category-table').append(nTrs);
     				
     				// 表格treetable化
     	        	$('#category-table').treetable({
     	        		theme: 'vsStyle',
     	        		column: 1,
     	        		expandable: true,
-    	        		onInitialized: function(){
-    	        		},
     	        		onNodeExpand: function(){
-    	        			console.log('onNodeExpand');
+    	        			if(this.children && this.children.length>0){
+    	        				return;
+    	        			}
+    	        			var categoryId = this.id;
+    	        			if(categoryId){
+    	        				var categories = listCategories(categoryId);
+    	        				if(categories && categories.length>0){
+    	        					for(var i=0; i<categories.length; i++){
+    	        						var category = categories[i];
+    	        						if(category){
+    	        							//this.addChild(category);
+    	        							$('#category-table').treetable('loadBranch', this, category);
+    	        						}
+    	        					}
+    	        				}
+    	        			}
     	        		}
     	        	});
     			}

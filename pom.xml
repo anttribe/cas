@@ -155,6 +155,16 @@
 				<groupId>org.anttribe.opengadget</groupId>
 				<artifactId>opengadget-runtime</artifactId>
 				<version>${opengadget.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.servlet</groupId>
+						<artifactId>servlet-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.servlet</groupId>
+						<artifactId>servlet-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>

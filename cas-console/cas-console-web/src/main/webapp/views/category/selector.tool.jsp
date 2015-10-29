@@ -6,7 +6,8 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.appname" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/zTree/css/awesomeStyle/awesome.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/zTree/css/zTreeStyle/zTreeStyle.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/zTree/css/metroStyle/metroStyle.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -16,7 +17,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <section class="">
-                        <div id="category-list-tree" class="tree">
+                        <div id="category-list-tree" class="ztree">
                         </div>
                     </section>
                 </div>
@@ -34,18 +35,52 @@
 	        		async: {
 	        			enable: true,
 	        			type: 'POST',
+	        			autoParam: ['parent'],
 	        			url: contextPath + '/category/list'
 	        		},
 	        		view: {
-	                    selectedMulti: false
+	                    selectedMulti: false,
+	                    dblClickExpand: false
 	                },
 	                data: {
 	                    simpleData: {
-	                        enable: false,
+	                        enable: true,
 	                        idKey: 'id',
 	                        pIdKey: 'parent',
 	                        rootPId: null
 	                    }
+	                },
+	                callback: {
+	                	onNodeCreated: function(e, treeId, treeNode){
+	                		if(treeNode.children){
+	                			treeNode.isParent = true;
+	                			treeNode.children = null;
+	                		}
+	                	},
+	                	onClick: function(e, treeId, treeNode){
+	                		var zTree = $.fn.zTree.getZTreeObj(treeId);
+	                		if(zTree){
+	                			if(treeNode.isParent){
+	                				zTree.expandNode(treeNode, null, false, true, true);
+	                			}
+	                		}
+	                	},
+	                	onExpand: function(e, treeId, treeNode){
+	                		var zTree = $.fn.zTree.getZTreeObj(treeId);
+	                		if(zTree && !treeNode.children){
+	                			// 异步加载子节点
+	                			cas.category.listCategoriesByParent(treeNode.id, function(datas){
+	                				zTree.addNodes(treeNode, datas);
+	                			});
+	                		}
+	                	},
+	                	onDblClick: function(e, treeId, treeNode){
+	                		var category = {
+	                			id: treeNode.id,
+	                			name: treeNode.name
+	                		};
+	                		cas.category.selectCategory(category);
+	                	}
 	                }
 	        	});
 	        });

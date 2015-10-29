@@ -32,11 +32,12 @@
                             <form role="form" method="post" action="${contextPath}/category/edit">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">分类名称</label>
-                                    <input type="text" class="form-control" name="name" placeholder="">
+                                    <input type="text" class="form-control" name="name" placeholder="" />
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">父分类</label>
-                                    <input type="text" class="form-control" name="parent" placeholder="">
+                                    <input type="hidden" name="parent" />
+                                    <input type="text" class="form-control" name="parentSelect" placeholder="" />
                                 </div>
                                 <button type="submit" class="btn btn-primary">提交</button>
                             </form>
@@ -50,27 +51,25 @@
         <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
-            $.extend((cas && cas.category), {
-            	categorySelector: null,
-            	selectCategory: function(category){
-            		if(category){
-            		}
-            	}
-            });
+            var categorySelector = null;
+            var selectCategory = function(category){
+    			if(category){
+    				$('input[name="parent"]').val(category.id);
+    				$('input[name="parentSelect"]').val(category.name);
+    			}
+            	if(categorySelector){
+    				categorySelector.close();
+    			}
+            };
         </script>
         <script type="text/javascript">
 	        $(function(){
-	        	$('input[name="parent"]').bind({
+	        	$('input[name="parentSelect"]').bind({
 	        		'click': function(){
-	        			cas.category.categorySelector = new BootstrapDialog({
-	        				size: BootstrapDialog.SIZE_NORMAL,
-	        				type: BootstrapDialog.TYPE_DEFAULT,
-	        				draggable: true,
-	        				closable: true,
-	        	            title: '<div class="model-header-title"><i class="glyphicon glyphicon-search"></i> 选择分类</div>',
-	        	            message: $('<div></div>').load('${contextPath}/category/select.tool')
-	        	        });
-	        			cas.category.categorySelector.open();
+	        			categorySelector = cas.category.categorySelector();
+	        			if(categorySelector){
+	        				categorySelector.open();
+	        			}
 	        		}
 	        	});
 	        });

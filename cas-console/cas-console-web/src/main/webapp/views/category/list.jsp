@@ -7,7 +7,7 @@
     <head>
         <title><spring:message code="app.appname" /></title>
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-treetable/css/jquery.treetable.css" >
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-treetable/css/jquery.treetable.theme.default.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/static/css/jquery.treetable.theme.custom.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -34,13 +34,13 @@
                             <div class="btn-group mb10">
                                 <a href="${contextPath}/category/goAdd" class="btn btn-primary btn-sm" title="新增分类"><i class="fa fa-plus"></i> 新增分类</a>
                             </div>
-                            <div class="">
+                            <div class="table-responsive">
                                 <table id="category-table" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>全选/全不选</th>
-                                            <th>分类名称</th>
-                                            <th>操作</th>
+                                            <th width="16%"><input type="checkbox" class="btn-ck-select-all" data-refer="ck-category" /> 全选/全不选</th>
+                                            <th width="60%">分类名称</th>
+                                            <th width="24%">操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -70,7 +70,7 @@
 	        					'data-tt-id': data['id'],
 	        					'data-tt-parent-id': data['parent'],
 	        					'data-tt-branch': (data['children'] && data['children'].length>0 ? true : false),
-	        					'html': '<td></td>'
+	        					'html': '<td><input type="checkbox" name="ck-category" value="' + data['id'] + '" /></td>'
 		        				      + '<td>' + (data['name'] || '') + '</td>'
 		        				      + '<td></td>'
 	        				}));
@@ -88,7 +88,6 @@
     				
     				// 表格treetable化
     	        	$('#category-table').treetable({
-    	        		theme: 'vsStyle',
     	        		column: 1,
     	        		expandable: true,
     	        		onNodeExpand: function(){
@@ -97,12 +96,12 @@
     	        			}
     	        			var categoryId = this.id;
     	        			if(categoryId){
+    	        				// 加载子分类数据
     	        				var categories = listCategories(categoryId);
     	        				if(categories && categories.length>0){
     	        					for(var i=0; i<categories.length; i++){
     	        						var category = categories[i];
     	        						if(category){
-    	        							//this.addChild(category);
     	        							$('#category-table').treetable('loadBranch', this, category);
     	        						}
     	        					}
@@ -111,6 +110,24 @@
     	        		}
     	        	});
     			}
+    			
+    			// 绑定事件
+    			$('.btn-ck-select-all').click(function(){
+    				var that = this;
+    				var dataRefer = $(that).attr('data-refer');
+    				if(dataRefer){
+    					var cks = $('input[type="checkbox"][name="' + dataRefer + '"]');
+    					
+    					console.log(that);
+    					console.log($(that).attr('checked'));
+    					
+    					if(cks && cks.length>0){
+    						$.each(cks, function(i, item){
+    							$(item).attr('checked', ($(that).attr('checked') || false));
+    						});
+    					}
+    				}
+    			});
 	        });
 	    </script>
     </body>

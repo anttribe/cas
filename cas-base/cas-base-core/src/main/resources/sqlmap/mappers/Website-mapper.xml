@@ -1,42 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.anttribe.cas.base.core.entity.Website">
-    <cache readOnly="true" />
+	<cache readOnly="true" />
 	<resultMap id="Website-resultMap" type="org.anttribe.cas.base.core.entity.Website">
-		<result property="siteId" column="siteId" />
-		<result property="siteName" column="siteName" />
+		<result property="id" column="id" />
+		<result property="siteName" column="site_name" />
 		<result property="domain" column="domain" />
 		<result property="logo" column="logo" />
 		<result property="charset" column="charset" />
-		<result property="userAgent" column="userAgent" />
-		<result property="intervalTime" column="intervalTime" />
-		<result property="retryTimes" column="retryTimes" />
+		<result property="userAgent" column="user_agent" />
+		<result property="intervalTime" column="interval_time" />
+		<result property="retryTimes" column="retry_times" />
 		<result property="timeout" column="timeout" />
+		<result property="available" column="available" />
+		<result property="contentType" column="content_type"
+			javaType="org.anttribe.cas.base.core.entity.ContentType" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+		<association property="category"
+			javaType="org.anttribe.cas.base.core.entity.Category" column="{id=category_id}"
+			select="org.anttribe.cas.base.core.entity.Category.queryById">
+		</association>
 	</resultMap>
+
+	<!-- select -->
+	<sql id="select">
+        <![CDATA[
+            SELECT t.id, t.site_name, t.domain, t.logo, t.charset, t.user_agent, t.interval_time, t.retry_times, t.timeout, t.available, t.content_type, t.category_id, t.create_time, t.update_time
+              FROM cas_t_core_website t
+        ]]>
+	</sql>
+
+	<!-- where -->
+	<sql id="where">
+		<where>
+			<if test="null != id and id != ''">
+				AND t.id = #{id}
+			</if>
+			<if test="null != siteName and siteName != ''">
+				AND t.site_name LIKE CONCAT('%', '${siteName}', '%')
+			</if>
+			<if test="null != domain and '' != domain">
+				AND t.domain = #{domain}
+			</if>
+			<if test="null != available and '' != available">
+				AND t.available = #{available:BOOLEAN}
+			</if>
+			<if test="null != contentType and '' != contentType">
+				AND t.content_type = #{contentType}
+			</if>
+			<if test="null != category and '' != category">
+				AND t.category_id = #{category}
+			</if>
+		</where>
+	</sql>
 
 	<!-- queryAll: 查询所有站点数据 -->
 	<select id="queryAll" resultMap="Website-resultMap">
-		<![CDATA[
-		SELECT siteId, siteName, domain, logo, charset, userAgent, intervalTime, retryTimes, timeout
-		    FROM t_cas_website t
-		]]>
+		<include refid="select"></include>
+		ORDER BY t.update_time, t.create_time
 	</select>
-	
+
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="Website-resultMap">
-		<![CDATA[
-		SELECT siteId, siteName, domain, logo, charset, userAgent, intervalTime, retryTimes, timeout
-		    FROM t_cas_website t
-		    where siteId = #{siteId}
-		]]>
+		<include refid="select"></include>
+		<include refid="where"></include>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->
 	<select id="queryByCriteria" resultMap="Website-resultMap"
-		parameterType="map">
-		<![CDATA[
-		SELECT siteId, siteName, domain, logo, charset, userAgent, intervalTime, retryTimes, timeout
-		    FROM t_cas_website t
-		]]>
+		parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		ORDER BY t.update_time, t.create_time
 	</select>
 </mapper>

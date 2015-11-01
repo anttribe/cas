@@ -90,6 +90,8 @@
     	        	$('#category-table').treetable({
     	        		column: 1,
     	        		expandable: true,
+    	        		stringExpand: '',
+    	        		stringCollapse: '',
     	        		onNodeExpand: function(){
     	        			if(this.children && this.children.length>0){
     	        				return;
@@ -117,13 +119,9 @@
     				var dataRefer = $(that).attr('data-refer');
     				if(dataRefer){
     					var cks = $('input[type="checkbox"][name="' + dataRefer + '"]');
-    					
-    					console.log(that);
-    					console.log($(that).attr('checked'));
-    					
     					if(cks && cks.length>0){
     						$.each(cks, function(i, item){
-    							$(item).attr('checked', ($(that).attr('checked') || false));
+    							$(item).attr('checked', $(that).prop('checked') || false);
     						});
     					}
     				}

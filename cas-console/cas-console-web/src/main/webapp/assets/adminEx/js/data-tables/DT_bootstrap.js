@@ -42,12 +42,12 @@ $.extend( $.fn.dataTableExt.oPagination, {
 			};
 
 			$(nPaging).addClass('pagination').append(
-				'<ul>'+
-					'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
-					'<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
-				'</ul>'
-			);
-			var els = $('a', nPaging);
+	 			'<ul>'+
+					'<li class="prev disabled"><a href="#" title="' + oLang.sPrevious + '"><i class="fa fa-angle-double-left"></i></a></li>'+
+					'<li class="next disabled"><a href="#" title="' + oLang.sNext + '"><i class="fa fa-angle-double-right"></i></a></li>' +
+	 			'</ul>'
+	 		);
+	 		var els = $('a', nPaging);
 			$(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
 			$(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
 		},

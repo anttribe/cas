@@ -18,16 +18,23 @@
 							if(oSettings.bRowChild){
 							    _fnRowChildCallback(oSettings, $(this), oTable);
 						    } else if(oSettings.bRowDetail){
-							    _fnRowDetailCallback();
+							    _fnRowDetailCallback(oSettings, $(this), oTable);
 						    }
-						}
+						};
 					}(oTable));
 				}
 			});
 		}
 		
-		function _fnRowDetailCallback(oSettings, nTd){
-			var nTr = $(this).closest('tr')[0];
+		function _fnRowDetailCallback(oSettings, nTd, oTable){
+			var nTr = $(nTd).closest('tr')[0];
+			if(oTable.fnIsOpen(nTr)){
+				$(nTd).removeClass('details-close').addClass('details-open');
+	            oTable.fnClose( nTr );
+	        } else {
+	        	$(nTd).removeClass('details-open').addClass('details-close');
+	            oTable.fnOpen( nTr, (oSettings.fnRowDetailCallback && oSettings.fnRowDetailCallback.call(this, oTable, nTr)), 'details');
+	        }
 		}
 		
         function _fnRowChildCallback(oSettings, nTd, oTable){

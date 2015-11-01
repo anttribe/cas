@@ -1,21 +1,19 @@
 /*
- * 文  件   名: Website.java
- * 版         本: cas-base-core(Anttribe). All rights reserved
- * 描         述: <描述>
+ * 文  件   名: WebsiteDTO.java
+ * 版         本 : cas-console-facade.(Anttribe) All rights reserved
+ * 描         述 : <描述>
  * 修   改  人: zhaoyong
- * 修改时 间: 2015年7月22日
+ * 修改时间: 2015年10月31日
  */
-package org.anttribe.cas.base.core.entity;
+package org.anttribe.cas.console.facade.dto;
 
-import java.util.Date;
-
-import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+import org.anttribe.cas.base.core.entity.ContentType;
 
 /**
  * @author zhaoyong
- * @version 2015年7月22日
+ * @version 2015年10月31日
  */
-public class Website extends MybatisAbstractEntity
+public class WebsiteDTO
 {
     /**
      * id
@@ -70,22 +68,7 @@ public class Website extends MybatisAbstractEntity
     /**
      * 站点所属分类
      */
-    private Category category;
-    
-    /**
-     * 是否可用
-     */
-    private boolean available;
-    
-    /**
-     * 数据创建时间
-     */
-    private Date createTime;
-    
-    /**
-     * 数据更新时间
-     */
-    private Date updateTime;
+    private CategoryDTO category;
     
     public String getId()
     {
@@ -187,43 +170,13 @@ public class Website extends MybatisAbstractEntity
         this.contentType = contentType;
     }
     
-    public Category getCategory()
+    public CategoryDTO getCategory()
     {
         return category;
     }
     
-    public void setCategory(Category category)
+    public void setCategory(CategoryDTO category)
     {
         this.category = category;
-    }
-    
-    public boolean isAvailable()
-    {
-        return available;
-    }
-    
-    public void setAvailable(boolean available)
-    {
-        this.available = available;
-    }
-    
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-    
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
-    }
-    
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-    
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
     }
 }

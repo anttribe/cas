@@ -41,10 +41,39 @@ public class WebsiteAssembler
             WebsiteDTO websiteDTO = new WebsiteDTO();
             websiteDTO.setId(website.getId());
             websiteDTO.setSiteName(website.getSiteName());
+            websiteDTO.setDomain(website.getDomain());
+            websiteDTO.setCharset(website.getCharset());
+            websiteDTO.setLogo(website.getLogo());
+            websiteDTO.setIntervalTime(website.getIntervalTime());
+            websiteDTO.setRetryTimes(website.getRetryTimes());
             websiteDTO.setCategory(CategoryAssembler.toDTO(website.getCategory()));
             websiteDTO.setContentType(website.getContentType());
+            websiteDTO.setCreateTime(website.getCreateTime());
+            websiteDTO.setUpdateTime(website.getUpdateTime());
             
             return websiteDTO;
+        }
+        return null;
+    }
+    
+    public static Website toEntity(WebsiteDTO websiteDTO)
+    {
+        if (null != websiteDTO)
+        {
+            Website website = new Website();
+            website.setId(websiteDTO.getId());
+            website.setSiteName(websiteDTO.getSiteName());
+            website.setDomain(websiteDTO.getDomain());
+            website.setCharset(websiteDTO.getCharset());
+            website.setLogo(websiteDTO.getLogo());
+            website.setIntervalTime(websiteDTO.getIntervalTime());
+            website.setRetryTimes(websiteDTO.getRetryTimes());
+            website.setCategory(CategoryAssembler.toEntity(websiteDTO.getCategory()));
+            website.setContentType(websiteDTO.getContentType());
+            website.setCreateTime(websiteDTO.getCreateTime());
+            website.setUpdateTime(websiteDTO.getUpdateTime());
+            
+            return website;
         }
         return null;
     }

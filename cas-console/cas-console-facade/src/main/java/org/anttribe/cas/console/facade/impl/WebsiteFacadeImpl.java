@@ -35,4 +35,23 @@ public class WebsiteFacadeImpl implements WebsiteFacade
         return WebsiteAssembler.toDTO(websites);
     }
     
+    @Override
+    public void editWebsite(WebsiteDTO websiteDTO)
+    {
+        Website website = WebsiteAssembler.toEntity(websiteDTO);
+        if (null != website)
+        {
+            websiteApplication.persistentWebsite(website);
+        }
+    }
+    
+    @Override
+    public void deleteWebsite(WebsiteDTO websiteDTO)
+    {
+        Website website = WebsiteAssembler.toEntity(websiteDTO);
+        if (null != website)
+        {
+            websiteApplication.deleteWebsite(website);
+        }
+    }
 }

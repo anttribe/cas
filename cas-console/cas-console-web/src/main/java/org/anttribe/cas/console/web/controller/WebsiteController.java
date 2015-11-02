@@ -43,4 +43,36 @@ public class WebsiteController
     {
         return websiteFacade.listWebsites(websiteDTO);
     }
+    
+    @RequestMapping("/goAdd")
+    public String goAddWebsite()
+    {
+        return "/website/edit";
+    }
+    
+    @RequestMapping("/goEdit")
+    public String goEditWebsite()
+    {
+        return "/website/edit";
+    }
+    
+    @RequestMapping("/edit")
+    public String doEditWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
+    {
+        if (null != websiteDTO)
+        {
+            websiteFacade.editWebsite(websiteDTO);
+        }
+        return "redirect:/website/index";
+    }
+    
+    @RequestMapping("/delete")
+    public String doDeleteWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
+    {
+        if (null != websiteDTO)
+        {
+            websiteFacade.deleteWebsite(websiteDTO);
+        }
+        return "redirect:/website/index";
+    }
 }

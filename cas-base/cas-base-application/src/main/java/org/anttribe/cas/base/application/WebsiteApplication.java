@@ -23,4 +23,18 @@ public interface WebsiteApplication
      * @return
      */
     List<Website> listAvailableWebsites();
+    
+    /**
+     * 持久化站点信息
+     * 
+     * @param website Website
+     */
+    void persistentWebsite(Website website);
+    
+    /**
+     * 删除站点信息
+     * 
+     * @param website Website
+     */
+    void deleteWebsite(Website website);
 }

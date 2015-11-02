@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.anttribe.cas.base.application.CategoryApplication;
 import org.anttribe.cas.base.core.entity.Category;
+import org.anttribe.cas.base.core.errorno.SystemErrorNo;
+import org.anttribe.cas.base.core.exception.UnifyException;
 import org.anttribe.component.lang.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -39,6 +41,17 @@ public class CategoryApplicationImpl implements CategoryApplication
     public void persistentCategory(Category category)
     {
         logger.debug("persistenting category to DB, param: category[{}]", category);
+        if (null == category)
+        {
+            logger.warn("persistenting category to DB, param category is null.");
+            throw new UnifyException(SystemErrorNo.PARAMETER_IS_NULL);
+        }
+        
+        if (!StringUtils.isEmpty(category.getName()))
+        {
+            logger.warn("persistenting category to DB, param category's name is null.");
+            throw new UnifyException(SystemErrorNo.PARAMETER_LOGIC_ERROR);
+        }
         
         if (StringUtils.isEmpty(category.getId()))
         {

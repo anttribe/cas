@@ -24,4 +24,18 @@ public interface WebsiteFacade
      * @return List<WebsiteDTO>
      */
     List<WebsiteDTO> listWebsites(WebsiteDTO websiteDTO);
+    
+    /**
+     * 添加站点信息
+     * 
+     * @param websiteDTO WebsiteDTO
+     */
+    void editWebsite(WebsiteDTO websiteDTO);
+    
+    /**
+     * 删除站点信息
+     * 
+     * @param websiteDTO WebsiteDTO
+     */
+    void deleteWebsite(WebsiteDTO websiteDTO);
 }

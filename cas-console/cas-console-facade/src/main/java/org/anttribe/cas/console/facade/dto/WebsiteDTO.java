@@ -7,6 +7,8 @@
  */
 package org.anttribe.cas.console.facade.dto;
 
+import java.util.Date;
+
 import org.anttribe.cas.base.core.entity.ContentType;
 
 /**
@@ -69,6 +71,16 @@ public class WebsiteDTO
      * 站点所属分类
      */
     private CategoryDTO category;
+    
+    /**
+     * 数据创建时间
+     */
+    private Date createTime;
+    
+    /**
+     * 数据更新时间
+     */
+    private Date updateTime;
     
     public String getId()
     {
@@ -178,5 +190,25 @@ public class WebsiteDTO
     public void setCategory(CategoryDTO category)
     {
         this.category = category;
+    }
+    
+    public Date getCreateTime()
+    {
+        return createTime;
+    }
+    
+    public void setCreateTime(Date createTime)
+    {
+        this.createTime = createTime;
+    }
+    
+    public Date getUpdateTime()
+    {
+        return updateTime;
+    }
+    
+    public void setUpdateTime(Date updateTime)
+    {
+        this.updateTime = updateTime;
     }
 }

@@ -40,8 +40,6 @@
                                         <tr>
                                             <th>名称</th>
                                             <th>域名</th>
-                                            <th>字符集</th>
-                                            <th>用户代理</th>
                                             <th>内容类型</th>
                                             <th>所属分类</th>
                                             <th>是否可用</th>
@@ -76,8 +74,6 @@
 	        					$html += '<tr data-id="' + website['id'] + '">' 
 		        				       + '<td>' + (website['siteName'] || '') + '</td>'
 		        				       + '<td>' + (website['domain'] || '') + '</td>'
-		        				       + '<td>' + (website['charset'] || '') + '</td>'
-		        				       + '<td>' + (website['userAgent'] || '') + '</td>'
 		        				       + '<td>' + (website['contentType'] || '') + '</td>'
 		        				       + '<td>' + ((website['category'] && website['category']['name']) || '') + '</td>'
 		        				       + '<td>' + '</td>'

@@ -32,37 +32,37 @@
 						    <form role="form" class="form-horizontal" method="post" action="${contextPath}/website/edit">
 							    <div class="form-group">
 								    <label for="siteName" class="col-sm-2 control-label">站点名称</label>
-								    <div class="col-sm-10"><input type="text" class="form-control" id="siteName" name="siteName" placeholder="" /></div>
+								    <div class="col-sm-4"><input type="text" class="form-control" id="siteName" name="siteName" placeholder="" /></div>
 							    </div>
 							    <div class="form-group">
-								    <label for="exampleInputEmail1">域名</label>
-								    <input type="url" class="form-control" name="domain" placeholder="" />
+								    <label for="domain" class="col-sm-2 control-label">域名</label>
+								    <div class="col-sm-6"><input type="url" class="form-control" id="domain" name="domain" placeholder="" /></div>
 							    </div>
-							    <div class="form-group">
-								    <label for="exampleInputEmail1">字符集</label>
-								    <input type="text" class="form-control" name="charset" placeholder="" />
+							    <div class="">
+							        <div class="form-group col-sm-6">
+								        <label for="charset" class="col-sm-4 control-label">字符集</label>
+								        <div class="col-sm-8"><input type="text" class="form-control" id="charset" name="charset" placeholder="" /></div>
+							        </div>
+							        <div class="form-group col-sm-6">
+								        <label for="userAgent" class="col-sm-4 control-label">用户代理</label>
+								        <div class="col-sm-8"><input type="text" class="form-control" id="userAgent" name="userAgent" placeholder="" /></div>
+							        </div>
 							    </div>
-							    <div class="form-group">
-								    <label for="exampleInputEmail1">用户代理</label>
-								    <input type="text" class="form-control" name="userAgent" placeholder="" />
+							    <div class="">
+							        <div class="form-group col-sm-4">
+								        <label for="intervalTime" class="col-sm-6 control-label">处理2个page之间的间隔时间</label>
+								        <div class="col-sm-6"><input type="text" class="form-control" id="intervalTime" name="intervalTime" placeholder="" /></div>
+							        </div>
+							        <div class="form-group col-sm-4">
+								        <label for="retryTimes" class="col-sm-6 control-label">失败重复次数</label>
+								        <div class="col-sm-6"><input type="text" class="form-control" id="retryTimes" name="retryTimes" placeholder="" /></div>
+							        </div>
+							        <div class="form-group col-sm-4">
+								        <label for="timeout" class="col-sm-6 control-label">超时时长</label>
+								        <div class="col-sm-6"><input type="text" class="form-control" id="timeout" name="timeout" placeholder="" /></div>
+							        </div>
 							    </div>
-							    <div class="form-group">
-								    <label for="exampleInputPassword1">站点分类</label>
-								    <input type="hidden" name="category" />
-								    <input type="text" class="form-control" name="categorySelect" placeholder="" />
-							    </div>
-							    <div class="form-group">
-								    <label for="exampleInputEmail1">处理2个page之间的间隔时间</label>
-								    <input type="text" class="form-control" name="intervalTime" placeholder="" />
-							    </div>
-							    <div class="form-group">
-								    <label for="exampleInputEmail1">失败重复次数</label>
-								    <input type="text" class="form-control" name="retryTimes" placeholder="" />
-							    </div>
-							    <div class="form-group">
-								    <label for="exampleInputEmail1">超时时长</label>
-								    <input type="text" class="form-control" name="timeout" placeholder="" />
-							    </div>
+							    <div class="clearfix"></div>
 							    <button type="submit" class="btn btn-primary">提交</button>
 							    <button type="button" class="btn btn-default">取消</button>
 						    </form>

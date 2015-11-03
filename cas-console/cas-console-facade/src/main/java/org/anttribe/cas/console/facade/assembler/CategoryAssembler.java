@@ -30,7 +30,6 @@ public class CategoryAssembler
             categoryDTO.setParent(null != category.getParent() ? category.getParent().getId() : "");
             categoryDTO.setOrdinal(category.getOrdinal());
             categoryDTO.setCreateTime(category.getCreateTime());
-            categoryDTO.setUpdateTime(category.getUpdateTime());
             categoryDTO.setChildren(CategoryAssembler.toDTO(category.getChildren()));
             
             return categoryDTO;
@@ -68,7 +67,6 @@ public class CategoryAssembler
             category.setOrdinal(categoryDTO.getOrdinal());
             category.setParent(new Category(categoryDTO.getParent()));
             category.setCreateTime(categoryDTO.getCreateTime());
-            category.setUpdateTime(category.getUpdateTime());
             
             return category;
         }

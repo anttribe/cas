@@ -48,14 +48,9 @@ public class Category extends MybatisAbstractEntity
     private List<Category> children;
     
     /**
-     * 数据创建时间
+     * 创建时间
      */
     private Date createTime;
-    
-    /**
-     * 数据更新时间
-     */
-    private Date updateTime;
     
     /**
      * <构造器>
@@ -146,13 +141,4 @@ public class Category extends MybatisAbstractEntity
         this.createTime = createTime;
     }
     
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-    
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
-    }
 }

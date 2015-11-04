@@ -38,7 +38,6 @@
                                 <table id="category-table" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th width="16%"><input type="checkbox" class="btn-ck-select-all" data-refer="ck-category" /> 全选/全不选</th>
                                             <th width="60%">分类名称</th>
                                             <th width="24%">操作</th>
                                         </tr>
@@ -70,8 +69,7 @@
 	        					'data-tt-id': data['id'],
 	        					'data-tt-parent-id': data['parent'],
 	        					'data-tt-branch': (data['children'] && data['children'].length>0 ? true : false),
-	        					'html': '<td><input type="checkbox" name="ck-category" value="' + data['id'] + '" /></td>'
-		        				      + '<td>' + (data['name'] || '') + '</td>'
+	        					'html': '<td>' + (data['name'] || '') + '</td>'
 		        				      + '<td></td>'
 	        				}));
 	        			}
@@ -114,18 +112,18 @@
     			}
     			
     			// 绑定事件
-    			$('.btn-ck-select-all').click(function(){
-    				var that = this;
-    				var dataRefer = $(that).attr('data-refer');
-    				if(dataRefer){
-    					var cks = $('input[type="checkbox"][name="' + dataRefer + '"]');
-    					if(cks && cks.length>0){
-    						$.each(cks, function(i, item){
-    							$(item).attr('checked', $(that).prop('checked') || false);
-    						});
-    					}
-    				}
-    			});
+//     			$('.btn-ck-select-all').click(function(){
+//     				var that = this;
+//     				var dataRefer = $(that).attr('data-refer');
+//     				if(dataRefer){
+//     					var cks = $('input[type="checkbox"][name="' + dataRefer + '"]');
+//     					if(cks && cks.length>0){
+//     						$.each(cks, function(i, item){
+//     							$(item).attr('checked', $(that).prop('checked') || false);
+//     						});
+//     					}
+//     				}
+//     			});
 	        });
 	    </script>
     </body>

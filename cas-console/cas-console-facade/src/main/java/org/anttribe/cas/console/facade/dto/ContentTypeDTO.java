@@ -1,17 +1,17 @@
 /*
- * 文  件   名: ContentType.java
- * 版         本: cas-base-core(Anttribe). All rights reserved
- * 描         述: <描述>
+ * 文  件   名: ContentTypeDTO.java
+ * 版         本 : cas-console-facade.(Anttribe) All rights reserved
+ * 描         述 : <描述>
  * 修   改  人: zhaoyong
- * 修改时 间: 2015年7月22日
+ * 修改时间: 2015年11月4日
  */
-package org.anttribe.cas.base.core.entity;
+package org.anttribe.cas.console.facade.dto;
 
 /**
  * @author zhaoyong
- * @version 2015年7月22日
+ * @version 2015年11月4日
  */
-public class ContentType
+public class ContentTypeDTO
 {
     /**
      * id

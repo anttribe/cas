@@ -9,14 +9,7 @@
 		<result property="logo" column="logo" />
 		<result property="charset" column="charset" />
 		<result property="userAgent" column="user_agent" />
-		<result property="intervalTime" column="interval_time" />
-		<result property="retryTimes" column="retry_times" />
-		<result property="timeout" column="timeout" />
-		<result property="available" column="available" />
-		<result property="contentType" column="content_type"
-			javaType="org.anttribe.cas.base.core.entity.ContentType" />
 		<result property="createTime" column="create_time" />
-		<result property="updateTime" column="update_time" />
 		<association property="category"
 			javaType="org.anttribe.cas.base.core.entity.Category" column="{id=category_id}"
 			select="org.anttribe.cas.base.core.entity.Category.queryById">
@@ -26,7 +19,7 @@
 	<!-- select -->
 	<sql id="select">
         <![CDATA[
-            SELECT t.id, t.site_name, t.domain, t.logo, t.charset, t.user_agent, t.interval_time, t.retry_times, t.timeout, t.available, t.content_type, t.category_id, t.create_time, t.update_time
+            SELECT t.id, t.site_name, t.domain, t.logo, t.charset, t.user_agent, t.category_id, t.create_time
               FROM cas_t_core_website t
         ]]>
 	</sql>
@@ -43,22 +36,24 @@
 			<if test="null != domain and '' != domain">
 				AND t.domain = #{domain}
 			</if>
-			<if test="null != available and '' != available">
-				AND t.available = #{available:BOOLEAN}
-			</if>
-			<if test="null != contentType and '' != contentType">
-				AND t.content_type = #{contentType}
-			</if>
 			<if test="null != category and '' != category">
 				AND t.category_id = #{category}
 			</if>
 		</where>
 	</sql>
+	
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Website">
+		<![CDATA[
+		    INSERT INTO cas_t_core_website(id, site_name, domain, logo, charset, user_agent, category_id, create_time)
+		      VALUES(#{id}, #{siteName}, #{domain}, #{logo}, #{charset}, #{userAgent}, #{category.id}, #{createTime})
+		]]>
+	</insert>
 
 	<!-- queryAll: 查询所有站点数据 -->
 	<select id="queryAll" resultMap="Website-resultMap">
 		<include refid="select"></include>
-		ORDER BY t.update_time, t.create_time
+		ORDER BY t.create_time
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
@@ -72,6 +67,6 @@
 		parameterType="Map">
 		<include refid="select"></include>
 		<include refid="where"></include>
-		ORDER BY t.update_time, t.create_time
+		ORDER BY t.create_time
 	</select>
 </mapper>

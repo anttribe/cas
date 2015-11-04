@@ -7,6 +7,7 @@
  */
 package org.anttribe.cas.base.core.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
@@ -28,34 +29,9 @@ public class Content extends MybatisAbstractEntity
     private ContentType contentType;
     
     /**
-     * 内容标题
+     * 属性值
      */
-    private String title;
-    
-    /**
-     * 摘要
-     */
-    private String brief;
-    
-    /**
-     * 缩略图
-     */
-    private String thumbnail;
-    
-    /**
-     * 作者
-     */
-    private String author;
-    
-    /**
-     * 内容
-     */
-    private String content;
-    
-    /**
-     * 发布时间
-     */
-    private String publishTime;
+    private List<ContentAttrValue> attrValues;
     
     /**
      * 原链接
@@ -68,9 +44,9 @@ public class Content extends MybatisAbstractEntity
     private Website website;
     
     /**
-     * 一篇内容属于的多个主题
+     * 创建时间
      */
-    private List<Topic> topics;
+    private Date createTime;
     
     public String getId()
     {
@@ -92,64 +68,14 @@ public class Content extends MybatisAbstractEntity
         this.contentType = contentType;
     }
     
-    public String getTitle()
+    public List<ContentAttrValue> getAttrValues()
     {
-        return title;
+        return attrValues;
     }
     
-    public void setTitle(String title)
+    public void setAttrValues(List<ContentAttrValue> attrValues)
     {
-        this.title = title;
-    }
-    
-    public String getBrief()
-    {
-        return brief;
-    }
-    
-    public void setBrief(String brief)
-    {
-        this.brief = brief;
-    }
-    
-    public String getThumbnail()
-    {
-        return thumbnail;
-    }
-    
-    public void setThumbnail(String thumbnail)
-    {
-        this.thumbnail = thumbnail;
-    }
-    
-    public String getAuthor()
-    {
-        return author;
-    }
-    
-    public void setAuthor(String author)
-    {
-        this.author = author;
-    }
-    
-    public String getContent()
-    {
-        return content;
-    }
-    
-    public void setContent(String content)
-    {
-        this.content = content;
-    }
-    
-    public String getPublishTime()
-    {
-        return publishTime;
-    }
-    
-    public void setPublishTime(String publishTime)
-    {
-        this.publishTime = publishTime;
+        this.attrValues = attrValues;
     }
     
     public String getLink()
@@ -172,13 +98,13 @@ public class Content extends MybatisAbstractEntity
         this.website = website;
     }
     
-    public List<Topic> getTopics()
+    public Date getCreateTime()
     {
-        return topics;
+        return createTime;
     }
     
-    public void setTopics(List<Topic> topics)
+    public void setCreateTime(Date createTime)
     {
-        this.topics = topics;
+        this.createTime = createTime;
     }
 }

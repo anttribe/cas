@@ -13,5 +13,5 @@ package org.anttribe.cas.base.core.entity;
  */
 public enum ContentType
 {
-    ARTICLE;
+    ARTICLE, BLOG;
 }

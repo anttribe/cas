@@ -31,13 +31,13 @@
                         <div class="panel-body">
                             <form role="form" method="post" action="${contextPath}/category/edit">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">分类名称</label>
-                                    <input type="text" class="form-control" name="name" placeholder="" />
+                                    <label for="name">分类名称</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">父分类</label>
+                                    <label for="parentSelect">父分类</label>
                                     <input type="hidden" name="parent" />
-                                    <input type="text" class="form-control" name="parentSelect" placeholder="" />
+                                    <input type="text" class="form-control" id="parentSelect" name="parentSelect" placeholder="" />
                                 </div>
                                 <button type="submit" class="btn btn-primary">提交</button>
                                 <button type="button" class="btn btn-default">取消</button>

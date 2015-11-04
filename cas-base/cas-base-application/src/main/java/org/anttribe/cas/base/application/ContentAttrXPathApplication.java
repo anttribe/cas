@@ -7,7 +7,7 @@
  */
 package org.anttribe.cas.base.application;
 
-import org.anttribe.cas.base.core.entity.ContentAttrXPath;
+import org.anttribe.cas.base.core.entity.CrawlerContentRegular;
 import org.anttribe.cas.base.core.entity.Website;
 
 /**
@@ -22,5 +22,5 @@ public interface ContentAttrXPathApplication
      * @param website Website
      * @return ContentAttrXPath
      */
-    ContentAttrXPath getContentAttrXPathByWebsite(Website website);
+    CrawlerContentRegular getContentAttrXPathByWebsite(Website website);
 }

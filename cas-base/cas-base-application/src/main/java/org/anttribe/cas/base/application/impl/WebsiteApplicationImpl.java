@@ -32,12 +32,11 @@ public class WebsiteApplicationImpl implements WebsiteApplication
     private static Logger logger = LoggerFactory.getLogger(WebsiteApplicationImpl.class);
     
     @Override
-    public List<Website> listAvailableWebsites()
+    public List<Website> listWebsites()
     {
-        logger.debug("listing available websites.");
+        logger.debug("listing websites.");
         
         Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put("available", true);
         return Website.find(Website.class, criteria);
     }
     
@@ -51,7 +50,7 @@ public class WebsiteApplicationImpl implements WebsiteApplication
             throw new UnifyException(SystemErrorNo.PARAMETER_IS_NULL);
         }
         
-        if (!StringUtils.isEmpty(website.getSiteName()))
+        if (StringUtils.isEmpty(website.getSiteName()))
         {
             logger.warn("persistenting website to DB, param website name is null.");
             throw new UnifyException(SystemErrorNo.PARAMETER_LOGIC_ERROR);

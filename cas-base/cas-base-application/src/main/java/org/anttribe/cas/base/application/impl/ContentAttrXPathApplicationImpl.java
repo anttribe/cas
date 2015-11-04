@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.anttribe.cas.base.application.ContentAttrXPathApplication;
-import org.anttribe.cas.base.core.entity.ContentAttrXPath;
+import org.anttribe.cas.base.core.entity.CrawlerContentRegular;
 import org.anttribe.cas.base.core.entity.Website;
 import org.anttribe.cas.base.core.errorno.SystemErrorNo;
 import org.anttribe.cas.base.core.exception.UnifyException;
@@ -26,7 +26,7 @@ public class ContentAttrXPathApplicationImpl implements ContentAttrXPathApplicat
 {
     
     @Override
-    public ContentAttrXPath getContentAttrXPathByWebsite(Website website)
+    public CrawlerContentRegular getContentAttrXPathByWebsite(Website website)
     {
         if (null == website)
         {
@@ -38,7 +38,7 @@ public class ContentAttrXPathApplicationImpl implements ContentAttrXPathApplicat
         Map<String, Object> criteria = new HashMap<String, Object>();
         criteria.put("website", website.getId());
         // 添加参数
-        List<ContentAttrXPath> tempList = ContentAttrXPath.find(ContentAttrXPath.class, criteria);
+        List<CrawlerContentRegular> tempList = CrawlerContentRegular.find(CrawlerContentRegular.class, criteria);
         if (!CollectionUtils.isEmpty(tempList))
         {
             return tempList.get(0);

@@ -18,11 +18,11 @@ import org.anttribe.cas.base.core.entity.Website;
 public interface WebsiteApplication
 {
     /**
-     * 列表所有可用的站点
+     * 列表所有站点
      * 
      * @return
      */
-    List<Website> listAvailableWebsites();
+    List<Website> listWebsites();
     
     /**
      * 持久化站点信息

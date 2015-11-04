@@ -56,7 +56,7 @@ public class ContentPersistentPipeline implements Pipeline
                 BeanUtils.populate(content, attrs);
                 content.setId(UUIDUtils.getRandomUUID());
                 // 根据内容，截取默认第一段的内容(第一个<p>包含的内容)或者固定长度内容
-                content.setBrief(populateBrief(content.getContent()));
+                // content.setBrief(populateBrief(content.getContent()));
                 // 保存数据到数据库
                 content.save();
             }

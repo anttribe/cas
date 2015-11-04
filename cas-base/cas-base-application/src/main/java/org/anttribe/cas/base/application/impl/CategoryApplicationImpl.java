@@ -47,7 +47,7 @@ public class CategoryApplicationImpl implements CategoryApplication
             throw new UnifyException(SystemErrorNo.PARAMETER_IS_NULL);
         }
         
-        if (!StringUtils.isEmpty(category.getName()))
+        if (StringUtils.isEmpty(category.getName()))
         {
             logger.warn("persistenting category to DB, param category's name is null.");
             throw new UnifyException(SystemErrorNo.PARAMETER_LOGIC_ERROR);

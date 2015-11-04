@@ -56,7 +56,7 @@ public class ContentCrawlJob
     {
         logger.debug("Start executing ContentCrawlJob to crawling content.");
         
-        List<Website> websites = websiteApplication.listAvailableWebsites();
+        List<Website> websites = websiteApplication.listWebsites();
         if (!CollectionUtils.isEmpty(websites))
         {
             for (Website website : websites)

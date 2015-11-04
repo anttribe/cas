@@ -8,6 +8,7 @@
 package org.anttribe.cas.base.core.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
 
@@ -51,6 +52,11 @@ public class Crawler extends MybatisAbstractEntity
      * 内容类型
      */
     private ContentType contentType;
+    
+    /**
+     * 内容规则
+     */
+    List<CrawlerContentRegular> regulars;
     
     /**
      * 是否可用

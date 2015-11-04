@@ -1,38 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.anttribe.cas.base.core.entity.ContentAttrXPath">
-	<cache readOnly="true" />
-	<resultMap id="ContentAttrXPath-resultMap"
-		type="org.anttribe.cas.base.core.entity.ContentAttrXPath">
-		<result property="id" column="id" />
-		<result property="contentsXpath" column="contentsXpath" />
-		<result property="titleXpath" column="titleXpath" />
-		<result property="briefXpath" column="briefXpath" />
-		<result property="thumbnailXpath" column="thumbnailXpath" />
-		<result property="authorXpath" column="authorXpath" />
-		<result property="publishTimeXpath" column="publishTimeXpath" />
-		<result property="tagsXpath" column="tagsXpath" />
-		<result property="contentXpath" column="contentXpath" />
-		<result property="linkXpath" column="linkXpath" />
-		<association property="website" column="{siteId = website}"
-			javaType="org.anttribe.cas.base.core.entity.Website" select="org.anttribe.cas.base.core.entity.Website.queryById" />
-	</resultMap>
-
-	<!-- queryAll: 查询所有站点数据 -->
-	<select id="queryAll" resultMap="ContentAttrXPath-resultMap">
-		<![CDATA[
-		SELECT id, website, contentsXpath, titleXpath, briefXpath, thumbnailXpath, authorXpath, publishTimeXpath, tagsXpath, contentXpath, linkXpath
-		    FROM t_cas_content_attrxpath t
-		]]>
-	</select>
-
-	<!-- queryByCriteria: 根据条件查询数据 -->
-	<select id="queryByCriteria" resultMap="ContentAttrXPath-resultMap"
-		parameterType="map">
-		<![CDATA[
-		SELECT id, website, contentsXpath, titleXpath, briefXpath, thumbnailXpath, authorXpath, publishTimeXpath, tagsXpath, contentXpath, linkXpath
-		    FROM t_cas_content_attrxpath t
-		    where t.website = #{website}
-		]]>
-	</select>
 </mapper>

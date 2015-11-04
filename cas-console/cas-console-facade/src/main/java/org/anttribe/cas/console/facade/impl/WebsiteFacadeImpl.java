@@ -31,7 +31,7 @@ public class WebsiteFacadeImpl implements WebsiteFacade
     @Override
     public List<WebsiteDTO> listWebsites(WebsiteDTO websiteDTO)
     {
-        List<Website> websites = websiteApplication.listAvailableWebsites();
+        List<Website> websites = websiteApplication.listWebsites();
         return WebsiteAssembler.toDTO(websites);
     }
     

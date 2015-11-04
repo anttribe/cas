@@ -9,8 +9,6 @@ package org.anttribe.cas.console.facade.dto;
 
 import java.util.Date;
 
-import org.anttribe.cas.base.core.entity.ContentType;
-
 /**
  * @author zhaoyong
  * @version 2015年10月31日
@@ -48,26 +46,6 @@ public class WebsiteDTO
     private String userAgent;
     
     /**
-     * 处理2个page之间的间隔时间
-     */
-    private int intervalTime;
-    
-    /**
-     * 处理失败之后的重复次数
-     */
-    private int retryTimes;
-    
-    /**
-     * 超时时长
-     */
-    private int timeout;
-    
-    /**
-     * 内容类型
-     */
-    private ContentType contentType;
-    
-    /**
      * 站点所属分类
      */
     private CategoryDTO category;
@@ -76,11 +54,6 @@ public class WebsiteDTO
      * 数据创建时间
      */
     private Date createTime;
-    
-    /**
-     * 数据更新时间
-     */
-    private Date updateTime;
     
     public String getId()
     {
@@ -142,46 +115,6 @@ public class WebsiteDTO
         this.userAgent = userAgent;
     }
     
-    public int getIntervalTime()
-    {
-        return intervalTime;
-    }
-    
-    public void setIntervalTime(int intervalTime)
-    {
-        this.intervalTime = intervalTime;
-    }
-    
-    public int getRetryTimes()
-    {
-        return retryTimes;
-    }
-    
-    public void setRetryTimes(int retryTimes)
-    {
-        this.retryTimes = retryTimes;
-    }
-    
-    public int getTimeout()
-    {
-        return timeout;
-    }
-    
-    public void setTimeout(int timeout)
-    {
-        this.timeout = timeout;
-    }
-    
-    public ContentType getContentType()
-    {
-        return contentType;
-    }
-    
-    public void setContentType(ContentType contentType)
-    {
-        this.contentType = contentType;
-    }
-    
     public CategoryDTO getCategory()
     {
         return category;
@@ -200,15 +133,5 @@ public class WebsiteDTO
     public void setCreateTime(Date createTime)
     {
         this.createTime = createTime;
-    }
-    
-    public Date getUpdateTime()
-    {
-        return updateTime;
-    }
-    
-    public void setUpdateTime(Date updateTime)
-    {
-        this.updateTime = updateTime;
     }
 }

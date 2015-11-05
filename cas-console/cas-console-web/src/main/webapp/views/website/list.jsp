@@ -11,37 +11,27 @@
     </head>
     <body>
         <div class="clearfix"></div>
-        <!-- page heading start-->
-        <div class="page-heading">
-            <h3>站点管理</h3>
-            <ul class="breadcrumb">
-                <li><a href="#">内容管理</a></li>
-                <li class="active"> 站点管理</li>
-            </ul>
-        </div>
-        <!-- page heading end-->
-
         <!--body wrapper start-->
         <div class="wrapper">
             <div class="row">
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                                                                          站点列表
+                            <spring:message code="app.website.title.list" />
                             <span class="tools pull-right"></span>
                         </header>
                         <div class="panel-body">
                             <div class="btn-group mb10">
-                                <a href="${contextPath}/website/goAdd" class="btn btn-primary btn-sm" title="新增站点"><i class="fa fa-plus"></i> 新增站点</a>
+                                <a href="${contextPath}/website/goAdd" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.website.action.add" /></a>
                             </div>
                             <div class="adv-table">
                                 <table id="website-table" class="display table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>名称</th>
-                                            <th>域名</th>
-                                            <th>所属分类</th>
-                                            <th>操作</th>
+                                            <th><spring:message code="app.website.title.siteName" /></th>
+                                            <th><spring:message code="app.website.title.domain" /></th>
+                                            <th><spring:message code="app.category.title.category" /></th>
+                                            <th><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -6,10 +6,10 @@
 <div class="header-section">
     <!--logo and iconic logo start-->
     <div class="logo">
-        <a href="/"><img src="${contextPath}/static/static/img/logo.png" alt=""></a>
+        <a href="${contextPath}/"><img src="${contextPath}/static/static/img/logo.png" alt=""></a>
     </div>
     <div class="logo-icon text-center">
-        <a href="/"><img src="${contextPath}/static/static/img/logo_icon.png" alt=""></a>
+        <a href="${contextPath}/"><img src="${contextPath}/static/static/img/logo_icon.png" alt=""></a>
     </div>
     <!--logo and iconic logo end-->
 
@@ -17,53 +17,32 @@
     <a class="toggle-btn"><i class="fa fa-bars"></i></a>
     <!--toggle button end-->
 
-    <!--search start-->
-    <form class="searchform" action="index.html" method="post">
-        <input type="text" class="form-control" name="keyword" placeholder="Search here..." />
-    </form>
-    <!--search end-->
-
-    <!--notification menu start -->
-    <div class="menu-right">
-        <ul class="notification-menu">
-            <li>
-                <a href="#" class="btn btn-default dropdown-toggle info-number" data-toggle="dropdown"><i class="fa fa-tasks"></i><span class="badge">8</span></a>
-                <div class="dropdown-menu dropdown-menu-head pull-right">
-                    <h5 class="title">task</h5>
-                    <ul class="dropdown-list user-list">
+    <c:if test="null != USER_SESSION">
+        <!--notification menu start -->
+        <div class="menu-right">
+            <ul class="notification-menu">
+                <li>
+                    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <c:choose>
+                            <c:when test="null != USER_SESSION.avatar">
+                                <img src="USER_SESSION.avatar" alt="avatar" />
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${contextPath}/static/static/img/photos/user-avatar.png" alt="avatar" />
+                            </c:otherwise>
+                        </c:choose>
+                        <c:out value="${USER_SESSION.username}"></c:out>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                        <li><a href="#"><i class="fa fa-user"></i> <spring:message code="app.user.title.profile" /></a></li>
+                        <li><a href="#"><i class="fa fa-cog"></i> <spring:message code="app.user.title.settings" /></a></li>
+                        <li><a href="#"><i class="fa fa-sign-out"></i> <spring:message code="app.user.action.signout" /></a></li>
                     </ul>
-                </div>
-            </li>
-            <li>
-                <a href="#" class="btn btn-default dropdown-toggle info-number" data-toggle="dropdown"><i class="fa fa-envelope-o"></i><span class="badge">5</span></a>
-                <div class="dropdown-menu dropdown-menu-head pull-right">
-                    <h5 class="title">You have 5 Mails </h5>
-                    <ul class="dropdown-list normal-list">
-                    </ul>
-                </div>
-            </li>
-            <li>
-                <a href="#" class="btn btn-default dropdown-toggle info-number" data-toggle="dropdown"><i class="fa fa-bell-o"></i><span class="badge">4</span></a>
-                <div class="dropdown-menu dropdown-menu-head pull-right">
-                    <h5 class="title">Notifications</h5>
-                    <ul class="dropdown-list normal-list">
-                    </ul>
-                </div>
-            </li>
-            <li>
-                <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <img src="${contextPath}/static/static/img/photos/user-avatar.png" alt="" />
-                    John Doe
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                    <li><a href="#"><i class="fa fa-user"></i>  Profile</a></li>
-                    <li><a href="#"><i class="fa fa-cog"></i>  Settings</a></li>
-                    <li><a href="#"><i class="fa fa-sign-out"></i> Log Out</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <!--notification menu end -->
+                </li>
+            </ul>
+        </div>
+        <!--notification menu end -->
+    </c:if>
 </div>
 <!-- header section end-->

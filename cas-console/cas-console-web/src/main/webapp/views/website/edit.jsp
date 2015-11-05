@@ -10,50 +10,40 @@
     </head>
     <body>
 	    <div class="clearfix"></div>
-	    <!-- page heading start-->
-	    <div class="page-heading">
-		    <h3>站点管理</h3>
-		    <ul class="breadcrumb">
-			    <li><a href="#">内容管理</a></li>
-			    <li class="active">站点管理</li>
-		    </ul>
-	    </div>
-	    <!-- page heading end-->
-
 	    <!--body wrapper start-->
 	    <div class="wrapper">
 		    <div class="row">
 			    <div class="col-sm-12">
 				    <section class="panel">
 					    <header class="panel-heading">
-						    <span>新增站点</span>
+						    <span><spring:message code="app.website.action.add" /></span>
 					    </header>
 					    <div class="panel-body">
 						    <form role="form" class="" method="post" action="${contextPath}/website/edit">
 							    <div class="form-group">
-								    <label for="siteName" class="control-label">站点名称</label>
+								    <label for="siteName" class="control-label"><spring:message code="app.website.title.siteName" /></label>
 								    <input type="text" class="form-control" id="siteName" name="siteName" placeholder="" />
 							    </div>
 							    <div class="form-group">
-								    <label for="domain" class="control-label">域名</label>
+								    <label for="domain" class="control-label"><spring:message code="app.website.title.domain" /></label>
 								    <input type="url" class="form-control" id="domain" name="domain" placeholder="" />
 							    </div>
 							    <div class="form-group">
-                                    <label for="categorySelect">站点分类</label>
+                                    <label for="categorySelect"><spring:message code="app.category.title.category" /></label>
                                     <input type="hidden" name="category.id" />
                                     <input type="text" class="form-control" id="categorySelect" name="categorySelect" placeholder="" />
                                 </div>
 							    <div class="form-group">
-								    <label for="charset" class="control-label">字符集</label>
+								    <label for="charset" class="control-label"><spring:message code="app.website.title.charset" /></label>
 								    <input type="text" class="form-control" id="charset" name="charset" placeholder="" />
 							    </div>
 							    <div class="form-group">
-								    <label for="userAgent" class="control-label">用户代理</label>
+								    <label for="userAgent" class="control-label"><spring:message code="app.website.title.userAgent" /></label>
 								    <input type="text" class="form-control" id="userAgent" name="userAgent" placeholder="" />
 							    </div>
 							    <div class="clearfix"></div>
-							    <button type="submit" class="btn btn-primary">提交</button>
-							    <button type="button" class="btn btn-default">取消</button>
+							    <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
+							    <a href="${contextPath}/website/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>
 						    </form>
 					    </div>
 				    </section>

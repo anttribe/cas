@@ -7,21 +7,20 @@
     <div class="left-side-inner">
         <!--sidebar nav start-->
         <ul class="nav nav-pills nav-stacked custom-nav">
-            <li class="menu-list nav-active"><a href="#"><i class="fa fa-laptop"></i> <span>站点管理</span></a>
+            <li><a href="#"><i class="fa fa-dashboard"></i> <span><spring:message code="app.dashboard.title" /></span></a></li>
+            <li class="menu-list"><a href="#"><i class="fa fa-laptop"></i> <span><spring:message code="app.website.title" /></span></a>
                 <ul class="sub-menu-list">
-                    <li><a href="${contextPath}/category/index"> 站点分类</a></li>
-                    <li><a href="${contextPath}/website/index"> 站点管理</a></li>
+                    <li><a href="${contextPath}/category/index"> <spring:message code="app.category.title" /></a></li>
+                    <li><a href="${contextPath}/website/index"> <spring:message code="app.website.title" /></a></li>
                 </ul>
             </li>
-            <li class="menu-list nav-active"><a href="#"><i class="fa fa-laptop"></i> <span>内容管理</span></a>
+            <li class="menu-list"><a href="#"><i class="fa fa-tasks"></i> <span><spring:message code="app.content.title" /></span></a>
                 <ul class="sub-menu-list">
-                    <li><a href="${contextPath}/content_type/index"> 内容类型</a></li>
-                    <li><a href="${contextPath}/category/index"> 内容属性</a></li>
-                    <li><a href="${contextPath}/website/index"> 站点内容</a></li>
+                    <li><a href="${contextPath}/content_type/index"> <spring:message code="app.contentType.title" /></a></li>
                 </ul>
             </li>
-            <li><a href="#"><i class="fa fa-laptop"></i> <span>爬虫管理</span></a></li>
-            <li class="menu-list nav-active"><a href="#"><i class="fa fa-laptop"></i> <span>系统管理</span></a>
+            <li><a href="#"><i class="fa fa-bug"></i> <span><spring:message code="app.crawler.title" /></span></a></li>
+            <li class="menu-list"><a href="#"><i class="fa fa-cogs"></i> <span><spring:message code="app.system.title" /></span></a>
                 <ul class="sub-menu-list">
                 </ul>
             </li>

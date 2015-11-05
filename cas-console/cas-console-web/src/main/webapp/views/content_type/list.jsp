@@ -10,36 +10,26 @@
     </head>
     <body>
         <div class="clearfix"></div>
-        <!-- page heading start-->
-        <div class="page-heading">
-            <h3>内容类型</h3>
-            <ul class="breadcrumb">
-                <li><a href="#">Dashboard</a></li>
-                <li class="active"> 内容类型</li>
-            </ul>
-        </div>
-        <!-- page heading end-->
-
         <!--body wrapper start-->
         <div class="wrapper">
             <div class="row">
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                                                        内容类型列表
+                            <spring:message code="app.contentType.title.list" />
                             <span class="tools pull-right"></span>
                         </header>
                         <div class="panel-body">
                             <div class="btn-group mb10">
-                                <a href="${contextPath}/content_type/goAdd" class="btn btn-primary btn-sm" title="新增内容类型"><i class="fa fa-plus"></i> 新增内容类型</a>
+                                <a href="${contextPath}/content_type/goAdd" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.contentType.action.add" /></a>
                             </div>
                             <div class="table-responsive">
                                 <table id="contentType-table" class="display table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>名称</th>
-                                            <th>编码code</th>
-                                            <th>操作</th>
+                                            <th><spring:message code="app.contentType.title.name" /></th>
+                                            <th><spring:message code="app.contentType.title.code" /></th>
+                                            <th><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -20,9 +20,11 @@
         <section>
             <%@include file="sidebar.jsp" %>
             <div class="main-content">
+                <%@include file="pageHeadeing.jsp" %>
                 <sitemesh:write property='body'/>
                 <%@include file="footer.jsp" %>
             </div>
         </section>
+        <script type="text/javascript" src="${contextPath}/static/assets/adminEx/js/adminEx.js"></script>
     </body>
 </html>

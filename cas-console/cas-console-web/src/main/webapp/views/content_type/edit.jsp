@@ -10,36 +10,26 @@
     </head>
     <body>
         <div class="clearfix"></div>
-        <!-- page heading start-->
-        <div class="page-heading">
-            <h3>内容类型</h3>
-            <ul class="breadcrumb">
-                <li><a href="#">Dashboard</a></li>
-                <li class="active"> 新增内容类型</li>
-            </ul>
-        </div>
-        <!-- page heading end-->
-
         <!--body wrapper start-->
         <div class="wrapper">
             <div class="row">
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            <span>新增内容类型</span>
+                            <span><spring:message code="app.contentType.action.add" /></span>
                         </header>
                         <div class="panel-body">
                             <form role="form" method="post" action="${contextPath}/content_type/edit">
                                 <div class="form-group">
-                                    <label for="name">类型名称</label>
+                                    <label for="name"><spring:message code="app.contentType.title.name" /></label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="code">类型编码code</label>
+                                    <label for="code"><spring:message code="app.contentType.title.code" /></label>
                                     <input type="text" class="form-control" id="code" name="code" placeholder="" />
                                 </div>
-                                <button type="submit" class="btn btn-primary">提交</button>
-                                <button type="button" class="btn btn-default">取消</button>
+                                <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
+                                <a href="${contextPath}/content_type/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>
                             </form>
                         </div>
                     </section>

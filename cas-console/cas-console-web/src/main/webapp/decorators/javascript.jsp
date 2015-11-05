@@ -7,6 +7,9 @@
 <!-- Bootstrap -->
 <script type="text/javascript" src="${contextPath}/static/assets/bootstrap/js/bootstrap.min.js"></script>
 
+<!-- jquery.nicescroll -->
+<script type="text/javascript" src="${contextPath}/static/assets/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+
 <script type="text/javascript">
     var contextPath = '${contextPath}';
 </script>

@@ -11,35 +11,25 @@
     </head>
     <body>
         <div class="clearfix"></div>
-        <!-- page heading start-->
-        <div class="page-heading">
-            <h3>分类管理</h3>
-            <ul class="breadcrumb">
-                <li><a href="#">Dashboard</a></li>
-                <li class="active"> 分类管理</li>
-            </ul>
-        </div>
-        <!-- page heading end-->
-
         <!--body wrapper start-->
         <div class="wrapper">
             <div class="row">
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                                                        分类列表
+                            <spring:message code="app.category.title.list" />
                             <span class="tools pull-right"></span>
                         </header>
                         <div class="panel-body">
                             <div class="btn-group mb10">
-                                <a href="${contextPath}/category/goAdd" class="btn btn-primary btn-sm" title="新增分类"><i class="fa fa-plus"></i> 新增分类</a>
+                                <a href="${contextPath}/category/goAdd" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.category.action.add" /></a>
                             </div>
                             <div class="table-responsive">
                                 <table id="category-table" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th width="60%">分类名称</th>
-                                            <th width="24%">操作</th>
+                                            <th width="60%"><spring:message code="app.category.title.name" /></th>
+                                            <th width="24%"><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>

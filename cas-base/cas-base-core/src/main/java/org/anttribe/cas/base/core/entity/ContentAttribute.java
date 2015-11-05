@@ -7,11 +7,13 @@
  */
 package org.anttribe.cas.base.core.entity;
 
+import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+
 /**
  * @author zhaoyong
  * @version 2015年11月4日
  */
-public class ContentAttribute
+public class ContentAttribute extends MybatisAbstractEntity
 {
     /**
      * id编号

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.entity.ContentAttribute">
+	<cache readOnly="true" />
+	<resultMap id="ContentAttribute-resultMap"
+		type="org.anttribe.cas.base.core.entity.ContentAttribute">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="attrValueType" column="attr_value_type" />
+		<association property="contentType"
+			javaType="org.anttribe.cas.base.core.entity.ContentType">
+			<id property="id" column="content_type" />
+			<result property="name" column="content_type_name" />
+		</association>
+	</resultMap>
+
+	<!-- select -->
+	<sql id="select">
+        <![CDATA[
+            SELECT t.id, t.name, t.attr_value_type, t.content_type
+              FROM cas_t_core_content_attr t
+        ]]>
+	</sql>
+
+	<!-- where -->
+	<sql id="where">
+		<where>
+			<if test="null != id and id != ''">
+				AND t.id = #{id}
+			</if>
+			<if test="null != name and name != ''">
+				AND t.name LIKE CONCAT('%', '${name}', '%')
+			</if>
+			<if test="null != contentType and null != contentType.id">
+				AND t.content_type = #{contentType.id}
+			</if>
+		</where>
+	</sql>
+
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.ContentAttribute">
+		<![CDATA[
+		    INSERT INTO cas_t_core_content_attr(id, name, content_type, attr_value_type)
+		      VALUES(#{id}, #{name}, #{contentType.id}, #{attrValueType})
+		]]>
+	</insert>
+
+	<!-- update: 更新单条数据 -->
+	<update id="update" parameterType="org.anttribe.cas.base.core.entity.ContentAttribute">
+        <![CDATA[
+            UPDATE cas_t_core_content_attr t
+        ]]>
+		<set>
+			<if test="null != name and name != ''">
+				name = #{name},
+			</if>
+			<if test="null != contentType and contentType.id != ''">
+				content_type = #{contentType.id},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- delete: 删除单条数据 -->
+	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.ContentAttribute">
+	    <![CDATA[
+            DELETE FROM cas_t_core_content_attr t
+        ]]>
+		<include refid="where"></include>
+	</delete>
+
+	<!-- queryAll: 查询所有数据 -->
+	<select id="queryAll" resultMap="ContentAttribute-resultMap">
+		<include refid="select"></include>
+		ORDER BY content_type
+	</select>
+
+	<!-- queryById: 根据id查询单条数据 -->
+	<select id="queryById" resultMap="ContentAttribute-resultMap">
+		<include refid="select"></include>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByCriteria: 根据条件查询数据 -->
+	<select id="queryByCriteria" resultMap="ContentAttribute-resultMap"
+		parameterType="map">
+		<![CDATA[
+		    SELECT t.id, t.name, t.attr_value_type, t.content_type
+              FROM cas_t_core_content_attr t
+		    LEFT JOIN cas_t_core_content_type t1 ON t1.id = t.content_type
+		]]>
+		<include refid="where"></include>
+		ORDER BY t.content_type
+	</select>
+</mapper>

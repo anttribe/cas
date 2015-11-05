@@ -61,7 +61,7 @@ public class ContentTypeController
         {
             contentTypeFacade.editContentType(contentTypeDTO);
         }
-        return "redirect:/content_type/index";
+        return "redirect:/contentType/index";
     }
     
     @RequestMapping("/delete")
@@ -71,6 +71,6 @@ public class ContentTypeController
         {
             contentTypeFacade.deleteContentType(contentTypeDTO);
         }
-        return "redirect:/content_type/index";
+        return "redirect:/contentType/index";
     }
 }

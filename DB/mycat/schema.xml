@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
 <!DOCTYPE mycat:schema SYSTEM "schema.dtd">
 <mycat:schema xmlns:mycat="http://org.opencloudb/">
-
-	<schema name="WEBIM" checkSQLschema="false" sqlMaxLimit="100" dataNode="dn1">
-	    
-		<table name="t_webim_user" primaryKey="id" dataNode="dn1,dn2" rule="rule_id" />
-		
-		<table name="t_webim_message" primaryKey="id" dataNode="dn1,dn2" rule="rule_create_month">
-		    <childTable name="t_webim_messagebody" primaryKey="id" joinKey="message_id" parentKey="id">
-			</childTable>
-		</table>
-	</schema>
 	
 	<schema name="CAS" checkSQLschema="false" sqlMaxLimit="100">
 	    <table name="cas_t_core_category" primaryKey="id" type="global" dataNode="dn3,dn4" />
+		<table name="cas_t_core_content_type" primaryKey="id" type="global" dataNode="dn3,dn4" />
+		<table name="cas_t_core_content_attr" primaryKey="id" type="global" dataNode="dn3,dn4" />
+		
 		<table name="cas_t_core_website" primaryKey="id" dataNode="dn3,dn4" rule="rule_id" />
-	</schema>
-	
-	<schema name="OPENESHOP" checkSQLschema="false" sqlMaxLimit="100">
-	    <table name="oes_good_t_category_info" primaryKey="id" type="global" dataNode="dn5,dn6" />
+		
+		<table name="cas_t_core_crawler" primaryKey="id" dataNode="dn3,dn4" rule="rule_id">
+		    <childTable name="cas_t_core_crawler_regular" primaryKey="id" joinKey="crawler" parentKey="id">
+			</childTable>
+		</table>
+		
+		<table name="cas_t_core_content" primaryKey="id" dataNode="dn3,dn4" rule="rule_id">
+		    <childTable name="cas_t_core_content_attr_value" primaryKey="id" joinKey="content_id" parentKey="id">
+			</childTable>
+		</table>
+		
 	</schema>
 	
 	<dataNode name="dn1" dataHost="localhost1" database="webim" />

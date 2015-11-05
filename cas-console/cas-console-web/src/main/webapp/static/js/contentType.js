@@ -5,7 +5,7 @@ $.extend(cas, {
 	        $.ajax({
 	        	type: 'POST',
 	        	async: false,
-	        	url: contextPath + '/content_type/list',
+	        	url: contextPath + '/contentType/list',
 	        	data: {},
 	        	success: function(result){
 	        		if(result && callback){
@@ -21,7 +21,7 @@ $.extend(cas, {
 				draggable: true,
 				closable: true,
 	            title: '<div class="model-header-title">选择内容类型</div>',
-	            message: $('<div></div>').load(contextPath + '/content_type/select.tool')
+	            message: $('<div></div>').load(contextPath + '/contentType/select.tool')
 	        });
 		},
 		selectContentType: function(contentType){

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @version 2015年11月4日
  */
 @Controller
-@RequestMapping("/content_type")
+@RequestMapping("/contentType")
 public class ContentTypeController
 {
     @Autowired

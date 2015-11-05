@@ -19,7 +19,7 @@
                             <span><spring:message code="app.contentType.action.add" /></span>
                         </header>
                         <div class="panel-body">
-                            <form role="form" method="post" action="${contextPath}/content_type/edit">
+                            <form role="form" method="post" action="${contextPath}/contentType/edit">
                                 <div class="form-group">
                                     <label for="name"><spring:message code="app.contentType.title.name" /></label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="" />
@@ -29,7 +29,7 @@
                                     <input type="text" class="form-control" id="code" name="code" placeholder="" />
                                 </div>
                                 <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
-                                <a href="${contextPath}/content_type/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>
+                                <a href="${contextPath}/contentType/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>
                             </form>
                         </div>
                     </section>

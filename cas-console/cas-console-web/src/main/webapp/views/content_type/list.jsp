@@ -21,7 +21,7 @@
                         </header>
                         <div class="panel-body">
                             <div class="btn-group mb10">
-                                <a href="${contextPath}/content_type/goAdd" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.contentType.action.add" /></a>
+                                <a href="${contextPath}/contentType/goAdd" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.contentType.action.add" /></a>
                             </div>
                             <div class="table-responsive">
                                 <table id="contentType-table" class="display table table-striped">

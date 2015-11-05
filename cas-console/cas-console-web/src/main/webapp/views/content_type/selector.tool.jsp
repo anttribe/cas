@@ -36,7 +36,7 @@
 	        			enable: true,
 	        			type: 'POST',
 	        			autoParam: ['parent'],
-	        			url: contextPath + '/category/list'
+	        			url: contextPath + '/contentType/list'
 	        		},
 	        		view: {
 	                    selectedMulti: false,

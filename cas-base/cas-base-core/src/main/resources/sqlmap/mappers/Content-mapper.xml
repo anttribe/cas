@@ -4,14 +4,6 @@
 	<cache readOnly="true" />
 	<resultMap id="Content-resultMap" type="org.anttribe.cas.base.core.entity.Content">
 		<result property="contentId" column="contentId" />
-		<result property="contentType" column="contentType"
-			javaType="org.anttribe.cas.base.core.entity.ContentType" />
-		<result property="title" column="title" />
-		<result property="brief" column="brief" />
-		<result property="thumbnail" column="thumbnail" />
-		<result property="author" column="author" />
-		<result property="content" column="content" />
-		<result property="publishTime" column="publishTime" />
 		<result property="link" column="link" />
 		<association property="website" column="{siteId = website}"
 			javaType="org.anttribe.cas.base.core.entity.Website" select="org.anttribe.cas.base.core.entity.Website.queryById" />
@@ -20,25 +12,18 @@
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Content">
 		<![CDATA[
-		insert into t_cas_content(contentId, title, author, publishTime, thumbnail, brief, content, website, link, contentType)
-		    values(#{contentId}, #{title}, #{author}, #{publishTime}, #{thumbnail}, #{brief}, #{content}, #{website.siteId}, #{link}, #{contentType})
 		]]>
 	</insert>
 
 	<!-- queryAll: 查询所有内容数据 -->
 	<select id="queryAll" resultMap="Content-resultMap">
 		<![CDATA[
-		SELECT contentId, title, author, publishTime, tags, thumbnail, brief, content, topic, website, link, contentType
-		    FROM t_cas_content t
 		]]>
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="Content-resultMap">
 		<![CDATA[
-		SELECT contentId, title, author, publishTime, tags, thumbnail, brief, content, topic, website, link, contentType
-		    FROM t_cas_content t
-		    where t.contentId = #{contentId}
 		]]>
 	</select>
 
@@ -46,9 +31,6 @@
 	<select id="queryByCriteria" resultMap="Content-resultMap"
 		parameterType="map">
 		<![CDATA[
-		SELECT contentId, title, author, publishTime, tags, thumbnail, brief, content, topic, website, link, contentType
-		    FROM t_cas_content t
-		    where t.contentId = #{contentId}
 		]]>
 	</select>
 </mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.entity.ContentType">
+	<cache readOnly="true" />
+	<resultMap id="ContentType-resultMap" type="org.anttribe.cas.base.core.entity.ContentType">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="code" column="code" />
+	</resultMap>
+
+	<!-- select -->
+	<sql id="select">
+        <![CDATA[
+            SELECT t.id, t.name, t.code
+              FROM cas_t_core_content_type t
+        ]]>
+	</sql>
+
+	<!-- where -->
+	<sql id="where">
+		<where>
+			<if test="null != id and id != ''">
+				AND t.id = #{id}
+			</if>
+			<if test="null != name and name != ''">
+				AND t.name LIKE CONCAT('%', '${name}', '%')
+			</if>
+			<if test="null != code and null != code">
+				AND t.code = #{code}
+			</if>
+		</where>
+	</sql>
+
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.ContentType">
+		<![CDATA[
+		    INSERT INTO cas_t_core_content_type(id, name, code)
+		      VALUES(#{id}, #{name}, #{code})
+		]]>
+	</insert>
+
+	<!-- update: 更新单条数据 -->
+	<update id="update" parameterType="org.anttribe.cas.base.core.entity.ContentType">
+        <![CDATA[
+            UPDATE cas_t_core_content_type t
+        ]]>
+		<set>
+			<if test="null != name and name != ''">
+				name = #{name},
+			</if>
+			<if test="null != code and code != ''">
+				code = #{code},
+			</if>
+		</set>
+		<include refid="where"></include>
+	</update>
+
+	<!-- delete: 删除单条数据 -->
+	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.ContentType">
+	    <![CDATA[
+            DELETE FROM cas_t_core_content_type t
+        ]]>
+		<include refid="where"></include>
+	</delete>
+
+	<!-- queryAll: 查询所有数据 -->
+	<select id="queryAll" resultMap="ContentType-resultMap">
+		<include refid="select"></include>
+	</select>
+
+	<!-- queryById: 根据id查询单条数据 -->
+	<select id="queryById" resultMap="ContentType-resultMap">
+		<include refid="select"></include>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByCriteria: 根据条件查询数据 -->
+	<select id="queryByCriteria" resultMap="ContentType-resultMap"
+		parameterType="map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+	</select>
+</mapper>

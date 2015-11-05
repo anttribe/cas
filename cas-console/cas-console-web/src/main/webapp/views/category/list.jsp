@@ -86,7 +86,7 @@
     				
     				// 表格treetable化
     	        	$('#category-table').treetable({
-    	        		column: 1,
+    	        		column: 0,
     	        		expandable: true,
     	        		stringExpand: '',
     	        		stringCollapse: '',

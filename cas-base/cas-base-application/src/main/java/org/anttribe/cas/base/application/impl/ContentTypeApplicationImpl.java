@@ -10,7 +10,6 @@ package org.anttribe.cas.base.application.impl;
 import java.util.List;
 
 import org.anttribe.cas.base.application.ContentTypeApplication;
-import org.anttribe.cas.base.core.entity.Category;
 import org.anttribe.cas.base.core.entity.ContentType;
 import org.anttribe.cas.base.core.errorno.SystemErrorNo;
 import org.anttribe.cas.base.core.exception.UnifyException;
@@ -63,8 +62,8 @@ public class ContentTypeApplicationImpl implements ContentTypeApplication
             return;
         }
         
-        ContentType tempContentType = ContentType.load(Category.class, contentType.getId());
-        if (null != tempContentType)
+        ContentType tempContentType = ContentType.load(ContentType.class, contentType.getId());
+        if (null == tempContentType)
         {
             contentType.save();
             logger.debug("contentType not exist in DB, then save new contentType to DB, contentType: {}",

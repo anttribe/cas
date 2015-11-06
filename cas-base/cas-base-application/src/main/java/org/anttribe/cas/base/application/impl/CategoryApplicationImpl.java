@@ -64,7 +64,7 @@ public class CategoryApplicationImpl implements CategoryApplication
         }
         
         Category tempCategory = Category.load(Category.class, category.getId());
-        if (null != tempCategory)
+        if (null == tempCategory)
         {
             category.setCreateTime(new Date());
             category.save();

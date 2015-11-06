@@ -17,7 +17,7 @@
             <li class="menu-list"><a href="#"><i class="fa fa-tasks"></i> <span><spring:message code="app.content.title" /></span></a>
                 <ul class="sub-menu-list">
                     <li><a href="${contextPath}/contentType/index"> <spring:message code="app.contentType.title" /></a></li>
-                    <li><a href="${contextPath}/contentAttribute/index"> <spring:message code="app.content.title" /></a></li>
+                    <li><a href="${contextPath}/contentAttribute/index"> <spring:message code="app.contentAttribute.title" /></a></li>
                 </ul>
             </li>
             <li><a href="#"><i class="fa fa-bug"></i> <span><spring:message code="app.crawler.title" /></span></a></li>

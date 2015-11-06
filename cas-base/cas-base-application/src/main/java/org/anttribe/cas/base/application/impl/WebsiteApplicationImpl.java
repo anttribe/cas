@@ -67,10 +67,10 @@ public class WebsiteApplicationImpl implements WebsiteApplication
         }
         
         Website tempWebsite = Website.load(Website.class, website.getId());
-        if (null != tempWebsite)
+        if (null == tempWebsite)
         {
-            tempWebsite.setCreateTime(new Date());
-            tempWebsite.save();
+            website.setCreateTime(new Date());
+            website.save();
             logger.debug("website not exist in DB, then save new website to DB, website: {}", website.getId());
             return;
         }

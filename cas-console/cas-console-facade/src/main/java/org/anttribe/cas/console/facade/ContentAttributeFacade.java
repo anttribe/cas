@@ -9,7 +9,7 @@ package org.anttribe.cas.console.facade;
 
 import java.util.List;
 
-import org.anttribe.cas.console.facade.dto.CategoryDTO;
+import org.anttribe.cas.console.facade.dto.ContentAttributeDTO;
 
 /**
  * @author zhaoyong
@@ -17,4 +17,25 @@ import org.anttribe.cas.console.facade.dto.CategoryDTO;
  */
 public interface ContentAttributeFacade
 {
+    /**
+     * 根据条件列表内容属性
+     * 
+     * @param contentAttributeDTO
+     * @return List<ContentAttributeDTO>
+     */
+    List<ContentAttributeDTO> listContentAttributes(ContentAttributeDTO contentAttributeDTO);
+    
+    /**
+     * 添加或修改内容属性
+     * 
+     * @param contentAttributeDTO ContentAttributeDTO
+     */
+    void editContentAttribute(ContentAttributeDTO contentAttributeDTO);
+    
+    /**
+     * 删除内容属性
+     * 
+     * @param contentTypeDTO
+     */
+    void deleteContentAttribute(ContentAttributeDTO contentAttributeDTO);
 }

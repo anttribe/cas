@@ -20,7 +20,7 @@
                     <li><a href="${contextPath}/contentAttribute/index"> <spring:message code="app.contentAttribute.title" /></a></li>
                 </ul>
             </li>
-            <li><a href="#"><i class="fa fa-bug"></i> <span><spring:message code="app.crawler.title" /></span></a></li>
+            <li><a href="${contextPath}/crawler/index"><i class="fa fa-bug"></i> <span><spring:message code="app.crawler.title" /></span></a></li>
             <li class="menu-list"><a href="#"><i class="fa fa-cogs"></i> <span><spring:message code="app.system.title" /></span></a>
                 <ul class="sub-menu-list">
                 </ul>

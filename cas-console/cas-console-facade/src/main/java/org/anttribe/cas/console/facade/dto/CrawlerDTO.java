@@ -8,6 +8,7 @@
 package org.anttribe.cas.console.facade.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import org.anttribe.cas.base.core.entity.CrawlerState;
 
@@ -51,6 +52,11 @@ public class CrawlerDTO
      * 内容类型
      */
     private ContentTypeDTO contentType;
+    
+    /**
+     * 内容规则
+     */
+    private List<CrawlerContentRegularDTO> regulars;
     
     /**
      * 是否可用
@@ -140,6 +146,16 @@ public class CrawlerDTO
     public void setContentType(ContentTypeDTO contentType)
     {
         this.contentType = contentType;
+    }
+    
+    public List<CrawlerContentRegularDTO> getRegulars()
+    {
+        return regulars;
+    }
+    
+    public void setRegulars(List<CrawlerContentRegularDTO> regulars)
+    {
+        this.regulars = regulars;
     }
     
     public boolean isAvailable()

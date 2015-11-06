@@ -35,6 +35,22 @@ public class ContentAttribute extends MybatisAbstractEntity
      */
     private String attrValueType;
     
+    /**
+     * <构造器>
+     */
+    public ContentAttribute()
+    {
+    
+    }
+    
+    /**
+     * @param id
+     */
+    public ContentAttribute(String id)
+    {
+        this.id = id;
+    }
+    
     public String getId()
     {
         return id;

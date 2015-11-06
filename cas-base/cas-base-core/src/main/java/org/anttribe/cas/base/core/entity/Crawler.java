@@ -78,6 +78,22 @@ public class Crawler extends MybatisAbstractEntity
      */
     private CrawlerState state;
     
+    /**
+     * <构造器>
+     */
+    public Crawler()
+    {
+    
+    }
+    
+    /**
+     * @param id
+     */
+    public Crawler(String id)
+    {
+        this.id = id;
+    }
+    
     public String getId()
     {
         return id;

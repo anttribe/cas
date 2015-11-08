@@ -1,0 +1,17 @@
+@charset "utf-8";
+.stepy-tab ul, .block-tabby ul.stepy-titles { border-bottom: none; padding: 0; }
+.stepy-tab ul li.stepy-active, .block-tabby ul li.stepy-active { border:none; background: #65CEA7!important; color: #fff; }
+.stepy-header li.stepy-active div { color: #fff; }
+.stepy-header li { background: #fff; margin-right: 15px; margin-bottom: 15px; border-radius: 5px; -webkit-border-radius: 5px; }
+.stepy-header li span { font-size: 12px; }
+.stepy-header li div{ font-size: 14px; font-weight: normal; text-shadow: none; }
+
+.stepy-step { margin-bottom: 50px; border: none; padding-bottom: 50px; width: 100%; color  }
+.stepy-step legend { color: #65CEA7; font-size: 16px; border-bottom: 1px dotted #ddd; padding-bottom: 10px; }
+.stepy-step label { font-size: 1.0em; font-weight: normal; }
+.stepy-step input, .stepy-step textarea, .stepy-step select { margin-left: 0 !important; border: 1px solid #ccc; font-size: 1.0em; height:34px; width: 100%; }
+.stepy-error { position: absolute; bottom: 105px; }
+.stepy-error label.error { font-size: 12px; font-weight: normal; }
+
+.button-back, .button-next, .stepy-navigator input[type="submit"] { border: 1px solid transparent; color: #fff; background-color: #374152; cursor: pointer; padding: 7px 15px 8px; text-decoration: none; -khtml-border-radius: 4px; -moz-border-radius: 4px; -opera-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px }
+.button-back:hover, .button-next:hover, .stepy-navigator input[type="submit"]:hover { background: #2e3644; color: #fff; text-decoration: none; }

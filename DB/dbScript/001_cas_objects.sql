@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `cas_t_core_content_attr`;
 CREATE TABLE `cas_t_core_content_attr` (
   `id` varchar(32) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `content_type` varchar(8) NOT NULL,
+  `content_type` varchar(32) NOT NULL,
   `attr_value_type` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='内容属性表';
@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS `cas_t_core_content`;
 CREATE TABLE `cas_t_core_content` (
   `id` varchar(32) NOT NULL,
   `link` varchar(1024) DEFAULT NULL,
-  `content_type` varchar(8) NOT NULL,
+  `content_type` varchar(32) NOT NULL,
   `create_time` datetime DEFAULT NULL,
   `website` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)

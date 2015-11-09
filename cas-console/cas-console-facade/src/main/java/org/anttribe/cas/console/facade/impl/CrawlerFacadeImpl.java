@@ -51,7 +51,7 @@ public class CrawlerFacadeImpl implements CrawlerFacade
         Crawler crawler = CrawlerAssembler.toEntity(crawlerDTO);
         if (null != crawler)
         {
-            
+            crawlerApplication.persistentCrawler(crawler);
         }
     }
     

@@ -83,7 +83,7 @@ public class Crawler extends MybatisAbstractEntity
      */
     public Crawler()
     {
-    
+        
     }
     
     /**
@@ -162,6 +162,16 @@ public class Crawler extends MybatisAbstractEntity
     public void setContentType(ContentType contentType)
     {
         this.contentType = contentType;
+    }
+    
+    public List<CrawlerContentRegular> getRegulars()
+    {
+        return regulars;
+    }
+    
+    public void setRegulars(List<CrawlerContentRegular> regulars)
+    {
+        this.regulars = regulars;
     }
     
     public boolean isAvailable()

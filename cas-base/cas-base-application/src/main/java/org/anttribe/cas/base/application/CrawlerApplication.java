@@ -25,4 +25,18 @@ public interface CrawlerApplication
      * @return List<Crawler>
      */
     List<Crawler> listCrawlers(Map<String, Object> criteria);
+    
+    /**
+     * 持久化爬虫信息
+     * 
+     * @param crawler Crawler
+     */
+    void persistentCrawler(Crawler crawler);
+    
+    /**
+     * 删除爬虫信息
+     * 
+     * @param crawler Crawler
+     */
+    void deleteCrawler(Crawler crawler);
 }

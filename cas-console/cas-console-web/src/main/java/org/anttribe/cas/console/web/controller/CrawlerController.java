@@ -56,7 +56,7 @@ public class CrawlerController
     }
     
     @RequestMapping("/edit")
-    public String doEditCrawler(HttpServletRequest request, @RequestParam(required = false) CrawlerDTO crawlerDTO)
+    public String doEditCrawler(HttpServletRequest request, CrawlerDTO crawlerDTO)
     {
         if (null != crawlerDTO)
         {

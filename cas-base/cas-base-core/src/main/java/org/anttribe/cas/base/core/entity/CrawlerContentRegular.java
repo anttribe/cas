@@ -7,7 +7,11 @@
  */
 package org.anttribe.cas.base.core.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 爬虫内容属性规则
@@ -36,6 +40,23 @@ public class CrawlerContentRegular extends MybatisAbstractEntity
      * 规则
      */
     private String regular;
+    
+    /**
+     * 根据爬虫信息删除内容属性规则
+     * 
+     * @param crawler Crawler
+     */
+    public static void removeByCrawler(Crawler crawler)
+    {
+        if (null != crawler && !StringUtils.isEmpty(crawler.getId()))
+        {
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("crawler", crawler.getId());
+            CrawlerContentRegular.getSqlSessionTemplate().delete(CrawlerContentRegular.class.getCanonicalName()
+                + ".deleteByCriteria",
+                criteria);
+        }
+    }
     
     public String getId()
     {

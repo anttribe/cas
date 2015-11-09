@@ -16,6 +16,7 @@ import org.anttribe.cas.console.facade.dto.CrawlerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -55,7 +56,7 @@ public class CrawlerController
     }
     
     @RequestMapping("/edit")
-    public String doEditCrawler(HttpServletRequest request, CrawlerDTO crawlerDTO)
+    public String doEditCrawler(HttpServletRequest request, @RequestParam(required = false) CrawlerDTO crawlerDTO)
     {
         if (null != crawlerDTO)
         {

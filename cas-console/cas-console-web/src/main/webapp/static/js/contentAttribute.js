@@ -8,7 +8,7 @@ $.extend(cas, {
 	        	url: contextPath + '/contentAttribute/list',
 	        	data: criteria || {},
 	        	success: function(result){
-	        		if(result && callback){
+	        		if(callback){
 	        			callback.call(this, result);
 	        		}
 	        	}

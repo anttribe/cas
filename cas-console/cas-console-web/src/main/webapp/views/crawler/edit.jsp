@@ -25,7 +25,7 @@
                             </div>
                             <form id="crawler-form" method="post" action="${contextPath}/crawler/edit">
                                 <fieldset title="<spring:message code="app.crawler.wizard.foundation" />">
-                                    <legend></legend>
+                                    <legend><spring:message code="app.crawler.wizard.foundation" /></legend>
                                     <div class="form-group">
                                         <label for="title"><spring:message code="app.crawler.title.title" /></label>
                                         <input type="text" class="form-control" id="title" name="title" placeholder="" />
@@ -37,15 +37,15 @@
                                     </div>
                                 </fieldset>
                                 <fieldset title="<spring:message code="app.crawler.wizard.contentAttrRegulars" />">
-                                    <legend></legend>
+                                    <legend><spring:message code="app.crawler.wizard.contentAttrRegulars" /></legend>
                                     <div class="form-group">
                                         <label for="contentType"><spring:message code="app.crawler.title.contentType" /></label>
-                                        <select class="form-control" id="contentType" name="contentType.id">
-                                        </select>
+                                        <select class="form-control" id="contentType" name="contentType.id"></select>
                                     </div>
+                                    <div id="contentAttrRegulars"></div>
                                 </fieldset>
                                 <fieldset title="<spring:message code="app.crawler.wizard.runtime" />">
-                                    <legend></legend>
+                                    <legend><spring:message code="app.crawler.wizard.runtime" /></legend>
                                     <div class="form-group">
                                         <label for="intervalTime"><spring:message code="app.crawler.title.intervalTime" /></label>
                                         <input type="text" class="form-control" id="intervalTime" name="intervalTime" placeholder="" />
@@ -72,6 +72,8 @@
         <script type="text/javascript" src="${contextPath}/static/assets/jquery-stepy/js/jquery.stepy.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/website.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/contentType.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/static/js/contentAttribute.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/static/js/crawler.js"></script>
         <script type="text/javascript">
             $(function(){
             	// 站点初始化
@@ -97,18 +99,36 @@
             					$html += '<option value="' + contentType['id'] + '">' + contentType['name'] + '</option>';
             				}
             			}
-            			$('#contentType').empty().append($html);
+            			$('#contentType').empty().append($html).change(function(){
+            				cas.crawler.listContentAttrAngulars($(this).val());
+            		    });
             		}
             	});
-            	
+            });
+        </script>
+        <script type="text/javascript">
+            $(function(){
+            	// 页面数据初始化
+            	var contentType = '${contentType}';
+            	if(contentType){
+            		//获取已经配置的属性规则展现
+            		$('option[value="' + contentType + '"]', '#contentType').attr('selected', true);
+            	} else{
+            		contentType = $('#contentType').val();
+                	cas.crawler.listContentAttrAngulars(contentType);
+            	}
+            });
+        </script>
+        <script type="text/javascript">
+            $(function(){
             	//页面表单向导初始化
-            	$('#crawler-form').stepy({
-            		backLabel: '<spring:message code="app.common.wizard.previous" />',
+        	    $('#crawler-form').stepy({
+        		    backLabel: '<spring:message code="app.common.wizard.previous" />',
                     nextLabel: '<spring:message code="app.common.wizard.next" />',
                     titleClick: true,
                     titleTarget: '.stepy-tab',
-                    legend: false
-            	});
+                    legend: true
+        	    });
             });
         </script>
     </body>

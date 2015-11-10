@@ -10,6 +10,7 @@ package org.anttribe.cas.base.application.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.anttribe.cas.base.core.constants.Constants;
 import org.anttribe.cas.base.core.entity.Crawler;
 import org.anttribe.cas.base.core.entity.CrawlerContentRegular;
 import org.anttribe.cas.base.core.errorno.SystemErrorNo;
@@ -54,11 +55,20 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
             throw new UnifyException(SystemErrorNo.PARAMETER_LOGIC_ERROR);
         }
         
+        // 处理默认属性值
+        crawler.setIntervalTime(null != crawler.getIntervalTime() ? crawler.getIntervalTime()
+            : Constants.Crawler.DEFAULT_PAGE_INTERVALTIME);
+        crawler.setRetryTimes(
+            null != crawler.getRetryTimes() ? crawler.getRetryTimes() : Constants.Crawler.DEFAULT_RETRYTIMES);
+        crawler.setTimeout(null != crawler.getTimeout() ? crawler.getTimeout() : Constants.Crawler.DEFAULT_TIMEOUT);
+        
         if (StringUtils.isEmpty(crawler.getId()))
         {
             crawler.setId(UUIDUtils.getRandomUUID());
             crawler.save();
             logger.debug("crawler id not there, then save new crawler to DB, crawler: {}", crawler.getId());
+            
+            this.persistentCrawlerContentRegulars(crawler);
             return;
         }
         
@@ -67,11 +77,23 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
         {
             crawler.save();
             logger.debug("crawler not exist in DB, then save new crawler to DB, crawler: {}", crawler.getId());
+            
+            this.persistentCrawlerContentRegulars(crawler);
             return;
         }
         crawler.update();
         logger.debug("crawler exist in DB, then update crawler info, crawler: {}", crawler.getId());
         
+        this.persistentCrawlerContentRegulars(crawler);
+    }
+    
+    /**
+     * 持久化处理爬虫上的内容属性规则数据
+     * 
+     * @param crawler Crawler
+     */
+    private void persistentCrawlerContentRegulars(Crawler crawler)
+    {
         // 删除数据库中保存的内容属性规则
         CrawlerContentRegular.removeByCrawler(crawler);
         // 保存内容属性

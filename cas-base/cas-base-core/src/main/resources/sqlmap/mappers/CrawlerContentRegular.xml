@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.entity.CrawlerContentRegular">
+	<cache readOnly="true" />
+	<resultMap id="CrawlerContentRegular-resultMap"
+		type="org.anttribe.cas.base.core.entity.CrawlerContentRegular">
+		<id property="id" column="id" />
+		<result property="regular" column="regular" />
+		<association property="crawler"
+			javaType="org.anttribe.cas.base.core.entity.Crawler">
+			<id property="id" column="crawler" />
+		</association>
+		<association property="attribute"
+			javaType="org.anttribe.cas.base.core.entity.ContentAttribute">
+			<id property="id" column="attribute_id" />
+			<result property="name" column="attribute_name" />
+		</association>
+	</resultMap>
+
+	<!-- select -->
+	<sql id="select">
+        <![CDATA[
+            SELECT t.id, t.crawler, t.attr_regular, t.content_attr, t1.id as attribute_id, t1.name as attribute_name
+              FROM cas_t_core_crawler_regular t
+            LEFT JOIN cas_t_core_content_attr t1 on t1.id = t.content_attr
+        ]]>
+	</sql>
+
+	<!-- where -->
+	<sql id="where">
+		<where>
+			<if test="null != id and id != ''">
+				AND t.id = #{id}
+			</if>
+			<if test="null != crawler and null != crawler.id and crawler.id != ''">
+				AND t.crawler = #{crawler.id}
+			</if>
+			<if test="null != attribute and null != attribute.id">
+				AND t.content_attr = #{attribute.id}
+			</if>
+		</where>
+	</sql>
+
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert"
+		parameterType="org.anttribe.cas.base.core.entity.CrawlerContentRegular">
+		<![CDATA[
+		    INSERT INTO cas_t_core_crawler_regular(id, crawler, attr_regular, content_attr)
+		      VALUES(#{id}, #{crawler.id}, #{regular}, #{attribute.id})
+		]]>
+	</insert>
+
+	<!-- update: 更新单条数据 -->
+	<update id="update"
+		parameterType="org.anttribe.cas.base.core.entity.CrawlerContentRegular">
+        <![CDATA[
+            UPDATE cas_t_core_crawler_regular t
+        ]]>
+		<set>
+			<if test="null != regular and regular != ''">
+				attr_regular = #{regular},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- delete: 删除单条数据 -->
+	<delete id="delete"
+		parameterType="org.anttribe.cas.base.core.entity.CrawlerContentRegular">
+	    <![CDATA[
+            DELETE FROM cas_t_core_crawler_regular t
+        ]]>
+		<include refid="where"></include>
+	</delete>
+
+	<!-- removeByCrawler: 删除数据 -->
+	<delete id="removeByCrawler"
+		parameterType="org.anttribe.cas.base.core.entity.CrawlerContentRegular">
+	    <![CDATA[
+            DELETE FROM cas_t_core_crawler_regular t
+        ]]>
+		<include refid="where"></include>
+	</delete>
+
+	<!-- queryAll: 查询所有数据 -->
+	<select id="queryAll" resultMap="CrawlerContentRegular-resultMap">
+		<include refid="select"></include>
+	</select>
+
+	<!-- queryById: 根据id查询单条数据 -->
+	<select id="queryById" resultMap="CrawlerContentRegular-resultMap">
+		<include refid="select"></include>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByCriteria: 根据条件查询数据 -->
+	<select id="queryByCriteria" resultMap="CrawlerContentRegular-resultMap"
+		parameterType="map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+	</select>
+</mapper>

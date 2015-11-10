@@ -36,17 +36,17 @@ public class Crawler extends MybatisAbstractEntity
     /**
      * 处理2个page之间的间隔时间
      */
-    private int intervalTime;
+    private Integer intervalTime;
     
     /**
      * 处理失败之后的重复次数
      */
-    private int retryTimes;
+    private Integer retryTimes;
     
     /**
      * 超时时长
      */
-    private int timeout;
+    private Integer timeout;
     
     /**
      * 内容类型
@@ -83,7 +83,6 @@ public class Crawler extends MybatisAbstractEntity
      */
     public Crawler()
     {
-        
     }
     
     /**
@@ -124,32 +123,32 @@ public class Crawler extends MybatisAbstractEntity
         this.website = website;
     }
     
-    public int getIntervalTime()
+    public Integer getIntervalTime()
     {
         return intervalTime;
     }
     
-    public void setIntervalTime(int intervalTime)
+    public void setIntervalTime(Integer intervalTime)
     {
         this.intervalTime = intervalTime;
     }
     
-    public int getRetryTimes()
+    public Integer getRetryTimes()
     {
         return retryTimes;
     }
     
-    public void setRetryTimes(int retryTimes)
+    public void setRetryTimes(Integer retryTimes)
     {
         this.retryTimes = retryTimes;
     }
     
-    public int getTimeout()
+    public Integer getTimeout()
     {
         return timeout;
     }
     
-    public void setTimeout(int timeout)
+    public void setTimeout(Integer timeout)
     {
         this.timeout = timeout;
     }

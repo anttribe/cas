@@ -78,15 +78,15 @@
 	</sql>
 
 	<!-- insert: 插入单条数据 -->
-	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Category">
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Crawler">
 		<![CDATA[
 		    INSERT INTO cas_t_core_crawler(id, title, website, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
-		      VALUES(#{id}, #{title}, #{website.id}, #{interval_time.id}, #{retry_times}, #{timeout}, #{contentType.id}, #{create_time}, #{crawl_time}, #{state}, #{available})
+		      VALUES(#{id}, #{title}, #{website.id}, #{intervalTime}, #{retryTimes}, #{timeout}, #{contentType.id}, #{createTime}, #{crawlTime}, #{state}, #{available})
 		]]>
 	</insert>
 
 	<!-- update: 更新单条数据 -->
-	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Category">
+	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Crawler">
         <![CDATA[
             UPDATE cas_t_core_crawler t
         ]]>
@@ -128,13 +128,13 @@
 	</update>
 
 	<!-- delete: 删除单条数据 -->
-	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Category">
+	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Crawler">
 	    <![CDATA[
             DELETE FROM cas_t_core_crawler t
         ]]>
 		<include refid="where"></include>
 	</delete>
-
+	
 	<!-- queryAll: 查询所有数据 -->
 	<select id="queryAll" resultMap="Crawler-resultMap">
 		<include refid="select"></include>

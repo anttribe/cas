@@ -58,8 +58,8 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
         // 处理默认属性值
         crawler.setIntervalTime(null != crawler.getIntervalTime() ? crawler.getIntervalTime()
             : Constants.Crawler.DEFAULT_PAGE_INTERVALTIME);
-        crawler.setRetryTimes(
-            null != crawler.getRetryTimes() ? crawler.getRetryTimes() : Constants.Crawler.DEFAULT_RETRYTIMES);
+        crawler.setRetryTimes(null != crawler.getRetryTimes() ? crawler.getRetryTimes()
+            : Constants.Crawler.DEFAULT_RETRYTIMES);
         crawler.setTimeout(null != crawler.getTimeout() ? crawler.getTimeout() : Constants.Crawler.DEFAULT_TIMEOUT);
         
         if (StringUtils.isEmpty(crawler.getId()))
@@ -100,7 +100,10 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
         List<CrawlerContentRegular> regulars = crawler.getRegulars();
         if (!CollectionUtils.isEmpty(regulars))
         {
-            CrawlerContentRegular.batchSave(CrawlerContentRegular.class, regulars);
+            for (CrawlerContentRegular regular : regulars)
+            {
+                regular.save();
+            }
             logger.debug("save regulars to DB, regulars: {}", regulars);
         }
     }

@@ -79,6 +79,7 @@ public class CrawlerAssembler
             crawler.setCrawlTime(crawlerDTO.getCrawlTime());
             crawler.setCreateTime(crawlerDTO.getCreateTime());
             crawler.setAvailable(crawlerDTO.isAvailable());
+            crawler.setRegulars(CrawlerContentRegularAssembler.toEntity(crawlerDTO.getRegulars()));
             
             return crawler;
         }

@@ -16,7 +16,7 @@
 		<association property="website"
 			javaType="org.anttribe.cas.base.core.entity.Website">
 			<id property="id" column="website_id" />
-			<result property="name" column="website_name" />
+			<result property="siteName" column="website_name" />
 		</association>
 		<association property="contentType"
 			javaType="org.anttribe.cas.base.core.entity.ContentType">

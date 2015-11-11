@@ -29,10 +29,12 @@ public class CrawlerContentRegularAssembler
         {
             CrawlerContentRegularDTO crawlerContentRegularDTO = new CrawlerContentRegularDTO();
             crawlerContentRegularDTO.setId(crawlerContentRegular.getId());
-            crawlerContentRegularDTO.setAttribute(
-                null != crawlerContentRegular.getAttribute() ? crawlerContentRegular.getAttribute().getId() : "");
-            crawlerContentRegularDTO.setCrawler(
-                null != crawlerContentRegular.getCrawler() ? crawlerContentRegular.getCrawler().getId() : "");
+            crawlerContentRegularDTO.setAttribute(null != crawlerContentRegular.getAttribute() ? crawlerContentRegular.getAttribute()
+                .getId()
+                : "");
+            crawlerContentRegularDTO.setCrawler(null != crawlerContentRegular.getCrawler() ? crawlerContentRegular.getCrawler()
+                .getId()
+                : "");
             crawlerContentRegularDTO.setRegular(crawlerContentRegular.getRegular());
             
             return crawlerContentRegularDTO;
@@ -67,13 +69,32 @@ public class CrawlerContentRegularAssembler
         {
             CrawlerContentRegular crawlerContentRegular = new CrawlerContentRegular();
             crawlerContentRegular.setId(crawlerContentRegularDTO.getId());
-            crawlerContentRegular.setCrawler(StringUtils.isEmpty(crawlerContentRegularDTO.getId())
-                ? new Crawler(crawlerContentRegularDTO.getId()) : null);
-            crawlerContentRegular.setAttribute(StringUtils.isEmpty(crawlerContentRegularDTO.getAttribute())
-                ? new ContentAttribute(crawlerContentRegularDTO.getAttribute()) : null);
+            crawlerContentRegular.setCrawler(StringUtils.isEmpty(crawlerContentRegularDTO.getId()) ? new Crawler(
+                crawlerContentRegularDTO.getId()) : null);
+            crawlerContentRegular.setAttribute(StringUtils.isEmpty(crawlerContentRegularDTO.getAttribute()) ? new ContentAttribute(
+                crawlerContentRegularDTO.getAttribute()) : null);
             crawlerContentRegular.setRegular(crawlerContentRegularDTO.getCrawler());
             
             return crawlerContentRegular;
+        }
+        return null;
+    }
+    
+    public static List<CrawlerContentRegular> toEntity(List<CrawlerContentRegularDTO> crawlerContentRegularDTOs)
+    {
+        if (!CollectionUtils.isEmpty(crawlerContentRegularDTOs))
+        {
+            List<CrawlerContentRegular> regulars = new ArrayList<CrawlerContentRegular>();
+            for (CrawlerContentRegularDTO crawlerContentRegularDTO : crawlerContentRegularDTOs)
+            {
+                CrawlerContentRegular regular = CrawlerContentRegularAssembler.toEntity(crawlerContentRegularDTO);
+                if (null == regular)
+                {
+                    continue;
+                }
+                regulars.add(regular);
+            }
+            return regulars;
         }
         return null;
     }

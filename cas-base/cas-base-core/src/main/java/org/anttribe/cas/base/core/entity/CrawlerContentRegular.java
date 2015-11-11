@@ -51,7 +51,7 @@ public class CrawlerContentRegular extends MybatisAbstractEntity
         if (null != crawler && !StringUtils.isEmpty(crawler.getId()))
         {
             Map<String, Object> criteria = new HashMap<String, Object>();
-            criteria.put("crawler", crawler.getId());
+            criteria.put("crawler", crawler);
             CrawlerContentRegular.getSqlSessionTemplate().delete(CrawlerContentRegular.class.getCanonicalName()
                 + ".deleteByCriteria",
                 criteria);

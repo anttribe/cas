@@ -16,6 +16,13 @@
 		</rule>
 	</tableRule>
 	
+	<tableRule name="rule_website">
+		<rule>
+			<columns>website</columns>
+			<algorithm>string-hash</algorithm>
+		</rule>
+	</tableRule>
+	
 	<tableRule name="rule_create_month">
 		<rule>
 			<columns>create_month</columns>

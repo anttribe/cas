@@ -8,6 +8,7 @@
         <title><spring:message code="app.appname" /></title>
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-treetable/css/jquery.treetable.css" >
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/static/css/jquery.treetable.theme.custom.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -44,6 +45,7 @@
         <!--body wrapper end-->
         
         <script type="text/javascript" src="${contextPath}/static/assets/jquery-treetable/js/jquery.treetable.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
             var listCategories = function(parentCategory){
@@ -60,13 +62,46 @@
 	        					'data-tt-parent-id': data['parent'],
 	        					'data-tt-branch': (data['children'] && data['children'].length>0 ? true : false),
 	        					'html': '<td>' + (data['name'] || '') + '</td>'
-		        				      + '<td></td>'
+		        				      + '<td><a href="javascript:void(0);" class="edit"><i class="fa fa-edit"></i><spring:message code="app.common.action.edit" /></a><a href="javascript:void(0);" class="pl5 delete"><i class="fa fa-trash-o"></i><spring:message code="app.common.action.delete" /></a></td>'
 	        				}));
 	        			}
 	        		}
 	        	});
             	return nTrs;
-            }
+            };
+            var goEditCategory = function(){
+            	var nTr = $(this).parents('tr');
+            	if(nTr){
+            		var categoryId = $(nTr).attr('data-tt-id');
+            		if(categoryId){
+            			cas.category.goEditCategory(categoryId);
+            		}
+            	}
+            };
+            var goDeleteCategory = function(){
+            	var nTr = $(this).parents('tr');
+            	if(nTr){
+            		var categoryId = $(nTr).attr('data-tt-id');
+            		if(categoryId){
+            			BootstrapDialog.confirm({
+            				//size: BootstrapDialog.SIZE_NORMAL,
+            				type: BootstrapDialog.TYPE_WARNING,
+            				draggable: true,
+            				closable: true,
+            	            title: '<spring:message code="app.category.delete.title" />',
+            	            message: '<spring:message code="app.category.delete.confirm" />',
+            	            btnCancelLabel: '<spring:message code="app.common.action.cancel" />',
+            	            btnOKLabel: '<spring:message code="app.common.action.confirm" />',
+            	            btnOKClass: 'btn-warning',
+            	            callback: function(result) {
+            	                if(result) {
+            	                	cas.category.deleteCategory(categoryId);
+            	                }
+            	            }
+            	        });
+            		}
+            	}
+            };
         </script>
         <script type="text/javascript">
 	        $(function(){
@@ -80,6 +115,11 @@
     	        		expandable: true,
     	        		stringExpand: '',
     	        		stringCollapse: '',
+    	        		onNodeInitialized: function(){
+    	        			// 绑定事件
+    	        			$('.edit', '#category-table').click(goEditCategory);
+    	        			$('.delete', '#category-table').click(goDeleteCategory);
+    	        		},
     	        		onNodeExpand: function(){
     	        			if(this.children && this.children.length>0){
     	        				return;
@@ -100,20 +140,6 @@
     	        		}
     	        	});
     			}
-    			
-    			// 绑定事件
-//     			$('.btn-ck-select-all').click(function(){
-//     				var that = this;
-//     				var dataRefer = $(that).attr('data-refer');
-//     				if(dataRefer){
-//     					var cks = $('input[type="checkbox"][name="' + dataRefer + '"]');
-//     					if(cks && cks.length>0){
-//     						$.each(cks, function(i, item){
-//     							$(item).attr('checked', $(that).prop('checked') || false);
-//     						});
-//     					}
-//     				}
-//     			});
 	        });
 	    </script>
     </body>

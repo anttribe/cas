@@ -9,12 +9,12 @@
 		
 		<table name="cas_t_core_website" primaryKey="id" dataNode="dn3,dn4" rule="rule_id" />
 		
-		<table name="cas_t_core_crawler" primaryKey="id" dataNode="dn3,dn4" rule="rule_id">
+		<table name="cas_t_core_crawler" primaryKey="id" dataNode="dn3,dn4" rule="rule_website">
 		    <childTable name="cas_t_core_crawler_regular" primaryKey="id" joinKey="crawler" parentKey="id">
 			</childTable>
 		</table>
 		
-		<table name="cas_t_core_content" primaryKey="id" dataNode="dn3,dn4" rule="rule_id">
+		<table name="cas_t_core_content" primaryKey="id" dataNode="dn3,dn4" rule="rule_website">
 		    <childTable name="cas_t_core_content_attr_value" primaryKey="id" joinKey="content_id" parentKey="id">
 			</childTable>
 		</table>

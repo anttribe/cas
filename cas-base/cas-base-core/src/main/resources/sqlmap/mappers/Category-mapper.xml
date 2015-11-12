@@ -41,6 +41,21 @@
 			</if>
 		</where>
 	</sql>
+	
+	<!-- where-no-alias -->
+	<sql id="where-no-alias">
+		<where>
+			<if test="null != id and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="null != name and name != ''">
+				AND name LIKE CONCAT('%', '${name}', '%')
+			</if>
+			<if test="null != parent and null != parent.id">
+				AND parent_id = #{parent.id}
+			</if>
+		</where>
+	</sql>
 
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Category">
@@ -72,9 +87,13 @@
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Category">
 	    <![CDATA[
-            DELETE FROM cas_t_core_category t
+            DELETE FROM cas_t_core_category
         ]]>
-		<include refid="where"></include>
+		<include refid="where-no-alias"></include>
+		<!-- 级联删除 -->
+		<if test="null != id and id != ''">
+		    OR parent_id = #{id}
+	    </if>
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->

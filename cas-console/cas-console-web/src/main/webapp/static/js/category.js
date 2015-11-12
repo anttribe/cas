@@ -14,6 +14,16 @@ $.extend(cas, {
 	        	}
 	        });
 		},
+		goEditCategory: function(categoryId){
+			if(categoryId){
+				location.href = contextPath + '/category/goEdit' + '?id=' + categoryId;
+			}
+		},
+		deleteCategory: function(categoryId){
+			if(categoryId){
+				location.href = contextPath + '/category/delete' + '?id=' + categoryId;
+			}
+		},
 		categorySelector: function(){
 			return new BootstrapDialog({
 				size: BootstrapDialog.SIZE_NORMAL,

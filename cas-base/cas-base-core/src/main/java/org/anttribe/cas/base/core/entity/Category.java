@@ -67,20 +67,6 @@ public class Category extends MybatisAbstractEntity
         this.id = id;
     }
     
-    /**
-     * 根据父分类获取自分类信息
-     * 
-     * @param parent 父分类id
-     * @return List<Category>
-     */
-    public static List<Category> listCategoriesByParent(String parent)
-    {
-        Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put("parent", new Category(parent));
-        return Category.getSqlSessionTemplate().selectList(Category.class.getCanonicalName() + ".queryByCriteria",
-            criteria);
-    }
-    
     public String getId()
     {
         return id;

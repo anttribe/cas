@@ -56,9 +56,15 @@ public class CategoryController
     }
     
     @RequestMapping("/goEdit")
-    public String goEditCategory()
+    public String goEditCategory(HttpServletRequest request, CategoryDTO categoryDTO)
     {
-        return "/category/edit";
+        categoryDTO = categoryFacade.loadCategory(categoryDTO);
+        if (null != categoryDTO)
+        {
+            request.setAttribute("category", categoryDTO);
+            return "/category/edit";
+        }
+        return "redirect:/category/index";
     }
     
     @RequestMapping("/edit")

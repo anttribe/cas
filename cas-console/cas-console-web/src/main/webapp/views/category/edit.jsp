@@ -20,14 +20,15 @@
                         </header>
                         <div class="panel-body">
                             <form role="form" method="post" action="${contextPath}/category/edit">
+                                <input type="hidden" name="id" value="${category.id}" />
                                 <div class="form-group">
                                     <label for="name"><spring:message code="app.category.title.name" /></label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="" />
+                                    <input type="text" class="form-control" id="name" name="name" value="${category.name}" placeholder="" />
                                 </div>
                                 <div class="form-group">
                                     <label for="parentSelect"><spring:message code="app.category.title.parent" /></label>
-                                    <input type="hidden" name="parent" />
-                                    <input type="text" class="form-control" id="parentSelect" name="parentSelect" placeholder="" />
+                                    <input type="hidden" name="parent.id" value="${category.parent.id}" />
+                                    <input type="text" class="form-control" id="parentSelect" name="parentSelect" value="${category.parent.name}" placeholder="" />
                                 </div>
                                 <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
                                 <a href="${contextPath}/category/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>
@@ -45,7 +46,7 @@
             var categorySelector = null;
             var selectCategory = function(category){
     			if(category){
-    				$('input[name="parent"]').val(category.id);
+    				$('input[name="parent.id"]').val(category.id);
     				$('input[name="parentSelect"]').val(category.name);
     			}
             	if(categorySelector){

@@ -26,6 +26,14 @@ public interface CategoryFacade
     List<CategoryDTO> listCategories(CategoryDTO categoryDTO);
     
     /**
+     * 加载分类信息
+     * 
+     * @param categoryDTO CategoryDTO
+     * @return CategoryDTO
+     */
+    CategoryDTO loadCategory(CategoryDTO categoryDTO);
+    
+    /**
      * 添加分类信息
      * 
      * @param categoryDTO CategoryDTO

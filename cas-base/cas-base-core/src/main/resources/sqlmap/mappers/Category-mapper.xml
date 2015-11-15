@@ -10,6 +10,7 @@
 		<association property="parent"
 			javaType="org.anttribe.cas.base.core.entity.Category">
 			<id property="id" column="parent_id" />
+			<result property="name" column="parent_name" />
 		</association>
 		<collection property="children" resultMap="Category-child-resultMap">
 		</collection>
@@ -41,7 +42,7 @@
 			</if>
 		</where>
 	</sql>
-	
+
 	<!-- where-no-alias -->
 	<sql id="where-no-alias">
 		<where>
@@ -52,7 +53,7 @@
 				AND name LIKE CONCAT('%', '${name}', '%')
 			</if>
 			<if test="null != parent and null != parent.id">
-				AND parent_id = #{parent.id}
+				AND t.parent_id = #{parent.id}
 			</if>
 		</where>
 	</sql>
@@ -68,7 +69,7 @@
 	<!-- update: 更新单条数据 -->
 	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Category">
         <![CDATA[
-            UPDATE cas_t_core_category t
+            UPDATE cas_t_core_category
         ]]>
 		<set>
 			<if test="null != name and name != ''">
@@ -77,11 +78,13 @@
 			<if test="null != ordinal and ordinal != ''">
 				ordinal = #{ordinal},
 			</if>
-			<if test="null != parent and parent != ''">
+			<if test="null != parent and parent.id != ''">
 				parent_id = #{parent.id},
 			</if>
 		</set>
-		<include refid="where"></include>
+		<![CDATA[
+            WHERE id = #{id}
+        ]]>
 	</update>
 
 	<!-- delete: 删除单条数据 -->
@@ -92,8 +95,8 @@
 		<include refid="where-no-alias"></include>
 		<!-- 级联删除 -->
 		<if test="null != id and id != ''">
-		    OR parent_id = #{id}
-	    </if>
+			OR parent_id = #{id}
+		</if>
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->
@@ -112,9 +115,10 @@
 	<select id="queryByCriteria" resultMap="Category-resultMap"
 		parameterType="map">
 		<![CDATA[
-		    SELECT t.id, t.name, t.ordinal, t.parent_id, t.create_time, t1.id as child_id
+		    SELECT t.id, t.name, t.ordinal, t.parent_id, t.create_time, t1.name as parent_name, t2.id as child_id
               FROM cas_t_core_category t
-		    LEFT JOIN cas_t_core_category t1 ON t1.parent_id = t.id 
+		    LEFT JOIN cas_t_core_category t1 ON t1.id = t.parent_id 
+		    LEFT JOIN cas_t_core_category t2 ON t2.parent_id = t.id 
 		]]>
 		<include refid="where"></include>
 		ORDER BY t.create_time

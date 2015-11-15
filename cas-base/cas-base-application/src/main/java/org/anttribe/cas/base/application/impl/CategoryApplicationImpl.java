@@ -9,6 +9,7 @@ package org.anttribe.cas.base.application.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.anttribe.cas.base.application.CategoryApplication;
 import org.anttribe.cas.base.core.entity.Category;
@@ -31,10 +32,10 @@ public class CategoryApplicationImpl implements CategoryApplication
     private static Logger logger = LoggerFactory.getLogger(CategoryApplicationImpl.class);
     
     @Override
-    public List<Category> listCategories(String parent)
+    public List<Category> listCategories(Map<String, Object> criteria)
     {
-        logger.debug("listing categories refer to parent, param: parent[{}]", parent);
-        return Category.listCategoriesByParent(parent);
+        logger.debug("listing categories refer to criteria, param: [{}]", criteria);
+        return Category.find(Category.class, criteria);
     }
     
     @Override

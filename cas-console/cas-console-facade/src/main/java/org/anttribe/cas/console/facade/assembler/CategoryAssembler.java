@@ -27,7 +27,7 @@ public class CategoryAssembler
             CategoryDTO categoryDTO = new CategoryDTO();
             categoryDTO.setId(category.getId());
             categoryDTO.setName(category.getName());
-            categoryDTO.setParent(null != category.getParent() ? category.getParent().getId() : "");
+            categoryDTO.setParent(CategoryAssembler.toDTO(category.getParent()));
             categoryDTO.setOrdinal(category.getOrdinal());
             categoryDTO.setCreateTime(category.getCreateTime());
             categoryDTO.setChildren(CategoryAssembler.toDTO(category.getChildren()));
@@ -65,7 +65,7 @@ public class CategoryAssembler
             category.setId(categoryDTO.getId());
             category.setName(categoryDTO.getName());
             category.setOrdinal(categoryDTO.getOrdinal());
-            category.setParent(new Category(categoryDTO.getParent()));
+            category.setParent(CategoryAssembler.toEntity(categoryDTO.getParent()));
             category.setCreateTime(categoryDTO.getCreateTime());
             
             return category;

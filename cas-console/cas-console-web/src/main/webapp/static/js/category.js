@@ -6,7 +6,7 @@ $.extend(cas, {
 	        	type: 'POST',
 	        	async: false,
 	        	url: contextPath + '/category/list',
-	        	data: {parent: parent},
+	        	data: {'parent.id': parent},
 	        	success: function(result){
 	        		if(result && callback){
 	        			callback.call(this, result);

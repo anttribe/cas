@@ -7,13 +7,16 @@
  */
 package org.anttribe.cas.console.facade.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.anttribe.cas.base.application.CategoryApplication;
 import org.anttribe.cas.base.core.entity.Category;
 import org.anttribe.cas.console.facade.CategoryFacade;
 import org.anttribe.cas.console.facade.assembler.CategoryAssembler;
 import org.anttribe.cas.console.facade.dto.CategoryDTO;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,14 +34,32 @@ public class CategoryFacadeImpl implements CategoryFacade
     @Override
     public List<CategoryDTO> listCategories(CategoryDTO categoryDTO)
     {
-        String parent = "";
-        if (null != categoryDTO && !StringUtils.isEmpty(categoryDTO.getParent()))
+        // 将对象转换成Map
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", categoryDTO.getId());
+        criteria.put("name", categoryDTO.getName());
+        criteria.put("parent", categoryDTO.getParent());
+        
+        List<Category> categories = categoryApplication.listCategories(criteria);
+        return CategoryAssembler.toDTO(categories);
+    }
+    
+    @Override
+    public CategoryDTO loadCategory(CategoryDTO categoryDTO)
+    {
+        if (null != categoryDTO && !StringUtils.isEmpty(categoryDTO.getId()))
         {
-            parent = categoryDTO.getParent();
+            // 将对象转换成Map
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", categoryDTO.getId());
+            List<Category> categories = categoryApplication.listCategories(criteria);
+            if (!CollectionUtils.isEmpty(categories))
+            {
+                return CategoryAssembler.toDTO(categories.get(0));
+            }
         }
         
-        List<Category> categories = categoryApplication.listCategories(parent);
-        return CategoryAssembler.toDTO(categories);
+        return null;
     }
     
     @Override

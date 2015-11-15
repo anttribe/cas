@@ -35,8 +35,8 @@
 	        		async: {
 	        			enable: true,
 	        			type: 'POST',
-	        			autoParam: ['parent'],
-	        			url: contextPath + '/category/list'
+	        			autoParam: ['parent.id'],
+	        			url: contextPath + '/category/list' + '?parent.id=' + ''
 	        		},
 	        		view: {
 	                    selectedMulti: false,
@@ -45,9 +45,7 @@
 	                data: {
 	                    simpleData: {
 	                        enable: true,
-	                        idKey: 'id',
-	                        pIdKey: 'parent',
-	                        rootPId: null
+	                        idKey: 'id'
 	                    }
 	                },
 	                callback: {

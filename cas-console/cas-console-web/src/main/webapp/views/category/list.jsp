@@ -59,7 +59,7 @@
 	        				}
 	        				nTrs.push($('<tr>', {
 	        					'data-tt-id': data['id'],
-	        					'data-tt-parent-id': data['parent'],
+	        					'data-tt-parent-id': (data['parent'] && data['parent']['id']) || '',
 	        					'data-tt-branch': (data['children'] && data['children'].length>0 ? true : false),
 	        					'html': '<td>' + (data['name'] || '') + '</td>'
 		        				      + '<td><a href="javascript:void(0);" class="edit"><i class="fa fa-edit"></i><spring:message code="app.common.action.edit" /></a><a href="javascript:void(0);" class="pl5 delete"><i class="fa fa-trash-o"></i><spring:message code="app.common.action.delete" /></a></td>'
@@ -84,7 +84,7 @@
             		var categoryId = $(nTr).attr('data-tt-id');
             		if(categoryId){
             			BootstrapDialog.confirm({
-            				//size: BootstrapDialog.SIZE_NORMAL,
+            				size: BootstrapDialog.SIZE_NORMAL,
             				type: BootstrapDialog.TYPE_WARNING,
             				draggable: true,
             				closable: true,

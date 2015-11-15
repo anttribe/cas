@@ -40,7 +40,7 @@ public class CategoryDTO implements Serializable
     /**
      * 父分类
      */
-    private String parent;
+    private CategoryDTO parent;
     
     /**
      * 子分类
@@ -87,12 +87,12 @@ public class CategoryDTO implements Serializable
         this.ordinal = ordinal;
     }
     
-    public String getParent()
+    public CategoryDTO getParent()
     {
         return parent;
     }
     
-    public void setParent(String parent)
+    public void setParent(CategoryDTO parent)
     {
         this.parent = parent;
     }

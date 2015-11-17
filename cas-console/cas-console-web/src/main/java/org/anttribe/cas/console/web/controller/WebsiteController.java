@@ -44,6 +44,13 @@ public class WebsiteController
         return websiteFacade.listWebsites(websiteDTO);
     }
     
+    @RequestMapping("/load")
+    @ResponseBody
+    public WebsiteDTO loadWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
+    {
+        return websiteFacade.loadWebsite(websiteDTO);
+    }
+    
     @RequestMapping("/goAdd")
     public String goAddWebsite()
     {
@@ -51,9 +58,15 @@ public class WebsiteController
     }
     
     @RequestMapping("/goEdit")
-    public String goEditWebsite()
+    public String goEditWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
     {
-        return "/website/edit";
+        websiteDTO = websiteFacade.loadWebsite(websiteDTO);
+        if (null != websiteDTO)
+        {
+            request.setAttribute("website", websiteDTO);
+            return "/website/edit";
+        }
+        return "redirect:/category/index";
     }
     
     @RequestMapping("/edit")

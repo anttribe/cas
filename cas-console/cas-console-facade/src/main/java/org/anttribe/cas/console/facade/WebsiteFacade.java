@@ -26,6 +26,14 @@ public interface WebsiteFacade
     List<WebsiteDTO> listWebsites(WebsiteDTO websiteDTO);
     
     /**
+     * 加载站点数据
+     * 
+     * @param websiteDTO WebsiteDTO
+     * @return WebsiteDTO
+     */
+    WebsiteDTO loadWebsite(WebsiteDTO websiteDTO);
+    
+    /**
      * 添加站点信息
      * 
      * @param websiteDTO WebsiteDTO

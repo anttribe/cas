@@ -108,7 +108,9 @@
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="Category-resultMap">
 		<include refid="select"></include>
-		<include refid="where"></include>
+		<![CDATA[
+            WHERE id = #{id}
+        ]]>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->

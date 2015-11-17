@@ -6,8 +6,8 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.appname" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-datatable/css/jquery.dataTables.min.css" >
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -48,8 +48,51 @@
         <script type="text/javascript" src="${contextPath}/static/assets/jquery-datatable/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/datatable_ext.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/website.js"></script>
         <script type="text/javascript">
+            var showWebsiteDetail = function(website){
+            	if(website){
+            		return '<table>' 
+            		     + '<tr>' + '<td><spring:message code="app.website.title.siteName" />:</td><td>' + (website['siteName'] || '') + '</td>' + '</tr>'
+            		     + '<tr>' + '<td><spring:message code="app.website.title.domain" />:</td><td>' + (website['domain'] || '') + '</td><td><spring:message code="app.category.title.category" />:</td><td>' + ((website['category'] && website['category']['name']) || '') + '</td>' + '</tr>'
+            		     + '<tr>' + '<td><spring:message code="app.website.title.charset" />:</td><td>' + (website['charset'] || '') + '</td><td><spring:message code="app.website.title.userAgent" />:</td><td>' + (website['userAgent'] || '') + '</td>' + '</tr>'
+            		     + '</table>';
+            	}
+            };
+            var goEditWebsite = function(){
+            	var nTr = $(this).parents('tr');
+            	if(nTr){
+            		var websiteId = $(nTr).attr('data-id');
+            		if(websiteId){
+            			cas.website.goEditWebsite(websiteId);
+            		}
+            	}
+            };
+            var goDeleteWebsite = function(){
+            	var nTr = $(this).parents('tr');
+            	if(nTr){
+            		var websiteId = $(nTr).attr('data-id');
+            		if(websiteId){
+            			BootstrapDialog.confirm({
+            				size: BootstrapDialog.SIZE_NORMAL,
+            				type: BootstrapDialog.TYPE_WARNING,
+            				draggable: true,
+            				closable: true,
+            	            title: '<spring:message code="app.category.delete.title" />',
+            	            message: '<spring:message code="app.category.delete.confirm" />',
+            	            btnCancelLabel: '<spring:message code="app.common.action.cancel" />',
+            	            btnOKLabel: '<spring:message code="app.common.action.confirm" />',
+            	            btnOKClass: 'btn-warning',
+            	            callback: function(result) {
+            	                if(result) {
+            	                	cas.website.deleteWebsite(websiteId);
+            	                }
+            	            }
+            	        });
+            		}
+            	}
+            };
         </script>
         <script type="text/javascript">
 	        $(function(){
@@ -61,17 +104,21 @@
 	        				if(website){
 	        					$html += '<tr data-id="' + website['id'] + '">' 
 		        				       + '<td>' + (website['siteName'] || '') + '</td>'
-		        				       + '<td>' + (website['domain'] || '') + '</td>'
+		        				       + '<td><a href="' + (website['domain'] || '#') + '" target="_blank">' + (website['domain'] || '') + '</a></td>'
 		        				       + '<td>' + ((website['category'] && website['category']['name']) || '') + '</td>'
-		        				       + '<td>' + '</td>'
+		        				       + '<td><a href="javascript:void(0);" class="edit"><i class="fa fa-edit"></i><spring:message code="app.common.action.edit" /></a><a href="javascript:void(0);" class="pl5 delete"><i class="fa fa-trash-o"></i><spring:message code="app.common.action.delete" /></a></td>'
 		        				       + '</tr>';
 	        				}
 	        			}
 	        			if($html){
 	        				$('tbody', '#website-table').empty().append($html);
 	        			}
+	        			
+	        			$('.edit', '#website-table').click(goEditWebsite);
+	        			$('.delete', '#website-table').click(goDeleteWebsite);
 	        		}
 	        		
+	        		var websites = {};
 	        		$('#website-table').dataTable_ext({
 		        		'bAutoWidth': true,
 	     				'bStateSave': true,
@@ -84,7 +131,21 @@
 		        		},
 		        		bRowDetail: true,
 		        		fnRowDetailCallback: function(oTable, nTr){
-		        			console.log(nTr);
+		        			if(nTr){
+		        				var websiteId = $(nTr).attr('data-id');
+		        				if(websiteId){
+		        					var website = websites[websiteId];
+		        					if(!website){
+		        						cas.website.loadWebsite(websiteId, function(w){
+		        							if(w){
+		        								website = w;
+		        							}
+		        						});
+		        					}
+		        					return showWebsiteDetail(website);
+		        				}
+		        			}
+		        			return '';
 		        		}
 		        	});
 	        	});

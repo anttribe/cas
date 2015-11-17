@@ -20,26 +20,27 @@
 					    </header>
 					    <div class="panel-body">
 						    <form role="form" class="" method="post" action="${contextPath}/website/edit">
+							    <input type="hidden" name="id" value="${website.id}" />
 							    <div class="form-group">
 								    <label for="siteName" class="control-label"><spring:message code="app.website.title.siteName" /></label>
-								    <input type="text" class="form-control" id="siteName" name="siteName" placeholder="" />
+								    <input type="text" class="form-control" id="siteName" name="siteName" value="${website.siteName}" placeholder="" />
 							    </div>
 							    <div class="form-group">
 								    <label for="domain" class="control-label"><spring:message code="app.website.title.domain" /></label>
-								    <input type="url" class="form-control" id="domain" name="domain" placeholder="" />
+								    <input type="url" class="form-control" id="domain" name="domain" value="${website.domain}" placeholder="" />
 							    </div>
 							    <div class="form-group">
                                     <label for="categorySelect"><spring:message code="app.category.title.category" /></label>
-                                    <input type="hidden" name="category.id" />
-                                    <input type="text" class="form-control" id="categorySelect" name="categorySelect" placeholder="" />
+                                    <input type="hidden" name="category.id" value="${website.category.id}" />
+                                    <input type="text" class="form-control" id="categorySelect" name="categorySelect" value="${website.category.name}" placeholder="" />
                                 </div>
 							    <div class="form-group">
 								    <label for="charset" class="control-label"><spring:message code="app.website.title.charset" /></label>
-								    <input type="text" class="form-control" id="charset" name="charset" placeholder="" />
+								    <input type="text" class="form-control" id="charset" name="charset" value="${website.charset}" placeholder="" />
 							    </div>
 							    <div class="form-group">
 								    <label for="userAgent" class="control-label"><spring:message code="app.website.title.userAgent" /></label>
-								    <input type="text" class="form-control" id="userAgent" name="userAgent" placeholder="" />
+								    <input type="text" class="form-control" id="userAgent" name="userAgent" value="${website.userAgent}" placeholder="" />
 							    </div>
 							    <div class="clearfix"></div>
 							    <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>

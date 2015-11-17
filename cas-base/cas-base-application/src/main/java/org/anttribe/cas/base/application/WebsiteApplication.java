@@ -8,6 +8,7 @@
 package org.anttribe.cas.base.application;
 
 import java.util.List;
+import java.util.Map;
 
 import org.anttribe.cas.base.core.entity.Website;
 
@@ -18,11 +19,11 @@ import org.anttribe.cas.base.core.entity.Website;
 public interface WebsiteApplication
 {
     /**
-     * 列表所有站点
+     * 列表站点
      * 
      * @return
      */
-    List<Website> listWebsites();
+    List<Website> listWebsites(Map<String, Object> criteria);
     
     /**
      * 持久化站点信息

@@ -42,8 +42,9 @@ public class WebsiteAssembler
             websiteDTO.setId(website.getId());
             websiteDTO.setSiteName(website.getSiteName());
             websiteDTO.setDomain(website.getDomain());
-            websiteDTO.setCharset(website.getCharset());
             websiteDTO.setLogo(website.getLogo());
+            websiteDTO.setCharset(website.getCharset());
+            websiteDTO.setUserAgent(website.getUserAgent());
             websiteDTO.setCategory(CategoryAssembler.toDTO(website.getCategory()));
             websiteDTO.setCreateTime(website.getCreateTime());
             

@@ -7,13 +7,18 @@
  */
 package org.anttribe.cas.console.facade.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.anttribe.cas.base.application.WebsiteApplication;
 import org.anttribe.cas.base.core.entity.Website;
 import org.anttribe.cas.console.facade.WebsiteFacade;
+import org.anttribe.cas.console.facade.assembler.CategoryAssembler;
 import org.anttribe.cas.console.facade.assembler.WebsiteAssembler;
 import org.anttribe.cas.console.facade.dto.WebsiteDTO;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +36,30 @@ public class WebsiteFacadeImpl implements WebsiteFacade
     @Override
     public List<WebsiteDTO> listWebsites(WebsiteDTO websiteDTO)
     {
-        List<Website> websites = websiteApplication.listWebsites();
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", websiteDTO.getId());
+        criteria.put("siteName", websiteDTO.getSiteName());
+        criteria.put("category", CategoryAssembler.toEntity(websiteDTO.getCategory()));
+        List<Website> websites = websiteApplication.listWebsites(criteria);
+        
         return WebsiteAssembler.toDTO(websites);
+    }
+    
+    @Override
+    public WebsiteDTO loadWebsite(WebsiteDTO websiteDTO)
+    {
+        if (null != websiteDTO && !StringUtils.isEmpty(websiteDTO.getId()))
+        {
+            // 将对象转换成Map
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", websiteDTO.getId());
+            List<Website> websites = websiteApplication.listWebsites(criteria);
+            if (!CollectionUtils.isEmpty(websites))
+            {
+                return WebsiteAssembler.toDTO(websites.get(0));
+            }
+        }
+        return null;
     }
     
     @Override

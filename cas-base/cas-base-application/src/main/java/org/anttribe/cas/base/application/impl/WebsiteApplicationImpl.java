@@ -8,7 +8,6 @@
 package org.anttribe.cas.base.application.impl;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +31,9 @@ public class WebsiteApplicationImpl implements WebsiteApplication
     private static Logger logger = LoggerFactory.getLogger(WebsiteApplicationImpl.class);
     
     @Override
-    public List<Website> listWebsites()
+    public List<Website> listWebsites(Map<String, Object> criteria)
     {
-        logger.debug("listing websites.");
-        
-        Map<String, Object> criteria = new HashMap<String, Object>();
+        logger.debug("listing websites by criteria, params:[{}].", criteria);
         return Website.find(Website.class, criteria);
     }
     

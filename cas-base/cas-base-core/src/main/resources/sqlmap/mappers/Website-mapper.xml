@@ -33,15 +33,27 @@
 			<if test="null != siteName and siteName != ''">
 				AND t.site_name LIKE CONCAT('%', '${siteName}', '%')
 			</if>
-			<if test="null != domain and '' != domain">
-				AND t.domain = #{domain}
-			</if>
-			<if test="null != category and '' != category">
-				AND t.category_id = #{category}
+			<if test="null != category and '' != category.id">
+				AND t.category_id = #{category.id}
 			</if>
 		</where>
 	</sql>
 	
+	<!-- where-no-alias -->
+	<sql id="where-no-alias">
+		<where>
+			<if test="null != id and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="null != siteName and siteName != ''">
+				AND site_name LIKE CONCAT('%', '${siteName}', '%')
+			</if>
+			<if test="null != category and '' != category.id">
+				AND category_id = #{category.id}
+			</if>
+		</where>
+	</sql>
+
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Website">
 		<![CDATA[
@@ -49,6 +61,44 @@
 		      VALUES(#{id}, #{siteName}, #{domain}, #{logo}, #{charset}, #{userAgent}, #{category.id}, #{createTime})
 		]]>
 	</insert>
+	
+	<!-- update: 更新单条数据 -->
+	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Website">
+        <![CDATA[
+            UPDATE cas_t_core_website
+        ]]>
+		<set>
+			<if test="null != siteName and siteName != ''">
+				site_name = #{siteName},
+			</if>
+			<if test="null != domain and domain != ''">
+				domain = #{domain},
+			</if>
+			<if test="null != logo and logo != ''">
+				logo = #{logo},
+			</if>
+			<if test="null != charset and charset != ''">
+				charset = #{charset},
+			</if>
+			<if test="null != userAgent and userAgent != ''">
+				user_agent = #{userAgent},
+			</if>
+			<if test="null != category and category.id != ''">
+				category_id = #{category.id},
+			</if>
+		</set>
+		<![CDATA[
+            WHERE id = #{id}
+        ]]>
+	</update>
+	
+	<!-- delete: 删除单条数据 -->
+	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Website">
+	    <![CDATA[
+            DELETE FROM cas_t_core_website
+        ]]>
+		<include refid="where-no-alias"></include>
+	</delete>
 
 	<!-- queryAll: 查询所有站点数据 -->
 	<select id="queryAll" resultMap="Website-resultMap">
@@ -57,9 +107,11 @@
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
-	<select id="queryById" resultMap="Website-resultMap">
+	<select id="queryById" parameterType="String" resultMap="Website-resultMap">
 		<include refid="select"></include>
-		<include refid="where"></include>
+		<![CDATA[
+            WHERE id = #{id}
+        ]]>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->

@@ -38,7 +38,7 @@ public class CategoryFacadeImpl implements CategoryFacade
         Map<String, Object> criteria = new HashMap<String, Object>();
         criteria.put("id", categoryDTO.getId());
         criteria.put("name", categoryDTO.getName());
-        criteria.put("parent", categoryDTO.getParent());
+        criteria.put("parent", CategoryAssembler.toEntity(categoryDTO.getParent()));
         
         List<Category> categories = categoryApplication.listCategories(criteria);
         return CategoryAssembler.toDTO(categories);

@@ -7,6 +7,7 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.appname" /></title>
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -43,6 +44,7 @@
         </div>
         <!--body wrapper end-->
         
+        <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/contentType.js"></script>
         <script type="text/javascript">
             var listContentTypes = function(){
@@ -55,16 +57,51 @@
 	        					$html += '<tr data-id="' + contentType['id'] + '">' 
 		        				       + '<td>' + (contentType['name'] || '') + '</td>'
 		        				       + '<td>' + (contentType['code'] || '') + '</td>'
-		        				       + '<td>' + '</td>'
+		        				       + '<td><a href="javascript:void(0);" class="edit"><i class="fa fa-edit"></i><spring:message code="app.common.action.edit" /></a><a href="javascript:void(0);" class="pl5 delete"><i class="fa fa-trash-o"></i><spring:message code="app.common.action.delete" /></a></td>'
 		        				       + '</tr>';
 	        				}
 	        			}
 	        			if($html){
 	        				$('tbody', '#contentType-table').empty().append($html);
 	        			}
+	        			$('.edit', '#contentType-table').click(goEditContentType);
+	        			$('.delete', '#contentType-table').click(goDeleteContentType);
 	        		}
 	        	});
-            }
+            };
+            var goEditContentType = function(){
+            	var nTr = $(this).parents('tr');
+            	if(nTr){
+            		var contentTypeId = $(nTr).attr('data-id');
+            		if(contentTypeId){
+            			cas.contentType.goEditContentType(contentTypeId);
+            		}
+            	}
+            };
+            var goDeleteContentType = function(){
+            	var nTr = $(this).parents('tr');
+            	if(nTr){
+            		var contentTypeId = $(nTr).attr('data-id');
+            		if(contentTypeId){
+            			BootstrapDialog.confirm({
+            				size: BootstrapDialog.SIZE_NORMAL,
+            				type: BootstrapDialog.TYPE_WARNING,
+            				draggable: true,
+            				closable: true,
+            	            title: '<spring:message code="app.contentType.delete.title" />',
+            	            message: '<spring:message code="app.contentType.delete.confirm" />',
+            	            btnCancelLabel: '<spring:message code="app.common.action.cancel" />',
+            	            btnOKLabel: '<spring:message code="app.common.action.confirm" />',
+            	            btnOKClass: 'btn-warning',
+            	            callback: function(result) {
+            	                if(result) {
+            	                	cas.contentType.deleteContentType(contentTypeId);
+            	                }
+            	            }
+            	        });
+            		}
+            	}
+            };
         </script>
         <script type="text/javascript">
 	        $(function(){

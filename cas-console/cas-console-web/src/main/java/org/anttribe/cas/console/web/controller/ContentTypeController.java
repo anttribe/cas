@@ -49,9 +49,15 @@ public class ContentTypeController
     }
     
     @RequestMapping("/goEdit")
-    public String goEditContentType()
+    public String goEditContentType(HttpServletRequest request, ContentTypeDTO contentTypeDTO)
     {
-        return "/content_type/edit";
+        contentTypeDTO = contentTypeFacade.loadContentType(contentTypeDTO);
+        if (null != contentTypeDTO)
+        {
+            request.setAttribute("contentType", contentTypeDTO);
+            return "/content_type/edit";
+        }
+        return "redirect:/contentType/index";
     }
     
     @RequestMapping("/edit")

@@ -14,20 +14,15 @@ $.extend(cas, {
 	        	}
 	        });
 		},
-		contentTypeSelector: function(){
-			return new BootstrapDialog({
-				size: BootstrapDialog.SIZE_NORMAL,
-				type: BootstrapDialog.TYPE_DEFAULT,
-				draggable: true,
-				closable: true,
-	            title: '<div class="model-header-title">选择内容类型</div>',
-	            message: $('<div></div>').load(contextPath + '/contentType/select.tool')
-	        });
+    	goEditContentType: function(contentTypeId){
+			if(contentTypeId){
+				location.href = contextPath + '/contentType/goEdit' + '?id=' + contentTypeId;
+			}
 		},
-		selectContentType: function(contentType){
-    		if(contentType){
-    			(window || window.parent).selectContentType(contentType);
-    		}
-    	}
+		deleteContentType: function(contentTypeId){
+			if(contentTypeId){
+				location.href = contextPath + '/contentType/delete' + '?id=' + contentTypeId;
+			}
+		}
 	}
 });

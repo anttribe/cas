@@ -26,6 +26,14 @@ public interface ContentTypeFacade
     List<ContentTypeDTO> listContentTypes();
     
     /**
+     * 加载ContentType
+     * 
+     * @param contentTypeDTO
+     * @return ContentTypeDTO
+     */
+    ContentTypeDTO loadContentType(ContentTypeDTO contentTypeDTO);
+    
+    /**
      * 添加或修改内容类型
      * 
      * @param contentTypeDTO ContentTypeDTO

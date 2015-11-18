@@ -8,6 +8,7 @@
 package org.anttribe.cas.base.application;
 
 import java.util.List;
+import java.util.Map;
 
 import org.anttribe.cas.base.core.entity.ContentType;
 
@@ -20,9 +21,10 @@ public interface ContentTypeApplication
     /**
      * 列表内容类型
      * 
+     * @param criteria
      * @return List<ContentType>
      */
-    List<ContentType> listContentTypes();
+    List<ContentType> listContentTypes(Map<String, Object> criteria);
     
     /**
      * 持久化内容类型

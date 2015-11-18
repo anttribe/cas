@@ -8,6 +8,7 @@
 package org.anttribe.cas.base.application.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.anttribe.cas.base.application.ContentTypeApplication;
 import org.anttribe.cas.base.core.entity.ContentType;
@@ -30,10 +31,10 @@ public class ContentTypeApplicationImpl implements ContentTypeApplication
     private static Logger logger = LoggerFactory.getLogger(ContentTypeApplicationImpl.class);
     
     @Override
-    public List<ContentType> listContentTypes()
+    public List<ContentType> listContentTypes(Map<String, Object> criteria)
     {
-        logger.debug("listing all contentTypes");
-        return ContentType.findAll(ContentType.class);
+        logger.debug("listing contentTypes by criteria, criteria[{}]", criteria);
+        return ContentType.find(ContentType.class, criteria);
     }
     
     @Override

@@ -22,11 +22,11 @@
                             <form role="form" method="post" action="${contextPath}/contentType/edit">
                                 <div class="form-group">
                                     <label for="name"><spring:message code="app.contentType.title.name" /></label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="" />
+                                    <input type="text" class="form-control" id="name" name="name" value="${contentType.name}" placeholder="" />
                                 </div>
                                 <div class="form-group">
                                     <label for="code"><spring:message code="app.contentType.title.code" /></label>
-                                    <input type="text" class="form-control" id="code" name="code" placeholder="" />
+                                    <input type="text" class="form-control" id="code" name="code" value="${contentType.code}" placeholder="" />
                                 </div>
                                 <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
                                 <a href="${contextPath}/contentType/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>

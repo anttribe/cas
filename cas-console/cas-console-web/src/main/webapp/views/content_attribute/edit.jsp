@@ -19,9 +19,10 @@
                         </header>
                         <div class="panel-body">
                             <form role="form" method="post" action="${contextPath}/contentAttribute/edit">
+                                <input type="hidden" name="id" value="${contentAttribute.id}" />
                                 <div class="form-group">
                                     <label for="name"><spring:message code="app.contentAttribute.title.name" /></label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="" />
+                                    <input type="text" class="form-control" id="name" name="name" value="${contentAttribute.name}" placeholder="" />
                                 </div>
                                 <div class="form-group">
                                     <label for="contentType"><spring:message code="app.contentType.title.contentType" /></label>
@@ -41,13 +42,14 @@
         <script type="text/javascript" src="${contextPath}/static/static/js/contentType.js"></script>
         <script type="text/javascript">
             $(function(){
+            	var contentTypeId = '${contentAttribute.contentType.id}';
             	cas.contentType.listContentTypes(function(contentTypes){
             		if(contentTypes && contentTypes.length>0){
             			var $html = '';
             			for(var i=0; i<contentTypes.length; i++){
             				var contentType = contentTypes[i];
             				if(contentType && contentType['id'] && contentType['name']){
-            					$html += '<option value="' + contentType['id'] + '">' + contentType['name'] + '</option>';
+            					$html += '<option value="' + contentType['id'] + '" ' + (contentTypeId && contentType['id'] == contentTypeId ? "selected" : "") + '>' + contentType['name'] + '</option>';
             				}
             			}
             			$('#contentType').empty().append($html);

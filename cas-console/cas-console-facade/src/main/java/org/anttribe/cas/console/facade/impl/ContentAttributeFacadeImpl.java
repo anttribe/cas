@@ -16,6 +16,8 @@ import org.anttribe.cas.base.core.entity.ContentAttribute;
 import org.anttribe.cas.console.facade.ContentAttributeFacade;
 import org.anttribe.cas.console.facade.assembler.ContentAttributeAssembler;
 import org.anttribe.cas.console.facade.dto.ContentAttributeDTO;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +46,23 @@ public class ContentAttributeFacadeImpl implements ContentAttributeFacade
     }
     
     @Override
+    public ContentAttributeDTO loadContentAttribute(ContentAttributeDTO contentAttributeDTO)
+    {
+        if (null != contentAttributeDTO && !StringUtils.isEmpty(contentAttributeDTO.getId()))
+        {
+            // 将对象转换成Map
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", contentAttributeDTO.getId());
+            List<ContentAttribute> contentAttributes = contentAttributeApplication.listContentAttributes(criteria);
+            if (!CollectionUtils.isEmpty(contentAttributes))
+            {
+                return ContentAttributeAssembler.toDTO(contentAttributes.get(0));
+            }
+        }
+        return null;
+    }
+    
+    @Override
     public void editContentAttribute(ContentAttributeDTO contentAttributeDTO)
     {
         ContentAttribute contentAttribute = ContentAttributeAssembler.toEntity(contentAttributeDTO);
@@ -62,4 +81,5 @@ public class ContentAttributeFacadeImpl implements ContentAttributeFacade
             contentAttributeApplication.deleteContentAttribute(contentAttribute);
         }
     }
+    
 }

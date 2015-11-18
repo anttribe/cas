@@ -13,6 +13,16 @@ $.extend(cas, {
 	        		}
 	        	}
 	        });
+		},
+		goEditContentAttribute: function(contentAttributeId){
+			if(contentAttributeId){
+				location.href = contextPath + '/contentAttribute/goEdit' + '?id=' + contentAttributeId;
+			}
+		},
+		deleteContentAttribute: function(contentAttributeId){
+			if(contentAttributeId){
+				location.href = contextPath + '/contentAttribute/delete' + '?id=' + contentAttributeId;
+			}
 		}
 	}
 });

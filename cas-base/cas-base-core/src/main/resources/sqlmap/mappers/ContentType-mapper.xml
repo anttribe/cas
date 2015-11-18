@@ -67,7 +67,7 @@
 				code = #{code},
 			</if>
 		</set>
-		<include refid="where"></include>
+		<include refid="where-no-alias"></include>
 	</update>
 
 	<!-- delete: 删除单条数据 -->
@@ -75,7 +75,7 @@
 	    <![CDATA[
             DELETE FROM cas_t_core_content_type
         ]]>
-		<include refid="where-no-alias"></include>
+		<include refid="where"></include>
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->
@@ -86,7 +86,9 @@
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="ContentType-resultMap">
 		<include refid="select"></include>
-		<include refid="where"></include>
+		<![CDATA[
+            WHERE id = #{id}
+        ]]>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->

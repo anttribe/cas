@@ -20,6 +20,7 @@
                         </header>
                         <div class="panel-body">
                             <form role="form" method="post" action="${contextPath}/contentType/edit">
+                                <input type="hidden" name="id" value="${contentType.id}" />
                                 <div class="form-group">
                                     <label for="name"><spring:message code="app.contentType.title.name" /></label>
                                     <input type="text" class="form-control" id="name" name="name" value="${contentType.name}" placeholder="" />

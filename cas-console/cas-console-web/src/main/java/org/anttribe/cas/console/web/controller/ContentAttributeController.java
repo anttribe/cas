@@ -49,9 +49,15 @@ public class ContentAttributeController
     }
     
     @RequestMapping("/goEdit")
-    public String goEditContentAttribute()
+    public String goEditContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
     {
-        return "/content_attribute/edit";
+        contentAttributeDTO = contentAttributeFacade.loadContentAttribute(contentAttributeDTO);
+        if (null != contentAttributeDTO)
+        {
+            request.setAttribute("contentAttribute", contentAttributeDTO);
+            return "/content_attribute/edit";
+        }
+        return "redirect:/contentAttribute/index";
     }
     
     @RequestMapping("/edit")

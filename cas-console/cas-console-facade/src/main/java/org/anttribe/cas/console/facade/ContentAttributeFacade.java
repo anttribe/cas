@@ -26,6 +26,14 @@ public interface ContentAttributeFacade
     List<ContentAttributeDTO> listContentAttributes(ContentAttributeDTO contentAttributeDTO);
     
     /**
+     * 加载内容属性数据
+     * 
+     * @param contentAttributeDTO
+     * @return ContentAttributeDTO
+     */
+    ContentAttributeDTO loadContentAttribute(ContentAttributeDTO contentAttributeDTO);
+    
+    /**
      * 添加或修改内容属性
      * 
      * @param contentAttributeDTO ContentAttributeDTO

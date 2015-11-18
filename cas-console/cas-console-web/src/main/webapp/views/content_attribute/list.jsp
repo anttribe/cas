@@ -9,6 +9,7 @@
         <title><spring:message code="app.appname" /></title>
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-datatable/css/jquery.dataTables.min.css" >
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -48,7 +49,43 @@
         <script type="text/javascript" src="${contextPath}/static/assets/jquery-datatable/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/datatable_ext.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/contentAttribute.js"></script>
+        <script type="text/javascript">
+	        var goEditContentAttribute = function(){
+	        	var nTr = $(this).parents('tr');
+	        	if(nTr){
+	        		var contentAttributeId = $(nTr).attr('data-id');
+	        		if(contentAttributeId){
+	        			cas.contentAttribute.goEditContentAttribute(contentAttributeId);
+	        		}
+	        	}
+	        };
+	        var goDeleteContentAttribute = function(){
+	        	var nTr = $(this).parents('tr');
+	        	if(nTr){
+	        		var contentAttributeId = $(nTr).attr('data-id');
+	        		if(contentAttributeId){
+	        			BootstrapDialog.confirm({
+	        				size: BootstrapDialog.SIZE_NORMAL,
+	        				type: BootstrapDialog.TYPE_WARNING,
+	        				draggable: true,
+	        				closable: true,
+	        	            title: '<spring:message code="app.contentAttribute.delete.title" />',
+	        	            message: '<spring:message code="app.contentAttribute.delete.confirm" />',
+	        	            btnCancelLabel: '<spring:message code="app.common.action.cancel" />',
+	        	            btnOKLabel: '<spring:message code="app.common.action.confirm" />',
+	        	            btnOKClass: 'btn-warning',
+	        	            callback: function(result) {
+	        	                if(result) {
+	        	                	cas.contentAttribute.deleteContentAttribute(contentAttributeId);
+	        	                }
+	        	            }
+	        	        });
+	        		}
+	        	}
+	        };
+        </script>
         <script type="text/javascript">
 	        $(function(){
 	        	cas.contentAttribute.listContentAttributes({}, function(contentAttributes){
@@ -60,13 +97,16 @@
 	        					$html += '<tr data-id="' + contentAttribute['id'] + '">' 
 		        				       + '<td>' + (contentAttribute['name'] || '') + '</td>'
 		        				       + '<td>' + ((contentAttribute['contentType'] && contentAttribute['contentType']['name']) || '') + '</td>'
-		        				       + '<td>' + '</td>'
+		        				       + '<td><a href="javascript:void(0);" class="edit"><i class="fa fa-edit"></i><spring:message code="app.common.action.edit" /></a><a href="javascript:void(0);" class="pl5 delete"><i class="fa fa-trash-o"></i><spring:message code="app.common.action.delete" /></a></td>'
 		        				       + '</tr>';
 	        				}
 	        			}
 	        			if($html){
 	        				$('tbody', '#contentAttribute-table').empty().append($html);
 	        			}
+	        			
+	        			$('.edit', '#contentAttribute-table').click(goEditContentAttribute);
+	        			$('.delete', '#contentAttribute-table').click(goDeleteContentAttribute);
 	        		}
 	        		
 	        		$('#contentAttribute-table').dataTable_ext({

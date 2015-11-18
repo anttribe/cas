@@ -37,6 +37,21 @@
 		</where>
 	</sql>
 
+	<!-- where-no-alias -->
+	<sql id="where-no-alias">
+		<where>
+			<if test="null != id and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="null != name and name != ''">
+				AND name LIKE CONCAT('%', '${name}', '%')
+			</if>
+			<if test="null != contentType and null != contentType.id">
+				AND dddcontent_type = #{contentType.id}
+			</if>
+		</where>
+	</sql>
+
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.ContentAttribute">
 		<![CDATA[
@@ -58,15 +73,17 @@
 				content_type = #{contentType.id},
 			</if>
 		</set>
-		where id = #{id}
+		<![CDATA[
+            WHERE id = #{id}
+        ]]>
 	</update>
 
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.ContentAttribute">
 	    <![CDATA[
-            DELETE FROM cas_t_core_content_attr t
+            DELETE FROM cas_t_core_content_attr
         ]]>
-		<include refid="where"></include>
+		<include refid="where-no-alias"></include>
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->
@@ -78,7 +95,9 @@
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="ContentAttribute-resultMap">
 		<include refid="select"></include>
-		<include refid="where"></include>
+		<![CDATA[
+            WHERE id = #{id}
+        ]]>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->

@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.anttribe.cas.base.core.entity.ContentAttribute;
 import org.anttribe.cas.base.core.entity.Crawler;
-import org.anttribe.cas.base.core.entity.CrawlerContentRegular;
+import org.anttribe.cas.base.core.entity.CrawlerRegular;
 import org.anttribe.cas.console.facade.dto.CrawlerContentRegularDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class CrawlerContentRegularAssembler
 {
-    public static CrawlerContentRegularDTO toDTO(CrawlerContentRegular crawlerContentRegular)
+    public static CrawlerContentRegularDTO toDTO(CrawlerRegular crawlerContentRegular)
     {
         if (null != crawlerContentRegular)
         {
@@ -42,12 +42,12 @@ public class CrawlerContentRegularAssembler
         return null;
     }
     
-    public static List<CrawlerContentRegularDTO> toDTO(List<CrawlerContentRegular> crawlerContentRegulars)
+    public static List<CrawlerContentRegularDTO> toDTO(List<CrawlerRegular> crawlerContentRegulars)
     {
         if (!CollectionUtils.isEmpty(crawlerContentRegulars))
         {
             List<CrawlerContentRegularDTO> crawlerContentRegularDTOs = new ArrayList<CrawlerContentRegularDTO>();
-            for (CrawlerContentRegular crawlerContentRegular : crawlerContentRegulars)
+            for (CrawlerRegular crawlerContentRegular : crawlerContentRegulars)
             {
                 CrawlerContentRegularDTO crawlerContentRegularDTO =
                     CrawlerContentRegularAssembler.toDTO(crawlerContentRegular);
@@ -63,11 +63,11 @@ public class CrawlerContentRegularAssembler
         return null;
     }
     
-    public static CrawlerContentRegular toEntity(CrawlerContentRegularDTO crawlerContentRegularDTO)
+    public static CrawlerRegular toEntity(CrawlerContentRegularDTO crawlerContentRegularDTO)
     {
         if (null != crawlerContentRegularDTO)
         {
-            CrawlerContentRegular crawlerContentRegular = new CrawlerContentRegular();
+            CrawlerRegular crawlerContentRegular = new CrawlerRegular();
             crawlerContentRegular.setId(crawlerContentRegularDTO.getId());
             crawlerContentRegular.setCrawler(StringUtils.isEmpty(crawlerContentRegularDTO.getId()) ? new Crawler(
                 crawlerContentRegularDTO.getId()) : null);
@@ -80,14 +80,14 @@ public class CrawlerContentRegularAssembler
         return null;
     }
     
-    public static List<CrawlerContentRegular> toEntity(List<CrawlerContentRegularDTO> crawlerContentRegularDTOs)
+    public static List<CrawlerRegular> toEntity(List<CrawlerContentRegularDTO> crawlerContentRegularDTOs)
     {
         if (!CollectionUtils.isEmpty(crawlerContentRegularDTOs))
         {
-            List<CrawlerContentRegular> regulars = new ArrayList<CrawlerContentRegular>();
+            List<CrawlerRegular> regulars = new ArrayList<CrawlerRegular>();
             for (CrawlerContentRegularDTO crawlerContentRegularDTO : crawlerContentRegularDTOs)
             {
-                CrawlerContentRegular regular = CrawlerContentRegularAssembler.toEntity(crawlerContentRegularDTO);
+                CrawlerRegular regular = CrawlerContentRegularAssembler.toEntity(crawlerContentRegularDTO);
                 if (null == regular)
                 {
                     continue;

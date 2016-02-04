@@ -5,7 +5,7 @@
  * 修   改  人: zhaoyong
  * 修改时 间: 2015年7月23日
  */
-package org.anttribe.cas.base.core.errorno;
+package org.anttribe.cas.base.infra.errorno;
 
 /**
  * 系统错误码

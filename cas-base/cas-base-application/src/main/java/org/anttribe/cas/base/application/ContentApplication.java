@@ -1,5 +1,5 @@
 /*
- * 文  件   名: ContentTypeApplication.java
+ * 文  件   名: ContentApplication.java
  * 版       本: Copyright (c) (Anttribe)cas v1.0. All rights reserved.
  * 描       述: <描述>
  * 修   改  人: zhaoyong(anshenglimin@163.com)
@@ -10,54 +10,54 @@ package org.anttribe.cas.base.application;
 import java.util.List;
 import java.util.Map;
 
-import org.anttribe.cas.base.core.entity.ContentType;
+import org.anttribe.cas.base.core.entity.Content;
 import org.anttribe.cas.base.infra.entity.Pagination;
 
 /**
- * ContentType逻辑层处理接口
+ * Content逻辑层处理接口
  * 
  * @author zhaoyong
  * @version 1.0
  */
-public interface ContentTypeApplication
+public interface ContentApplication
 {
-    
+
     /**
      * 列表数据
      * 
      * @param criteria Map<String, Object>
-     * @return List<ContentType>
+	 * @return List<Content>
      */
-    List<ContentType> listContentTypes(Map<String, Object> criteria);
-    
-    /**
+    List<Content> listContents(Map<String, Object> criteria);
+	
+	/**
      * 根据分类参数列表数据
      * 
      * @param criteria Map<String, Object>
-     * @return Pagination
+	 * @return Pagination
      */
-    Pagination listContentTypes(Map<String, Object> criteria, Pagination pagination);
-    
-    /**
+    Pagination listContents(Map<String, Object> criteria, Pagination pagination);
+	
+	/**
      * 根据条件获取单条数据
      * 
      * @param criteria Map<String, Object>
-     * @return ContentType
+	 * @return Content
      */
-    ContentType findContentType(Map<String, Object> criteria);
-    
-    /**
+	Content findContent(Map<String, Object> criteria);
+	
+	/**
      * 持久化数据
      * 
-     * @param contentType ContentType
+     * @param content Content
      */
-    void persistentContentType(ContentType contentType);
+    void persistentContent(Content content);
     
     /**
      * 删除数据
      * 
-     * @param contentType ContentType
+     * @param content Content
      */
-    void deleteContentType(ContentType contentType);
-    
+    void deleteContent(Content content);
+
 }

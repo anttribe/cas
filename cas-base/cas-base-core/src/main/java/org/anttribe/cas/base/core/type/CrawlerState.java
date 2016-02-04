@@ -5,7 +5,7 @@
  * 修   改  人: zhaoyong
  * 修改时间: 2015年11月3日
  */
-package org.anttribe.cas.base.core.entity;
+package org.anttribe.cas.base.core.type;
 
 /**
  * 爬虫状态枚举

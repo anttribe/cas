@@ -10,7 +10,7 @@ package org.anttribe.cas.base.core.entity;
 import java.util.Date;
 import java.util.List;
 
-import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
 
 /**
  * @author zhaoyong
@@ -18,10 +18,16 @@ import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
  */
 public class Content extends MybatisAbstractEntity
 {
+    
     /**
-     * 内容id
+     * id编号
      */
-    private String id;
+    private Long id;
+    
+    /**
+     * 原链接
+     */
+    private String link;
     
     /**
      * 内容类型
@@ -34,11 +40,6 @@ public class Content extends MybatisAbstractEntity
     private List<ContentAttrValue> attrValues;
     
     /**
-     * 原链接
-     */
-    private String link;
-    
-    /**
      * 所属站点
      */
     private Website website;
@@ -48,14 +49,24 @@ public class Content extends MybatisAbstractEntity
      */
     private Date createTime;
     
-    public String getId()
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
+    }
+    
+    public String getLink()
+    {
+        return link;
+    }
+    
+    public void setLink(String link)
+    {
+        this.link = link;
     }
     
     public ContentType getContentType()
@@ -78,16 +89,6 @@ public class Content extends MybatisAbstractEntity
         this.attrValues = attrValues;
     }
     
-    public String getLink()
-    {
-        return link;
-    }
-    
-    public void setLink(String link)
-    {
-        this.link = link;
-    }
-    
     public Website getWebsite()
     {
         return website;
@@ -107,4 +108,5 @@ public class Content extends MybatisAbstractEntity
     {
         this.createTime = createTime;
     }
+    
 }

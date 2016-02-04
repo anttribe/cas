@@ -10,7 +10,8 @@ package org.anttribe.cas.base.core.entity;
 import java.util.Date;
 import java.util.List;
 
-import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+import org.anttribe.cas.base.core.type.CrawlerState;
+import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
 
 /**
  * @author zhaoyong
@@ -18,10 +19,11 @@ import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
  */
 public class Crawler extends MybatisAbstractEntity
 {
+    
     /**
-     * id
+     * id编号
      */
-    private String id;
+    private Long id;
     
     /**
      * 名称，描述性文字
@@ -56,12 +58,7 @@ public class Crawler extends MybatisAbstractEntity
     /**
      * 内容规则
      */
-    List<CrawlerContentRegular> regulars;
-    
-    /**
-     * 是否可用
-     */
-    private boolean available;
+    List<CrawlerRegular> regulars;
     
     /**
      * 创建时间
@@ -79,6 +76,11 @@ public class Crawler extends MybatisAbstractEntity
     private CrawlerState state;
     
     /**
+     * 是否可用
+     */
+    private boolean available;
+    
+    /**
      * <构造器>
      */
     public Crawler()
@@ -88,17 +90,17 @@ public class Crawler extends MybatisAbstractEntity
     /**
      * @param id
      */
-    public Crawler(String id)
+    public Crawler(Long id)
     {
         this.id = id;
     }
     
-    public String getId()
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -163,24 +165,14 @@ public class Crawler extends MybatisAbstractEntity
         this.contentType = contentType;
     }
     
-    public List<CrawlerContentRegular> getRegulars()
+    public List<CrawlerRegular> getRegulars()
     {
         return regulars;
     }
     
-    public void setRegulars(List<CrawlerContentRegular> regulars)
+    public void setRegulars(List<CrawlerRegular> regulars)
     {
         this.regulars = regulars;
-    }
-    
-    public boolean isAvailable()
-    {
-        return available;
-    }
-    
-    public void setAvailable(boolean available)
-    {
-        this.available = available;
     }
     
     public Date getCreateTime()
@@ -212,4 +204,15 @@ public class Crawler extends MybatisAbstractEntity
     {
         this.state = state;
     }
+    
+    public boolean isAvailable()
+    {
+        return available;
+    }
+    
+    public void setAvailable(boolean available)
+    {
+        this.available = available;
+    }
+    
 }

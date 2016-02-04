@@ -5,7 +5,7 @@
  * 修   改  人: zhaoyong
  * 修改时 间: 2015年7月23日
  */
-package org.anttribe.cas.base.core.exception;
+package org.anttribe.cas.base.infra.exception;
 
 /**
  * 统一异常信息

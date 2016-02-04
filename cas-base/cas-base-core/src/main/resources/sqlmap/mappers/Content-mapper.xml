@@ -3,34 +3,174 @@
 <mapper namespace="org.anttribe.cas.base.core.entity.Content">
 	<cache readOnly="true" />
 	<resultMap id="Content-resultMap" type="org.anttribe.cas.base.core.entity.Content">
-		<result property="contentId" column="contentId" />
+		<result property="id" column="id" />
 		<result property="link" column="link" />
+		<result property="createTime" column="create_time" />
 		<association property="website" column="{siteId = website}"
 			javaType="org.anttribe.cas.base.core.entity.Website" select="org.anttribe.cas.base.core.entity.Website.queryById" />
 	</resultMap>
 
+	<!-- select -->
+	<sql id="select">
+        <![CDATA[
+            SELECT t.id, t.link, t.content_type, t.create_time, t.website
+              FROM cas_t_core_content t
+        ]]>
+	</sql>
+
+	<!-- where -->
+	<sql id="where">
+		<where>
+			<if test="null != id and id != ''">
+				AND t.id = #{id}
+			</if>
+			<if test="null != contentType and contentType != ''">
+				AND t.content_type = #{contentType}
+			</if>
+			<if test="null != website and website != ''">
+				AND t.website = #{website}
+			</if>
+		</where>
+	</sql>
+
+	<!-- orderBy -->
+	<sql id="orderBy">
+	    <![CDATA[]]>
+	</sql>
+
+	<!-- limit -->
+	<sql id="limit">
+		<if test="null != pagination">
+			limit #{pagination.offset}, #{pagination.pagesize}
+		</if>
+	</sql>
+
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Content">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
+		</selectKey>
 		<![CDATA[
+		    INSERT INTO cas_t_core_content(link, content_type, create_time, website)
+		        VALUES(#{link}, #{contentType}, #{createTime}, #{website})
 		]]>
 	</insert>
 
-	<!-- queryAll: 查询所有内容数据 -->
-	<select id="queryAll" resultMap="Content-resultMap">
+	<!-- batchInsert: 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
 		<![CDATA[
+		    INSERT INTO cas_t_core_content(id, link, content_type, create_time, website)
+		        VALUES
 		]]>
+		<foreach collection="list" item="item" open="(" close=")"
+			separator=", ">
+			#{id},
+			#{link},
+			#{contentType},
+			#{createTime},
+			#{website}
+		</foreach>
+	</insert>
+
+	<!-- update: 更新单条数据 -->
+	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Content">
+        <![CDATA[
+            UPDATE cas_t_core_content t
+        ]]>
+		<set>
+			<if test="null != link and link != ''">
+				t.link = #{link}
+			</if>
+			<if test="null != contentType and contentType != ''">
+				t.content_type = #{contentType}
+			</if>
+			<if test="null != website and website != ''">
+				t.website = #{website}
+			</if>
+		</set>
+		<include refid="where"></include>
+	</update>
+
+	<!-- batchUpdate: 批量更新数据 -->
+	<update id="batchUpdate" parameterType="java.util.List">
+		<![CDATA[
+            UPDATE cas_t_core_content t
+        ]]>
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="link = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != link and link != ''">
+						when #{item.id} then #{link}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="content_type = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != contentType and contentType != ''">
+						when #{item.id} then #{contentType}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="website = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != website and website != ''">
+						when #{item.id} then #{website}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		<![CDATA[
+            WHERE id IN 
+        ]]>
+		<foreach collection="list" separator=", " item="item" open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<!-- delete: 删除单条数据 -->
+	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Content">
+	    <![CDATA[
+            DELETE FROM cas_t_core_content t
+        ]]>
+		<include refid="where"></include>
+	</delete>
+
+	<!-- queryAll: 查询所有数据 -->
+	<select id="queryAll" resultMap="Content-resultMap">
+		<include refid="select"></include>
+		<include refid="orderBy"></include>
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="Content-resultMap">
-		<![CDATA[
-		]]>
+		<include refid="select"></include>
+		<include refid="where"></include>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->
 	<select id="queryByCriteria" resultMap="Content-resultMap"
-		parameterType="map">
+		parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="orderBy"></include>
+	</select>
+
+	<!-- queryDataCount: 根据条件查询数据条数 -->
+	<select id="queryDataCount" resultMap="int" parameterType="Map">
 		<![CDATA[
-		]]>
+            SELECT COUNT(1)
+              FROM cas_t_core_content t
+        ]]>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByPagination: 根据分页条件查询数据 -->
+	<select id="queryByPagination" resultMap="Content-resultMap"
+		parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="orderBy"></include>
+		<include refid="limit"></include>
 	</select>
 </mapper>

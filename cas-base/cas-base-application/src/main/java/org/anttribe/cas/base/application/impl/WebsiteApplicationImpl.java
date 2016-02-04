@@ -13,9 +13,10 @@ import java.util.Map;
 
 import org.anttribe.cas.base.application.WebsiteApplication;
 import org.anttribe.cas.base.core.entity.Website;
-import org.anttribe.cas.base.core.errorno.SystemErrorNo;
-import org.anttribe.cas.base.core.exception.UnifyException;
-import org.anttribe.component.lang.UUIDUtils;
+import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.infra.errorno.SystemErrorNo;
+import org.anttribe.cas.base.infra.exception.UnifyException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,40 @@ public class WebsiteApplicationImpl implements WebsiteApplication
     }
     
     @Override
+    public Pagination listWebsites(Map<String, Object> criteria, Pagination pagination)
+    {
+        List<Website> tempWebsites = Website.find(Website.class, criteria, pagination);
+        int totalCount = Website.count(Website.class, criteria);
+        if (null == pagination)
+        {
+            pagination = new Pagination();
+        }
+        pagination.setTotalRecords(totalCount);
+        pagination.setDatas(tempWebsites);
+        
+        return pagination;
+    }
+    
+    @Override
+    public Website findWebsite(Map<String, Object> criteria)
+    {
+        logger.debug("find Website refer to criteria, param: criteria[{}]", criteria);
+        
+        if (null == criteria)
+        {
+            // 参数错误
+            return null;
+        }
+        
+        List<Website> tempWebsites = Website.find(Website.class, criteria);
+        if (!CollectionUtils.isEmpty(tempWebsites))
+        {
+            return tempWebsites.get(0);
+        }
+        return null;
+    }
+    
+    @Override
     public void persistentWebsite(Website website)
     {
         logger.debug("persistenting website to DB, param: website[{}]", website);
@@ -53,9 +88,8 @@ public class WebsiteApplicationImpl implements WebsiteApplication
             throw new UnifyException(SystemErrorNo.PARAMETER_LOGIC_ERROR);
         }
         
-        if (StringUtils.isEmpty(website.getId()))
+        if (null == website.getId())
         {
-            website.setId(UUIDUtils.getRandomUUID());
             website.setCreateTime(new Date());
             website.save();
             
@@ -85,4 +119,5 @@ public class WebsiteApplicationImpl implements WebsiteApplication
             website.remove();
         }
     }
+    
 }

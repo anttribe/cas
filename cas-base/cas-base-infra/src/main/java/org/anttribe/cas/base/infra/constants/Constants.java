@@ -5,7 +5,7 @@
  * 修   改  人: zhaoyong
  * 修改时间: 2015年11月10日
  */
-package org.anttribe.cas.base.core.constants;
+package org.anttribe.cas.base.infra.constants;
 
 /**
  * @author zhaoyong

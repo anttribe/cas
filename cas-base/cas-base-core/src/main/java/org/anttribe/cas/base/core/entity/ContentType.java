@@ -7,7 +7,7 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
 
 /**
  * @author zhaoyong
@@ -15,10 +15,11 @@ import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
  */
 public class ContentType extends MybatisAbstractEntity
 {
+    
     /**
-     * id
+     * id编号
      */
-    private String id;
+    private Long id;
     
     /**
      * 名称
@@ -30,12 +31,37 @@ public class ContentType extends MybatisAbstractEntity
      */
     private String code;
     
-    public String getId()
+    /**
+     * <默认构造器>
+     */
+    public ContentType()
+    {
+    }
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder strB = new StringBuilder();
+        strB.append("ContentType")
+            .append("{")
+            .append("id=")
+            .append(this.getId())
+            .append(',')
+            .append("name=")
+            .append(this.getName())
+            .append(',')
+            .append("code=")
+            .append(this.getCode())
+            .append("}");
+        return strB.toString();
+    }
+    
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }

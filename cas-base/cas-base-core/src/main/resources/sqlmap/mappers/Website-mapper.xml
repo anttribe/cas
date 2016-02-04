@@ -38,7 +38,7 @@
 			</if>
 		</where>
 	</sql>
-	
+
 	<!-- where-no-alias -->
 	<sql id="where-no-alias">
 		<where>
@@ -54,64 +54,162 @@
 		</where>
 	</sql>
 
+	<!-- orderBy -->
+	<sql id="orderBy">
+	    <![CDATA[]]>
+	</sql>
+
+	<!-- limit -->
+	<sql id="limit">
+		<if test="null != pagination">
+			limit #{pagination.offset}, #{pagination.pagesize}
+		</if>
+	</sql>
+
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Website">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
+		</selectKey>
 		<![CDATA[
-		    INSERT INTO cas_t_core_website(id, site_name, domain, logo, charset, user_agent, category_id, create_time)
-		      VALUES(#{id}, #{siteName}, #{domain}, #{logo}, #{charset}, #{userAgent}, #{category.id}, #{createTime})
+		    INSERT INTO cas_t_core_website(site_name, domain, logo, charset, user_agent, category_id, create_time)
+		        VALUES(#{siteName}, #{domain}, #{logo}, #{charset}, #{userAgent}, #{categoryId}, #{createTime})
 		]]>
 	</insert>
-	
+
+	<!-- batchInsert: 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		<![CDATA[
+		    INSERT INTO cas_t_core_website(id, site_name, domain, logo, charset, user_agent, category_id, create_time)
+		        VALUES
+		]]>
+		<foreach collection="list" item="item" open="(" close=")"
+			separator=", ">
+			#{id},
+			#{siteName},
+			#{domain},
+			#{logo},
+			#{charset},
+			#{userAgent},
+			#{categoryId},
+			#{createTime}
+		</foreach>
+	</insert>
+
 	<!-- update: 更新单条数据 -->
 	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Website">
         <![CDATA[
-            UPDATE cas_t_core_website
+            UPDATE cas_t_core_website t
         ]]>
 		<set>
 			<if test="null != siteName and siteName != ''">
-				site_name = #{siteName},
+				t.site_name = #{siteName}
 			</if>
 			<if test="null != domain and domain != ''">
-				domain = #{domain},
+				t.domain = #{domain}
 			</if>
 			<if test="null != logo and logo != ''">
-				logo = #{logo},
+				t.logo = #{logo}
 			</if>
 			<if test="null != charset and charset != ''">
-				charset = #{charset},
+				t.charset = #{charset}
 			</if>
 			<if test="null != userAgent and userAgent != ''">
-				user_agent = #{userAgent},
+				t.user_agent = #{userAgent}
 			</if>
-			<if test="null != category and category.id != ''">
-				category_id = #{category.id},
+			<if test="null != categoryId and categoryId != ''">
+				t.category_id = #{categoryId}
+			</if>
+			<if test="null != createTime and createTime != ''">
+				t.create_time = #{createTime}
 			</if>
 		</set>
-		<![CDATA[
-            WHERE id = #{id}
-        ]]>
+		<include refid="where"></include>
 	</update>
-	
+
+	<!-- batchUpdate: 批量更新数据 -->
+	<update id="batchUpdate" parameterType="java.util.List">
+		<![CDATA[
+            UPDATE cas_t_core_website t
+        ]]>
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="site_name = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != siteName and siteName != ''">
+						when #{item.id} then #{siteName}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="domain = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != domain and domain != ''">
+						when #{item.id} then #{domain}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="logo = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != logo and logo != ''">
+						when #{item.id} then #{logo}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="charset = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != charset and charset != ''">
+						when #{item.id} then #{charset}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="user_agent = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != userAgent and userAgent != ''">
+						when #{item.id} then #{userAgent}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="category_id = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != categoryId and categoryId != ''">
+						when #{item.id} then #{categoryId}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="create_time = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != createTime and createTime != ''">
+						when #{item.id} then #{createTime}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		<![CDATA[
+            WHERE id IN 
+        ]]>
+		<foreach collection="list" separator=", " item="item" open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Website">
 	    <![CDATA[
-            DELETE FROM cas_t_core_website
+            DELETE FROM cas_t_core_website t
         ]]>
-		<include refid="where-no-alias"></include>
+		<include refid="where"></include>
 	</delete>
 
-	<!-- queryAll: 查询所有站点数据 -->
+	<!-- queryAll: 查询所有数据 -->
 	<select id="queryAll" resultMap="Website-resultMap">
 		<include refid="select"></include>
-		ORDER BY t.create_time
+		<include refid="orderBy"></include>
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
-	<select id="queryById" parameterType="String" resultMap="Website-resultMap">
+	<select id="queryById" resultMap="Website-resultMap">
 		<include refid="select"></include>
-		<![CDATA[
-            WHERE id = #{id}
-        ]]>
+		<include refid="where"></include>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->
@@ -119,6 +217,25 @@
 		parameterType="Map">
 		<include refid="select"></include>
 		<include refid="where"></include>
-		ORDER BY t.create_time
+		<include refid="orderBy"></include>
 	</select>
+
+	<!-- queryDataCount: 根据条件查询数据条数 -->
+	<select id="queryDataCount" resultMap="int" parameterType="Map">
+		<![CDATA[
+            SELECT COUNT(1)
+              FROM cas_t_core_website t
+        ]]>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByPagination: 根据分页条件查询数据 -->
+	<select id="queryByPagination" resultMap="Website-resultMap"
+		parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="orderBy"></include>
+		<include refid="limit"></include>
+	</select>
+
 </mapper>

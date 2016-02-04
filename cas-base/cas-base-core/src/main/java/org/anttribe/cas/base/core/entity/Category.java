@@ -1,5 +1,5 @@
 /*
- * 文  件   名: WebsiteCategory.java
+ * 文  件   名: Category.java
  * 版         本 : cas-base-core.(Anttribe) All rights reserved
  * 描         述 : <描述>
  * 修   改  人: zhaoyong
@@ -8,11 +8,9 @@
 package org.anttribe.cas.base.core.entity;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
 
 /**
  * 分类信息
@@ -22,10 +20,11 @@ import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
  */
 public class Category extends MybatisAbstractEntity
 {
+    
     /**
-     * 分类id
+     * 编号
      */
-    private String id;
+    private Long id;
     
     /**
      * 分类名称
@@ -35,7 +34,7 @@ public class Category extends MybatisAbstractEntity
     /**
      * 顺序
      */
-    private int ordinal;
+    private Integer ordinal;
     
     /**
      * 父分类
@@ -46,6 +45,11 @@ public class Category extends MybatisAbstractEntity
      * 子分类
      */
     private List<Category> children;
+    
+    /**
+     * 树节点标记
+     */
+    private String treeCode;
     
     /**
      * 创建时间
@@ -62,17 +66,44 @@ public class Category extends MybatisAbstractEntity
     /**
      * <构造器>
      */
-    public Category(String id)
+    public Category(Long id)
     {
         this.id = id;
     }
     
-    public String getId()
+    @Override
+    public String toString()
+    {
+        StringBuilder strB = new StringBuilder();
+        strB.append("Category")
+            .append("{")
+            .append("id=")
+            .append(this.getId())
+            .append(',')
+            .append("name=")
+            .append(this.getName())
+            .append(',')
+            .append("parent=")
+            .append(this.getParent())
+            .append(',')
+            .append("treeCode=")
+            .append(this.getTreeCode())
+            .append(',')
+            .append("createTime=")
+            .append(this.getCreateTime())
+            .append(',')
+            .append("ordinal=")
+            .append(this.getOrdinal())
+            .append("}");
+        return strB.toString();
+    }
+    
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -87,12 +118,12 @@ public class Category extends MybatisAbstractEntity
         this.name = name;
     }
     
-    public int getOrdinal()
+    public Integer getOrdinal()
     {
         return ordinal;
     }
     
-    public void setOrdinal(int ordinal)
+    public void setOrdinal(Integer ordinal)
     {
         this.ordinal = ordinal;
     }
@@ -115,6 +146,16 @@ public class Category extends MybatisAbstractEntity
     public void setChildren(List<Category> children)
     {
         this.children = children;
+    }
+    
+    public String getTreeCode()
+    {
+        return treeCode;
+    }
+    
+    public void setTreeCode(String treeCode)
+    {
+        this.treeCode = treeCode;
     }
     
     public Date getCreateTime()

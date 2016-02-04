@@ -56,18 +56,18 @@ public class ContentCrawlJob
     {
         logger.debug("Start executing ContentCrawlJob to crawling content.");
         
-        List<Website> websites = websiteApplication.listWebsites();
-        if (!CollectionUtils.isEmpty(websites))
-        {
-            for (Website website : websites)
-            {
-                Spider.create(new ContentPageProcessor(website))
-                    .addUrl(website.getDomain())
-                    .addPipeline(new ContentPersistentPipeline())
-                    .thread(this.getThreadNum())
-                    .run();
-            }
-        }
+//        List<Website> websites = websiteApplication.listWebsites();
+//        if (!CollectionUtils.isEmpty(websites))
+//        {
+//            for (Website website : websites)
+//            {
+//                Spider.create(new ContentPageProcessor(website))
+//                    .addUrl(website.getDomain())
+//                    .addPipeline(new ContentPersistentPipeline())
+//                    .thread(this.getThreadNum())
+//                    .run();
+//            }
+//        }
     }
     
     public int getThreadNum()

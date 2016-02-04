@@ -7,7 +7,7 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
 
 /**
  * @author zhaoyong
@@ -15,10 +15,11 @@ import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
  */
 public class ContentAttribute extends MybatisAbstractEntity
 {
+    
     /**
      * id编号
      */
-    private String id;
+    private Long id;
     
     /**
      * 属性名
@@ -40,23 +41,43 @@ public class ContentAttribute extends MybatisAbstractEntity
      */
     public ContentAttribute()
     {
-    
     }
     
     /**
      * @param id
      */
-    public ContentAttribute(String id)
+    public ContentAttribute(Long id)
     {
         this.id = id;
     }
     
-    public String getId()
+    @Override
+    public String toString()
+    {
+        StringBuilder strB = new StringBuilder();
+        strB.append("ContentAttr")
+            .append("{")
+            .append("id=")
+            .append(this.getId())
+            .append(',')
+            .append("name=")
+            .append(this.getName())
+            .append(',')
+            .append("attrValueType=")
+            .append(this.getAttrValueType())
+            .append(',')
+            .append("contentType=")
+            .append(this.getContentType())
+            .append("}");
+        return strB.toString();
+    }
+    
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -90,4 +111,5 @@ public class ContentAttribute extends MybatisAbstractEntity
     {
         this.attrValueType = attrValueType;
     }
+    
 }

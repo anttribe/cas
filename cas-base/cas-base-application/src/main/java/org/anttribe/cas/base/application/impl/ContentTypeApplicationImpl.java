@@ -7,14 +7,16 @@
  */
 package org.anttribe.cas.base.application.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.anttribe.cas.base.application.ContentTypeApplication;
 import org.anttribe.cas.base.core.entity.ContentType;
-import org.anttribe.cas.base.core.errorno.SystemErrorNo;
-import org.anttribe.cas.base.core.exception.UnifyException;
-import org.anttribe.component.lang.UUIDUtils;
+import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.infra.errorno.SystemErrorNo;
+import org.anttribe.cas.base.infra.exception.UnifyException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,53 @@ public class ContentTypeApplicationImpl implements ContentTypeApplication
     public List<ContentType> listContentTypes(Map<String, Object> criteria)
     {
         logger.debug("listing contentTypes by criteria, criteria[{}]", criteria);
+        if (null == criteria)
+        {
+            criteria = new HashMap<String, Object>();
+        }
         return ContentType.find(ContentType.class, criteria);
+    }
+    
+    @Override
+    public Pagination listContentTypes(Map<String, Object> criteria, Pagination pagination)
+    {
+        logger.debug("listing ContentTypes refer to criteria and pagination, param: criteria[{}], pagination[{}]",
+            criteria,
+            pagination);
+            
+        if (null == criteria)
+        {
+            criteria = new HashMap<String, Object>();
+        }
+        List<ContentType> tempContentTypes = ContentType.find(ContentType.class, criteria, pagination);
+        int totalCount = ContentType.count(ContentType.class, criteria);
+        if (null == pagination)
+        {
+            pagination = new Pagination();
+        }
+        pagination.setTotalRecords(totalCount);
+        pagination.setDatas(tempContentTypes);
+        
+        return pagination;
+    }
+    
+    @Override
+    public ContentType findContentType(Map<String, Object> criteria)
+    {
+        logger.debug("find ContentType refer to criteria, param: criteria[{}]", criteria);
+        
+        if (null == criteria)
+        {
+            // 参数错误
+            return null;
+        }
+        
+        List<ContentType> tempContentTypes = ContentType.find(ContentType.class, criteria);
+        if (!CollectionUtils.isEmpty(tempContentTypes))
+        {
+            return tempContentTypes.get(0);
+        }
+        return null;
     }
     
     @Override
@@ -53,11 +101,9 @@ public class ContentTypeApplicationImpl implements ContentTypeApplication
             throw new UnifyException(SystemErrorNo.PARAMETER_LOGIC_ERROR);
         }
         
-        if (StringUtils.isEmpty(contentType.getId()))
+        if (null == contentType.getId())
         {
-            contentType.setId(UUIDUtils.getRandomUUID());
             contentType.save();
-            
             logger.debug("contentType id not there, then save new contentType to DB, contentType: {}",
                 contentType.getId());
             return;

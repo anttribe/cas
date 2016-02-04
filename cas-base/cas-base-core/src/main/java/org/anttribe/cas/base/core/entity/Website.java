@@ -9,7 +9,7 @@ package org.anttribe.cas.base.core.entity;
 
 import java.util.Date;
 
-import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
+import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
 
 /**
  * @author zhaoyong
@@ -17,10 +17,11 @@ import org.anttribe.opengadget.core.domain.MybatisAbstractEntity;
  */
 public class Website extends MybatisAbstractEntity
 {
+    
     /**
-     * id
+     * 编号
      */
-    private String id;
+    private Long id;
     
     /**
      * 网站名
@@ -57,12 +58,52 @@ public class Website extends MybatisAbstractEntity
      */
     private Date createTime;
     
-    public String getId()
+    /**
+     * <默认构造器>
+     */
+    public Website()
+    {
+    }
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder strB = new StringBuilder();
+        strB.append("Website")
+            .append("{")
+            .append("id=")
+            .append(this.getId())
+            .append(',')
+            .append("siteName=")
+            .append(this.getSiteName())
+            .append(',')
+            .append("domain=")
+            .append(this.getDomain())
+            .append(',')
+            .append("logo=")
+            .append(this.getLogo())
+            .append(',')
+            .append("charset=")
+            .append(this.getCharset())
+            .append(',')
+            .append("userAgent=")
+            .append(this.getUserAgent())
+            .append(',')
+            .append("categoryId=")
+            .append(this.getCategory())
+            .append(',')
+            .append("createTime=")
+            .append(this.getCreateTime())
+            .append("}");
+        return strB.toString();
+    }
+    
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -136,4 +177,5 @@ public class Website extends MybatisAbstractEntity
     {
         this.createTime = createTime;
     }
+    
 }

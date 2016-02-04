@@ -8,14 +8,16 @@
 package org.anttribe.cas.base.application.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.anttribe.cas.base.application.CategoryApplication;
 import org.anttribe.cas.base.core.entity.Category;
-import org.anttribe.cas.base.core.errorno.SystemErrorNo;
-import org.anttribe.cas.base.core.exception.UnifyException;
-import org.anttribe.component.lang.UUIDUtils;
+import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.infra.errorno.SystemErrorNo;
+import org.anttribe.cas.base.infra.exception.UnifyException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,31 +34,77 @@ public class CategoryApplicationImpl implements CategoryApplication
     private static Logger logger = LoggerFactory.getLogger(CategoryApplicationImpl.class);
     
     @Override
-    public List<Category> listCategories(Map<String, Object> criteria)
+    public List<Category> listCategorys(Map<String, Object> criteria)
     {
         logger.debug("listing categories refer to criteria, param: [{}]", criteria);
+        if (null == criteria)
+        {
+            criteria = new HashMap<String, Object>();
+        }
         return Category.find(Category.class, criteria);
+    }
+    
+    @Override
+    public Pagination listCategorys(Map<String, Object> criteria, Pagination pagination)
+    {
+        logger.debug("listing Categorys refer to criteria and pagination, param: criteria[{}], pagination[{}]",
+            criteria,
+            pagination);
+            
+        if (null == criteria)
+        {
+            criteria = new HashMap<String, Object>();
+        }
+        List<Category> tempCategorys = Category.find(Category.class, criteria, pagination);
+        int totalCount = Category.count(Category.class, criteria);
+        if (null == pagination)
+        {
+            pagination = new Pagination();
+        }
+        pagination.setTotalRecords(totalCount);
+        pagination.setDatas(tempCategorys);
+        
+        return pagination;
+    }
+    
+    @Override
+    public Category findCategory(Map<String, Object> criteria)
+    {
+        logger.debug("find Category refer to criteria, param: criteria[{}]", criteria);
+        
+        if (null == criteria)
+        {
+            // 参数错误
+            return null;
+        }
+        
+        List<Category> tempCategorys = Category.find(Category.class, criteria);
+        if (!CollectionUtils.isEmpty(tempCategorys))
+        {
+            return tempCategorys.get(0);
+        }
+        return null;
     }
     
     @Override
     public void persistentCategory(Category category)
     {
         logger.debug("persistenting category to DB, param: category[{}]", category);
+        
+        // 参数校验
         if (null == category)
         {
             logger.warn("persistenting category to DB, param category is null.");
             throw new UnifyException(SystemErrorNo.PARAMETER_IS_NULL);
         }
-        
         if (StringUtils.isEmpty(category.getName()))
         {
             logger.warn("persistenting category to DB, param category's name is null.");
             throw new UnifyException(SystemErrorNo.PARAMETER_LOGIC_ERROR);
         }
         
-        if (StringUtils.isEmpty(category.getId()))
+        if (null == category.getId())
         {
-            category.setId(UUIDUtils.getRandomUUID());
             category.setCreateTime(new Date());
             category.save();
             
@@ -86,4 +134,5 @@ public class CategoryApplicationImpl implements CategoryApplication
             category.remove();
         }
     }
+    
 }

@@ -7,17 +7,17 @@
  */
 package org.anttribe.cas.base.application.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.anttribe.cas.base.core.constants.Constants;
 import org.anttribe.cas.base.core.entity.Crawler;
-import org.anttribe.cas.base.core.entity.CrawlerContentRegular;
-import org.anttribe.cas.base.core.errorno.SystemErrorNo;
-import org.anttribe.cas.base.core.exception.UnifyException;
-import org.anttribe.component.lang.UUIDUtils;
+import org.anttribe.cas.base.core.entity.CrawlerRegular;
+import org.anttribe.cas.base.infra.constants.Constants;
+import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.infra.errorno.SystemErrorNo;
+import org.anttribe.cas.base.infra.exception.UnifyException;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -36,19 +36,65 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
     public List<Crawler> listCrawlers(Map<String, Object> criteria)
     {
         logger.debug("listing crawlers refer to criteria, param: [{}]", criteria);
+        if (null == criteria)
+        {
+            criteria = new HashMap<String, Object>();
+        }
         return Crawler.find(Crawler.class, criteria);
+    }
+    
+    @Override
+    public Pagination listCrawlers(Map<String, Object> criteria, Pagination pagination)
+    {
+        logger.debug("listing Crawlers refer to criteria and pagination, param: criteria[{}], pagination[{}]",
+            criteria,
+            pagination);
+            
+        if (null == criteria)
+        {
+            criteria = new HashMap<String, Object>();
+        }
+        List<Crawler> tempCrawlers = Crawler.find(Crawler.class, criteria, pagination);
+        int totalCount = Crawler.count(Crawler.class, criteria);
+        if (null == pagination)
+        {
+            pagination = new Pagination();
+        }
+        pagination.setTotalRecords(totalCount);
+        pagination.setDatas(tempCrawlers);
+        
+        return pagination;
+    }
+    
+    @Override
+    public Crawler findCrawler(Map<String, Object> criteria)
+    {
+        logger.debug("find Crawler refer to criteria, param: criteria[{}]", criteria);
+        
+        if (null == criteria)
+        {
+            // 参数错误
+            return null;
+        }
+        
+        List<Crawler> tempCrawlers = Crawler.find(Crawler.class, criteria);
+        if (!CollectionUtils.isEmpty(tempCrawlers))
+        {
+            return tempCrawlers.get(0);
+        }
+        return null;
     }
     
     @Override
     public void persistentCrawler(Crawler crawler)
     {
         logger.debug("persistenting crawler to DB, param: [{}]", crawler);
+        // 参数校验
         if (null == crawler)
         {
             logger.warn("persistenting crawler to DB, param crawler is null.");
             throw new UnifyException(SystemErrorNo.PARAMETER_IS_NULL);
         }
-        
         if (null == crawler.getWebsite() || null == crawler.getContentType())
         {
             logger.warn("persistenting crawler to DB, param crawler's website or contentType is null.");
@@ -58,16 +104,14 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
         // 处理默认属性值
         crawler.setIntervalTime(null != crawler.getIntervalTime() ? crawler.getIntervalTime()
             : Constants.Crawler.DEFAULT_PAGE_INTERVALTIME);
-        crawler.setRetryTimes(null != crawler.getRetryTimes() ? crawler.getRetryTimes()
-            : Constants.Crawler.DEFAULT_RETRYTIMES);
+        crawler.setRetryTimes(
+            null != crawler.getRetryTimes() ? crawler.getRetryTimes() : Constants.Crawler.DEFAULT_RETRYTIMES);
         crawler.setTimeout(null != crawler.getTimeout() ? crawler.getTimeout() : Constants.Crawler.DEFAULT_TIMEOUT);
         
-        if (StringUtils.isEmpty(crawler.getId()))
+        if (null == crawler.getId())
         {
-            crawler.setId(UUIDUtils.getRandomUUID());
             crawler.save();
             logger.debug("crawler id not there, then save new crawler to DB, crawler: {}", crawler.getId());
-            
             this.persistentCrawlerContentRegulars(crawler);
             return;
         }
@@ -95,12 +139,12 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
     private void persistentCrawlerContentRegulars(Crawler crawler)
     {
         // 删除数据库中保存的内容属性规则
-        CrawlerContentRegular.removeByCrawler(crawler);
+        // CrawlerRegular.removeByCrawler(crawler);
         // 保存内容属性
-        List<CrawlerContentRegular> regulars = crawler.getRegulars();
+        List<CrawlerRegular> regulars = crawler.getRegulars();
         if (!CollectionUtils.isEmpty(regulars))
         {
-            for (CrawlerContentRegular regular : regulars)
+            for (CrawlerRegular regular : regulars)
             {
                 regular.save();
             }
@@ -118,7 +162,7 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
             crawler.remove();
             
             // 删除内容属性规则
-            CrawlerContentRegular.removeByCrawler(crawler);
+            // CrawlerRegular.removeByCrawler(crawler);
         }
     }
     

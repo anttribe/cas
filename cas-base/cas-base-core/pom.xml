@@ -17,17 +17,14 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.anttribe.cas</groupId>
-			<artifactId>cas-base-infra</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.anttribe.opengadget</groupId>
-			<artifactId>opengadget-core</artifactId>
+			<groupId>org.anttribe.cas</groupId>
+			<artifactId>cas-base-infra</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

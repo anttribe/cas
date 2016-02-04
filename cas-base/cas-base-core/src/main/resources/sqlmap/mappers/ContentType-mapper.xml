@@ -23,14 +23,14 @@
 				AND t.id = #{id}
 			</if>
 			<if test="null != name and name != ''">
-				AND t.name LIKE CONCAT('%', '${name}', '%')
+				AND t.name LIKE CONCAT('%', #{name}, '%')
 			</if>
 			<if test="null != code and null != code">
 				AND t.code = #{code}
 			</if>
 		</where>
 	</sql>
-	
+
 	<!-- where-no-alias -->
 	<sql id="where-no-alias">
 		<where>
@@ -38,7 +38,7 @@
 				AND id = #{id}
 			</if>
 			<if test="null != name and name != ''">
-				AND name LIKE CONCAT('%', '${name}', '%')
+				AND name LIKE CONCAT('%', #{name}, '%')
 			</if>
 			<if test="null != code and null != code">
 				AND code = #{code}
@@ -46,12 +46,41 @@
 		</where>
 	</sql>
 
+	<!-- orderBy -->
+	<sql id="orderBy">
+	    <![CDATA[]]>
+	</sql>
+
+	<!-- limit -->
+	<sql id="limit">
+		<if test="null != pagination">
+			limit #{pagination.offset}, #{pagination.pagesize}
+		</if>
+	</sql>
+
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.ContentType">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
+		</selectKey>
+		<![CDATA[
+		    INSERT INTO cas_t_core_content_type(name, code)
+		        VALUES(#{name}, #{code})
+		]]>
+	</insert>
+
+	<!-- batchInsert: 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
 		<![CDATA[
 		    INSERT INTO cas_t_core_content_type(id, name, code)
-		      VALUES(#{id}, #{name}, #{code})
+		        VALUES
 		]]>
+		<foreach collection="list" item="item" open="(" close=")"
+			separator=", ">
+			#{id},
+			#{name},
+			#{code}
+		</foreach>
 	</insert>
 
 	<!-- update: 更新单条数据 -->
@@ -61,19 +90,49 @@
         ]]>
 		<set>
 			<if test="null != name and name != ''">
-				name = #{name},
+				t.name = #{name}
 			</if>
 			<if test="null != code and code != ''">
-				code = #{code},
+				t.code = #{code}
 			</if>
 		</set>
-		<include refid="where-no-alias"></include>
+		<include refid="where"></include>
+	</update>
+
+	<!-- batchUpdate: 批量更新数据 -->
+	<update id="batchUpdate" parameterType="java.util.List">
+		<![CDATA[
+            UPDATE cas_t_core_content_type t
+        ]]>
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="name = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != name and name != ''">
+						when #{item.id} then #{name}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="code = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != code and code != ''">
+						when #{item.id} then #{code}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		<![CDATA[
+            WHERE id IN 
+        ]]>
+		<foreach collection="list" separator=", " item="item" open="("
+			close=")">
+			#{item.id}
+		</foreach>
 	</update>
 
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.ContentType">
 	    <![CDATA[
-            DELETE FROM cas_t_core_content_type
+            DELETE FROM cas_t_core_content_type t
         ]]>
 		<include refid="where"></include>
 	</delete>
@@ -81,20 +140,39 @@
 	<!-- queryAll: 查询所有数据 -->
 	<select id="queryAll" resultMap="ContentType-resultMap">
 		<include refid="select"></include>
+		<include refid="orderBy"></include>
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="ContentType-resultMap">
 		<include refid="select"></include>
-		<![CDATA[
-            WHERE id = #{id}
-        ]]>
+		<include refid="where"></include>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->
 	<select id="queryByCriteria" resultMap="ContentType-resultMap"
-		parameterType="map">
+		parameterType="Map">
 		<include refid="select"></include>
 		<include refid="where"></include>
+		<include refid="orderBy"></include>
 	</select>
+
+	<!-- queryDataCount: 根据条件查询数据条数 -->
+	<select id="queryDataCount" resultMap="int" parameterType="Map">
+		<![CDATA[
+            SELECT COUNT(1)
+              FROM cas_t_core_content_type t
+        ]]>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByPagination: 根据分页条件查询数据 -->
+	<select id="queryByPagination" resultMap="ContentType-resultMap"
+		parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="orderBy"></include>
+		<include refid="limit"></include>
+	</select>
+
 </mapper>

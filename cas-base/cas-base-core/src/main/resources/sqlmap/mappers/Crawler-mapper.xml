@@ -8,9 +8,9 @@
 		<result property="intervalTime" column="interval_time" />
 		<result property="retryTimes" column="retry_imes" />
 		<result property="timeout" column="timeout" />
-		<result property="available" column="available" />
 		<result property="createTime" column="create_time" />
 		<result property="crawlTime" column="crawl_time" />
+		<result property="available" column="available" />
 		<result property="state" column="state"
 			javaType="org.anttribe.cas.base.core.entity.CrawlerState" />
 		<association property="website"
@@ -31,9 +31,9 @@
 		<result property="intervalTime" column="interval_time" />
 		<result property="retryTimes" column="retry_imes" />
 		<result property="timeout" column="timeout" />
-		<result property="available" column="available" />
 		<result property="createTime" column="create_time" />
 		<result property="crawlTime" column="crawl_time" />
+		<result property="available" column="available" />
 		<result property="state" column="state"
 			javaType="org.anttribe.cas.base.core.entity.CrawlerState" />
 		<association property="website"
@@ -77,12 +77,49 @@
 		</where>
 	</sql>
 
+	<!-- orderBy -->
+	<sql id="orderBy">
+	    <![CDATA[]]>
+	</sql>
+
+	<!-- limit -->
+	<sql id="limit">
+		<if test="null != pagination">
+			limit #{pagination.offset}, #{pagination.pagesize}
+		</if>
+	</sql>
+
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Crawler">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
+		</selectKey>
+		<![CDATA[
+		    INSERT INTO cas_t_core_crawler(title, website, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
+		        VALUES(#{title}, #{website}, #{intervalTime}, #{retryTimes}, #{timeout}, #{contentType}, #{createTime}, #{crawlTime}, #{state}, #{available})
+		]]>
+	</insert>
+
+	<!-- batchInsert: 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
 		<![CDATA[
 		    INSERT INTO cas_t_core_crawler(id, title, website, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
-		      VALUES(#{id}, #{title}, #{website.id}, #{intervalTime}, #{retryTimes}, #{timeout}, #{contentType.id}, #{createTime}, #{crawlTime}, #{state}, #{available})
+		        VALUES
 		]]>
+		<foreach collection="list" item="item" open="(" close=")"
+			separator=", ">
+			#{id},
+			#{title},
+			#{website},
+			#{intervalTime},
+			#{retryTimes},
+			#{timeout},
+			#{contentType},
+			#{createTime},
+			#{crawlTime},
+			#{state},
+			#{available}
+		</foreach>
 	</insert>
 
 	<!-- update: 更新单条数据 -->
@@ -91,40 +128,104 @@
             UPDATE cas_t_core_crawler t
         ]]>
 		<set>
-			<if test="null != name and name != ''">
-				name = #{name},
-			</if>
 			<if test="null != title and title != ''">
-				title = #{title},
-			</if>
-			<if test="null != website and website.id != ''">
-				website = #{website.id},
+				t.title = #{title}
 			</if>
 			<if test="null != intervalTime and intervalTime != ''">
-				interval_time = #{intervalTime},
+				t.interval_time = #{intervalTime}
 			</if>
 			<if test="null != retryTimes and retryTimes != ''">
-				retry_times = #{retryTimes},
+				t.retry_times = #{retryTimes}
 			</if>
 			<if test="null != timeout and timeout != ''">
-				timeout = #{timeout},
+				t.timeout = #{timeout}
 			</if>
-			<if test="null != contentType and contentType.id != ''">
-				content_type = #{contentType.id},
+			<if test="null != contentType and contentType != ''">
+				t.content_type = #{contentType}
 			</if>
-			<if test="null != crawl_time and crawl_time != ''">
-				crawl_time = #{crawl_time},
+			<if test="null != crawlTime and crawlTime != ''">
+				t.crawl_time = #{crawlTime}
 			</if>
 			<if test="null != state and state != ''">
-				state = #{state},
+				t.state = #{state}
 			</if>
 			<if test="null != available and available != ''">
-				available = #{available},
+				t.available = #{available}
 			</if>
 		</set>
+		<include refid="where"></include>
+	</update>
+
+	<!-- batchUpdate: 批量更新数据 -->
+	<update id="batchUpdate" parameterType="java.util.List">
 		<![CDATA[
-            WHERE id = #{id}
+            UPDATE cas_t_core_crawler t
         ]]>
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="title = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != title and title != ''">
+						when #{item.id} then #{title}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="interval_time = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != intervalTime and intervalTime != ''">
+						when #{item.id} then #{intervalTime}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="retry_times = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != retryTimes and retryTimes != ''">
+						when #{item.id} then #{retryTimes}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="timeout = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != timeout and timeout != ''">
+						when #{item.id} then #{timeout}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="content_type = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != contentType and contentType != ''">
+						when #{item.id} then #{contentType}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="crawl_time = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != crawlTime and crawlTime != ''">
+						when #{item.id} then #{crawlTime}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="state = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != state and state != ''">
+						when #{item.id} then #{state}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="available = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != available and available != ''">
+						when #{item.id} then #{available}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		<![CDATA[
+            WHERE id IN 
+        ]]>
+		<foreach collection="list" separator=", " item="item" open="("
+			close=")">
+			#{item.id}
+		</foreach>
 	</update>
 
 	<!-- delete: 删除单条数据 -->
@@ -134,24 +235,43 @@
         ]]>
 		<include refid="where"></include>
 	</delete>
-	
+
 	<!-- queryAll: 查询所有数据 -->
 	<select id="queryAll" resultMap="Crawler-resultMap">
 		<include refid="select"></include>
-		ORDER BY t.create_time
+		<include refid="orderBy"></include>
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
-	<select id="queryById" resultMap="Crawler-detail-resultMap">
+	<select id="queryById" resultMap="Crawler-resultMap">
 		<include refid="select"></include>
 		<include refid="where"></include>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->
 	<select id="queryByCriteria" resultMap="Crawler-resultMap"
-		parameterType="map">
+		parameterType="Map">
 		<include refid="select"></include>
 		<include refid="where"></include>
-		ORDER BY t.create_time
+		<include refid="orderBy"></include>
 	</select>
+
+	<!-- queryDataCount: 根据条件查询数据条数 -->
+	<select id="queryDataCount" resultMap="int" parameterType="Map">
+		<![CDATA[
+            SELECT COUNT(1)
+              FROM cas_t_core_crawler t
+        ]]>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByPagination: 根据分页条件查询数据 -->
+	<select id="queryByPagination" resultMap="Crawler-resultMap"
+		parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="orderBy"></include>
+		<include refid="limit"></include>
+	</select>
+
 </mapper>

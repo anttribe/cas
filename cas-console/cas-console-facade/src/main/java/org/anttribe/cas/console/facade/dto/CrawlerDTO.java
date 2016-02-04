@@ -10,8 +10,8 @@ package org.anttribe.cas.console.facade.dto;
 import java.util.Date;
 import java.util.List;
 
-import org.anttribe.cas.base.core.constants.Constants;
-import org.anttribe.cas.base.core.entity.CrawlerState;
+import org.anttribe.cas.base.core.type.CrawlerState;
+import org.anttribe.cas.base.infra.constants.Constants;
 
 /**
  * @author zhaoyong

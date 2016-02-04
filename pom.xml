@@ -23,7 +23,6 @@
 		<dom4j.version>1.6.1</dom4j.version>
 		<quartz.version>2.2.1</quartz.version>
 		<jstl.version>1.2</jstl.version>
-		<mysql.version>5.1.22</mysql.version>
 		<spring.version>4.1.4.RELEASE</spring.version>
 		<spring.data.redis.version>1.5.1.RELEASE</spring.data.redis.version>
 		<redis.version>2.7.3</redis.version>
@@ -31,10 +30,9 @@
 		<mybatis-spring.version>1.2.2</mybatis-spring.version>
 		<ehcache.version>2.9.0</ehcache.version>
 		<dbcp.version>1.4</dbcp.version>
-
+		<mysql.version>5.1.22</mysql.version>
+		<dddlib.version>4.3.6</dddlib.version>
 		<components.version>0.0.1-SNAPSHOT</components.version>
-		<opengadget.version>0.0.1-SNAPSHOT</opengadget.version>
-
 		<junit.version>4.11</junit.version>
 	</properties>
 
@@ -95,11 +93,7 @@
 				<artifactId>quartz</artifactId>
 				<version>${quartz.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>${mysql.version}</version>
-			</dependency>
+			
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
@@ -140,31 +134,28 @@
 				<artifactId>jedis</artifactId>
 				<version>${redis.version}</version>
 			</dependency>
-
+			
 			<dependency>
-				<groupId>org.anttribe.components</groupId>
-				<artifactId>component-lang</artifactId>
-				<version>${components.version}</version>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>${mybatis.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.anttribe.opengadget</groupId>
-				<artifactId>opengadget-core</artifactId>
-				<version>${opengadget.version}</version>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-spring</artifactId>
+				<version>${mybatis-spring.version}</version>
 			</dependency>
+			
 			<dependency>
-				<groupId>org.anttribe.opengadget</groupId>
-				<artifactId>opengadget-runtime</artifactId>
-				<version>${opengadget.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>javax.servlet</groupId>
-						<artifactId>servlet-api</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.servlet</groupId>
-						<artifactId>servlet-api</artifactId>
-					</exclusion>
-				</exclusions>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.dayatang.dddlib</groupId>
+				<artifactId>dddlib-domain</artifactId>
+				<version>${dddlib.version}</version>
 			</dependency>
 
 			<dependency>

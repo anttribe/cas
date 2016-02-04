@@ -7,23 +7,26 @@
  */
 package org.anttribe.cas.base.core.entity;
 
+import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
+
 /**
  * 抽象内容属性值
  * 
  * @author zhaoyong
  * @version 2015年11月4日
  */
-public class ContentAttrValue
+public class ContentAttrValue extends MybatisAbstractEntity
 {
+    
     /**
      * id编号
      */
-    private String id;
+    private Long id;
     
     /**
-     * 所属属性
+     * 内容属性
      */
-    private ContentAttribute attribute;
+    private ContentAttribute contentAttr;
     
     /**
      * 属性值
@@ -35,24 +38,52 @@ public class ContentAttrValue
      */
     private Content content;
     
-    public String getId()
+    /**
+     * <默认构造器>
+     */
+    public ContentAttrValue()
+    {
+    }
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder strB = new StringBuilder();
+        strB.append("ContentAttrValue")
+            .append("{")
+            .append("id=")
+            .append(this.getId())
+            .append(',')
+            .append("content=")
+            .append(this.getContent())
+            .append(',')
+            .append("attrValue=")
+            .append(this.getAttrValue())
+            .append(',')
+            .append("contentAttr=")
+            .append(this.getContentAttr())
+            .append("}");
+        return strB.toString();
+    }
+    
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
     
-    public ContentAttribute getAttribute()
+    public ContentAttribute getContentAttr()
     {
-        return attribute;
+        return contentAttr;
     }
     
-    public void setAttribute(ContentAttribute attribute)
+    public void setContentAttr(ContentAttribute contentAttr)
     {
-        this.attribute = attribute;
+        this.contentAttr = contentAttr;
     }
     
     public String getAttrValue()
@@ -74,4 +105,5 @@ public class ContentAttrValue
     {
         this.content = content;
     }
+    
 }

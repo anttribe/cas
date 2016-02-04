@@ -6,13 +6,16 @@
 		<id property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="ordinal" column="ordinal" />
+		<result property="treeCode" column="tree_code" />
 		<result property="createTime" column="create_time" />
 		<association property="parent"
 			javaType="org.anttribe.cas.base.core.entity.Category">
 			<id property="id" column="parent_id" />
 			<result property="name" column="parent_name" />
 		</association>
-		<collection property="children" resultMap="Category-child-resultMap">
+		<collection property="children" javaType="java.util.ArrayList"
+			column="{parent_id=id}" ofType="org.anttribe.cas.base.core.entity.Category"
+			select="queryByCriteria">
 		</collection>
 	</resultMap>
 
@@ -23,8 +26,9 @@
 	<!-- select -->
 	<sql id="select">
         <![CDATA[
-            SELECT t.id, t.name, t.ordinal, t.parent_id, t.create_time
+            SELECT t.id, t.name, t.ordinal, t.parent, t.create_time, t1.name as parent_name, t2.id as child_id
               FROM cas_t_core_category t
+		      LEFT JOIN cas_t_core_category t1 ON t1.id = t.parent
         ]]>
 	</sql>
 
@@ -35,10 +39,10 @@
 				AND t.id = #{id}
 			</if>
 			<if test="null != name and name != ''">
-				AND t.name LIKE CONCAT('%', '${name}', '%')
+				AND t.name LIKE CONCAT('%', #{name}, '%')
 			</if>
 			<if test="null != parent and null != parent.id">
-				AND t.parent_id = #{parent.id}
+				AND t.parent = #{parent.id}
 			</if>
 		</where>
 	</sql>
@@ -53,17 +57,37 @@
 				AND name LIKE CONCAT('%', '${name}', '%')
 			</if>
 			<if test="null != parent and null != parent.id">
-				AND t.parent_id = #{parent.id}
+				AND t.parent = #{parent.id}
 			</if>
 		</where>
 	</sql>
 
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Category">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
+		</selectKey>
 		<![CDATA[
-		    INSERT INTO cas_t_core_category(id, name, ordinal, parent_id, create_time)
-		      VALUES(#{id}, #{name}, #{ordinal}, #{parent.id}, #{createTime})
+		    INSERT INTO cas_t_core_category(name, parent, tree_code, create_time, ordinal)
+		        VALUES(#{name}, #{parent}, #{treeCode}, #{createTime}, #{ordinal})
 		]]>
+	</insert>
+
+	<!-- batchInsert: 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		<![CDATA[
+		    INSERT INTO cas_t_core_category(id, name, parent, tree_code, create_time, ordinal)
+		        VALUES
+		]]>
+		<foreach collection="list" item="item" open="(" close=")"
+			separator=", ">
+			#{id},
+			#{name},
+			#{parent},
+			#{treeCode},
+			#{createTime},
+			#{ordinal}
+		</foreach>
 	</insert>
 
 	<!-- update: 更新单条数据 -->
@@ -79,7 +103,10 @@
 				ordinal = #{ordinal},
 			</if>
 			<if test="null != parent and parent.id != ''">
-				parent_id = #{parent.id},
+				parent = #{parent.id},
+			</if>
+			<if test="null != treeCode and treeCode != ''">
+				tree_code = #{treeCode},
 			</if>
 		</set>
 		<![CDATA[
@@ -87,42 +114,98 @@
         ]]>
 	</update>
 
+	<!-- batchUpdate: 批量更新数据 -->
+	<update id="batchUpdate" parameterType="java.util.List">
+		<![CDATA[
+            UPDATE cas_t_core_category t
+        ]]>
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="name = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != name and name != ''">
+						when #{item.id} then #{name}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="parent = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != parent and parent != ''">
+						when #{item.id} then #{parent}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="tree_code = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != treeCode and treeCode != ''">
+						when #{item.id} then #{treeCode}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="ordinal = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != ordinal and ordinal != ''">
+						when #{item.id} then #{ordinal}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		<![CDATA[
+            WHERE id IN 
+        ]]>
+		<foreach collection="list" separator=", " item="item" open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Category">
 	    <![CDATA[
-            DELETE FROM cas_t_core_category
+            DELETE FROM cas_t_core_category t
         ]]>
 		<include refid="where-no-alias"></include>
 		<!-- 级联删除 -->
 		<if test="null != id and id != ''">
-			OR parent_id = #{id}
+			OR parent = #{id}
 		</if>
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->
 	<select id="queryAll" resultMap="Category-resultMap">
 		<include refid="select"></include>
-		ORDER BY t.create_time
+		<include refid="orderBy"></include>
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
 	<select id="queryById" resultMap="Category-resultMap">
 		<include refid="select"></include>
-		<![CDATA[
-            WHERE id = #{id}
-        ]]>
+		<include refid="where"></include>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->
 	<select id="queryByCriteria" resultMap="Category-resultMap"
-		parameterType="map">
-		<![CDATA[
-		    SELECT t.id, t.name, t.ordinal, t.parent_id, t.create_time, t1.name as parent_name, t2.id as child_id
-              FROM cas_t_core_category t
-		    LEFT JOIN cas_t_core_category t1 ON t1.id = t.parent_id 
-		    LEFT JOIN cas_t_core_category t2 ON t2.parent_id = t.id 
-		]]>
+		parameterType="Map">
+		<include refid="select"></include>
 		<include refid="where"></include>
-		ORDER BY t.create_time
+		<include refid="orderBy"></include>
 	</select>
+
+	<!-- queryDataCount: 根据条件查询数据条数 -->
+	<select id="queryDataCount" resultMap="int" parameterType="Map">
+		<![CDATA[
+            SELECT COUNT(1)
+              FROM cas_t_core_category t
+        ]]>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByPagination: 根据分页条件查询数据 -->
+	<select id="queryByPagination" resultMap="Category-resultMap"
+		parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="orderBy"></include>
+		<include refid="limit"></include>
+	</select>
+
 </mapper>

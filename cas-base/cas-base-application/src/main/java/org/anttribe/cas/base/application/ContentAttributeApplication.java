@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.anttribe.cas.base.core.entity.ContentAttribute;
+import org.anttribe.cas.base.infra.entity.Pagination;
 
 /**
  * @author zhaoyong
@@ -19,24 +20,41 @@ import org.anttribe.cas.base.core.entity.ContentAttribute;
 public interface ContentAttributeApplication
 {
     /**
-     * 根据条件查询内容属性
+     * 列表数据
      * 
-     * @param criteria
+     * @param criteria Map<String, Object>
      * @return List<ContentAttribute>
      */
     List<ContentAttribute> listContentAttributes(Map<String, Object> criteria);
     
     /**
-     * 持久化内容属性信息
+     * 根据分类参数列表数据
+     * 
+     * @param criteria Map<String, Object>
+     * @return Pagination
+     */
+    Pagination listContentAttributes(Map<String, Object> criteria, Pagination pagination);
+    
+    /**
+     * 根据条件获取单条数据
+     * 
+     * @param criteria Map<String, Object>
+     * @return ContentAttribute
+     */
+    ContentAttribute findContentAttribute(Map<String, Object> criteria);
+    
+    /**
+     * 持久化数据
      * 
      * @param contentAttribute ContentAttribute
      */
     void persistentContentAttribute(ContentAttribute contentAttribute);
     
     /**
-     * 删除分类信息
+     * 删除数据
      * 
      * @param contentAttribute ContentAttribute
      */
     void deleteContentAttribute(ContentAttribute contentAttribute);
+    
 }

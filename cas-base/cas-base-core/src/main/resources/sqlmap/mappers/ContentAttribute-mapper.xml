@@ -17,8 +17,9 @@
 	<!-- select -->
 	<sql id="select">
         <![CDATA[
-            SELECT t.id, t.name, t.attr_value_type, t.content_type
+            SELECT t.id, t.name, t.attr_value_type, t.content_type, t1.name as content_type_name
               FROM cas_t_core_content_attr t
+              LEFT JOIN cas_t_core_content_type t1 ON t1.id = t.content_type
         ]]>
 	</sql>
 
@@ -29,7 +30,7 @@
 				AND t.id = #{id}
 			</if>
 			<if test="null != name and name != ''">
-				AND t.name LIKE CONCAT('%', '${name}', '%')
+				AND t.name LIKE CONCAT('%', #{name}, '%')
 			</if>
 			<if test="null != contentType and null != contentType.id">
 				AND t.content_type = #{contentType.id}
@@ -44,20 +45,50 @@
 				AND id = #{id}
 			</if>
 			<if test="null != name and name != ''">
-				AND name LIKE CONCAT('%', '${name}', '%')
+				AND name LIKE CONCAT('%', #{name}, '%')
 			</if>
 			<if test="null != contentType and null != contentType.id">
-				AND dddcontent_type = #{contentType.id}
+				AND content_type = #{contentType.id}
 			</if>
 		</where>
+	</sql>
+	
+	<!-- orderBy -->
+	<sql id="orderBy">
+	    <![CDATA[]]>
+	</sql>
+	
+	<!-- limit -->
+	<sql id="limit">
+	    <if test="null != pagination">
+			limit #{pagination.offset}, #{pagination.pagesize}
+		</if>
 	</sql>
 
 	<!-- insert: 插入单条数据 -->
 	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.ContentAttribute">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
+		</selectKey>
 		<![CDATA[
-		    INSERT INTO cas_t_core_content_attr(id, name, content_type, attr_value_type)
-		      VALUES(#{id}, #{name}, #{contentType.id}, #{attrValueType})
+		    INSERT INTO cas_t_core_content_attr(name, content_type, attr_value_type)
+		      VALUES(#{name}, #{contentType.id}, #{attrValueType})
 		]]>
+	</insert>
+
+	<!-- batchInsert: 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		<![CDATA[
+		    INSERT INTO cas_t_core_content_attr(id, name, attr_value_type, content_type)
+		        VALUES
+		]]>
+		<foreach collection="list" item="item" open="(" close=")"
+			separator=", ">
+			#{id},
+			#{name},
+			#{attrValueType},
+			#{contentType}
+		</foreach>
 	</insert>
 
 	<!-- update: 更新单条数据 -->
@@ -78,6 +109,43 @@
         ]]>
 	</update>
 
+	<!-- batchUpdate: 批量更新数据 -->
+	<update id="batchUpdate" parameterType="java.util.List">
+		<![CDATA[
+            UPDATE cas_t_core_content_attr t
+        ]]>
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="name = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != name and name != ''">
+						when #{item.id} then #{name}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="attr_value_type = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != attrValueType and attrValueType != ''">
+						when #{item.id} then #{attrValueType}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="content_type = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != contentType and contentType != ''">
+						when #{item.id} then #{contentType}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		<![CDATA[
+            WHERE id IN 
+        ]]>
+		<foreach collection="list" separator=", " item="item" open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.ContentAttribute">
 	    <![CDATA[
@@ -87,28 +155,41 @@
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->
-	<select id="queryAll" resultMap="ContentAttribute-resultMap">
+	<select id="queryAll" resultMap="ContentAttr-resultMap">
 		<include refid="select"></include>
-		ORDER BY content_type
+		<include refid="orderBy"></include>
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
-	<select id="queryById" resultMap="ContentAttribute-resultMap">
+	<select id="queryById" resultMap="ContentAttr-resultMap">
 		<include refid="select"></include>
-		<![CDATA[
-            WHERE id = #{id}
-        ]]>
+		<include refid="where"></include>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->
-	<select id="queryByCriteria" resultMap="ContentAttribute-resultMap"
-		parameterType="map">
-		<![CDATA[
-		    SELECT t.id, t.name, t.attr_value_type, t.content_type, t1.id as content_type_id, t1.name as content_type_name
-              FROM cas_t_core_content_attr t
-		    LEFT JOIN cas_t_core_content_type t1 ON t1.id = t.content_type
-		]]>
+	<select id="queryByCriteria" resultMap="ContentAttr-resultMap"
+		parameterType="Map">
+		<include refid="select"></include>
 		<include refid="where"></include>
-		ORDER BY t.content_type
+		<include refid="orderBy"></include>
 	</select>
+
+	<!-- queryDataCount: 根据条件查询数据条数 -->
+	<select id="queryDataCount" resultMap="int" parameterType="Map">
+		<![CDATA[
+            SELECT COUNT(1)
+              FROM cas_t_core_content_attr t
+        ]]>
+		<include refid="where"></include>
+	</select>
+
+	<!-- queryByPagination: 根据分页条件查询数据 -->
+	<select id="queryByPagination" resultMap="ContentAttr-resultMap"
+		parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="orderBy"></include>
+		<include refid="limit"></include>
+	</select>
+
 </mapper>

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anttribe.cas.base.application.ContentAttrXPathApplication;
-import org.anttribe.cas.base.core.entity.CrawlerContentRegular;
+import org.anttribe.cas.base.core.entity.CrawlerRegular;
 import org.anttribe.cas.base.core.entity.Website;
 import org.anttribe.cas.cis.runtime.constants.Constants;
 import org.apache.commons.collections.CollectionUtils;
@@ -60,7 +60,7 @@ public class ContentPageProcessor implements PageProcessor
     /**
      * 内容属性xpath
      */
-    private CrawlerContentRegular contentAttrXPath;
+    private CrawlerRegular contentAttrXPath;
     
     /**
      * <默认构造器>

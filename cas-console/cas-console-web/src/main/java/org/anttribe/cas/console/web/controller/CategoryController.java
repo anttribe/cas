@@ -11,8 +11,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.anttribe.cas.base.infra.common.Result;
+import org.anttribe.cas.base.infra.errorno.CategoryErrorNo;
 import org.anttribe.cas.console.facade.CategoryFacade;
 import org.anttribe.cas.console.facade.dto.CategoryDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +34,7 @@ public class CategoryController
     private CategoryFacade categoryFacade;
     
     @RequestMapping("/index")
-    public String index(HttpServletRequest request, CategoryDTO categoryDTO)
+    public String index(HttpServletRequest request)
     {
         return "/category/list";
     }
@@ -40,50 +43,78 @@ public class CategoryController
     @ResponseBody
     public List<CategoryDTO> listCategories(HttpServletRequest request, CategoryDTO categoryDTO)
     {
-        return categoryFacade.listCategories(categoryDTO);
+        List<CategoryDTO> categorys = this.categoryFacade.listCategorys(categoryDTO);
+        return categorys;
     }
     
-    @RequestMapping("/select.tool")
+    @RequestMapping("/tool/selector")
     public String select(HttpServletRequest request, CategoryDTO categoryDTO)
     {
-        return "/category/selector.tool";
+        return "/category/tool.selector";
     }
     
-    @RequestMapping("/goAdd")
+    @RequestMapping("/add")
     public String goAddCategory()
     {
         return "/category/edit";
     }
     
-    @RequestMapping("/goEdit")
+    @RequestMapping("/edit")
     public String goEditCategory(HttpServletRequest request, CategoryDTO categoryDTO)
     {
-        categoryDTO = categoryFacade.loadCategory(categoryDTO);
-        if (null != categoryDTO)
+        if (null != categoryDTO && null != categoryDTO.getId())
         {
-            request.setAttribute("category", categoryDTO);
-            return "/category/edit";
+            categoryDTO = categoryFacade.loadCategory(categoryDTO);
+            if (null != categoryDTO)
+            {
+                request.setAttribute("category", categoryDTO);
+                return "/category/edit";
+            }
         }
         return "redirect:/category/index";
     }
     
-    @RequestMapping("/edit")
-    public String doEditCategory(HttpServletRequest request, CategoryDTO categoryDTO)
+    @ResponseBody
+    @RequestMapping("/edit/exec")
+    public Result<?> doEditCategory(HttpServletRequest request, CategoryDTO categoryDTO)
     {
+        Result<?> result = new Result<Object>();
         if (null != categoryDTO)
         {
-            categoryFacade.editCategory(categoryDTO);
+            boolean validateResult = this.categoryFacade.validateNameUnique(categoryDTO);
+            if (!validateResult)
+            {
+                result.setResultCode(CategoryErrorNo.CATEGORY_NAME_UNIQUE);
+                return result;
+            }
+            categoryFacade.saveOrUpdateCategory(categoryDTO);
+            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
-        return "redirect:/category/index";
+        
+        return result;
     }
     
-    @RequestMapping("/delete")
-    public String doDeleteCategory(HttpServletRequest request, CategoryDTO categoryDTO)
+    @ResponseBody
+    @RequestMapping("/delete/exec")
+    public Result<?> doDeleteCategory(HttpServletRequest request, CategoryDTO categoryDTO)
     {
+        Result<?> result = new Result<Object>();
         if (null != categoryDTO)
         {
             categoryFacade.deleteCategory(categoryDTO);
+            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
-        return "redirect:/category/index";
+        return result;
+    }
+    
+    @ResponseBody
+    @RequestMapping("/validate/nameUnique")
+    public boolean validateNameUnique(HttpServletRequest request, CategoryDTO categoryDTO)
+    {
+        if (null != categoryDTO && !StringUtils.isEmpty(categoryDTO.getName()))
+        {
+            return this.categoryFacade.validateNameUnique(categoryDTO);
+        }
+        return false;
     }
 }

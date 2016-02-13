@@ -9,6 +9,7 @@ package org.anttribe.cas.console.facade;
 
 import java.util.List;
 
+import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.console.facade.dto.ContentTypeDTO;
 
 /**
@@ -23,7 +24,16 @@ public interface ContentTypeFacade
      * @param contentTypeDTO
      * @return List<ContentTypeDTO>
      */
-    List<ContentTypeDTO> listContentTypes();
+    List<ContentTypeDTO> listContentTypes(ContentTypeDTO contentTypeDTO);
+    
+    /**
+     * 分页列表所有的内容类型
+     * 
+     * @param contentTypeDTO
+     * @param pagination
+     * @return Pagination
+     */
+    Pagination listContentTypes(ContentTypeDTO contentTypeDTO, Pagination pagination);
     
     /**
      * 加载ContentType
@@ -34,11 +44,27 @@ public interface ContentTypeFacade
     ContentTypeDTO loadContentType(ContentTypeDTO contentTypeDTO);
     
     /**
+     * 校验类型名称唯一
+     * 
+     * @param contentTypeDTO
+     * @return
+     */
+    boolean validateNameUnique(ContentTypeDTO contentTypeDTO);
+    
+    /**
+     * 校验类型编码唯一
+     * 
+     * @param contentTypeDTO
+     * @return
+     */
+    boolean validateCodeUnique(ContentTypeDTO contentTypeDTO);
+    
+    /**
      * 添加或修改内容类型
      * 
      * @param contentTypeDTO ContentTypeDTO
      */
-    void editContentType(ContentTypeDTO contentTypeDTO);
+    void saveOrUpdateWebsite(ContentTypeDTO contentTypeDTO);
     
     /**
      * 删除内容类型

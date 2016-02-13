@@ -25,7 +25,7 @@ public class CategoryDTO implements Serializable
     /**
      * 分类id
      */
-    private String id;
+    private Long id;
     
     /**
      * 分类名称
@@ -35,7 +35,7 @@ public class CategoryDTO implements Serializable
     /**
      * 顺序
      */
-    private int ordinal;
+    private Integer ordinal;
     
     /**
      * 父分类
@@ -57,12 +57,12 @@ public class CategoryDTO implements Serializable
      */
     private Date updateTime;
     
-    public String getId()
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -77,12 +77,12 @@ public class CategoryDTO implements Serializable
         this.name = name;
     }
     
-    public int getOrdinal()
+    public Integer getOrdinal()
     {
         return ordinal;
     }
     
-    public void setOrdinal(int ordinal)
+    public void setOrdinal(Integer ordinal)
     {
         this.ordinal = ordinal;
     }

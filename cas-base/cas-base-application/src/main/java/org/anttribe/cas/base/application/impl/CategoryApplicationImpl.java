@@ -112,7 +112,9 @@ public class CategoryApplicationImpl implements CategoryApplication
             return;
         }
         
-        Category tempCategory = Category.load(Category.class, category.getId());
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", category.getId());
+        Category tempCategory = this.findCategory(criteria);
         if (null == tempCategory)
         {
             category.setCreateTime(new Date());

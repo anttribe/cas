@@ -1,12 +1,13 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html lang="en_US">
     <head>
-        <title><spring:message code="app.appname" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css">
+        <title><spring:message code="app.website.title" /></title>
     </head>
     <body>
 	    <div class="clearfix"></div>
@@ -16,18 +17,18 @@
 			    <div class="col-sm-12">
 				    <section class="panel">
 					    <header class="panel-heading">
-						    <span><spring:message code="app.website.action.add" /></span>
+						    <span><spring:message code="app.website.title" /></span>
 					    </header>
 					    <div class="panel-body">
-						    <form role="form" class="" method="post" action="${contextPath}/website/edit">
+						    <form role="form" class="cmxform data-form" method="POST" action="">
 							    <input type="hidden" name="id" value="${website.id}" />
 							    <div class="form-group">
 								    <label for="siteName" class="control-label"><spring:message code="app.website.title.siteName" /></label>
-								    <input type="text" class="form-control" id="siteName" name="siteName" value="${website.siteName}" placeholder="" />
+								    <input type="text" class="form-control" id="siteName" name="siteName" maxLength="30" value="${website.siteName}" placeholder="" />
 							    </div>
 							    <div class="form-group">
 								    <label for="domain" class="control-label"><spring:message code="app.website.title.domain" /></label>
-								    <input type="url" class="form-control" id="domain" name="domain" value="${website.domain}" placeholder="" />
+								    <input type="url" class="form-control" id="domain" name="domain" maxLength="500" value="${website.domain}" placeholder="" />
 							    </div>
 							    <div class="form-group">
                                     <label for="categorySelect"><spring:message code="app.category.title.category" /></label>
@@ -36,11 +37,11 @@
                                 </div>
 							    <div class="form-group">
 								    <label for="charset" class="control-label"><spring:message code="app.website.title.charset" /></label>
-								    <input type="text" class="form-control" id="charset" name="charset" value="${website.charset}" placeholder="" />
+								    <input type="text" class="form-control" id="charset" name="charset" maxLength="30" value="${website.charset}" placeholder="" />
 							    </div>
 							    <div class="form-group">
 								    <label for="userAgent" class="control-label"><spring:message code="app.website.title.userAgent" /></label>
-								    <input type="text" class="form-control" id="userAgent" name="userAgent" value="${website.userAgent}" placeholder="" />
+								    <input type="text" class="form-control" id="userAgent" name="userAgent" maxLength="200" value="${website.userAgent}" placeholder="" />
 							    </div>
 							    <div class="clearfix"></div>
 							    <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
@@ -53,7 +54,6 @@
 	    </div>
 	    <!--body wrapper end-->
 
-	    <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
 	    <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
 	    <script type="text/javascript" src="${contextPath}/static/static/js/website.js"></script>
 	    <script type="text/javascript">
@@ -78,6 +78,66 @@
 					    }
 				    }
 			    });
+			    
+			    $('.data-form').validate({
+	        		focusInvalid: true,
+	        		rules: {
+	        			siteName: {
+	        				required: true,
+	        				maxlength: 30, 
+	        				remote: {
+	                        	type: 'POST',
+	                        	url: contextPath + '/website/validate/nameUnique',
+	                        	data: {
+	                        		id: function(){return $('input[name="id"]').val();},
+	                        		name: function(){return $('input[name="siteName"]').val();}
+	                        	}
+	                        }
+	        			},
+	        			domain: {
+	        				url: true
+	        			}
+	        		},
+	        		messages: {
+	        			siteName: {
+	        				remote: '<spring:message code="app.errorNo.020001" />'
+	        			}
+	        		},
+	        		submitHandler: function(){
+	        			$('.data-form').ajaxSubmit({
+	        				type: 'POST',
+	        				url: '${contextPath}/website/edit/exec',
+	        				success: function(result){
+	        					if(result && result.resultCode){
+	        				    	if(result.resultCode == '000000'){
+	        				    		BootstrapDialog.alert({
+	        				    			type: BootstrapDialog.TYPE_SUCCESS,
+	        				    			message: '<spring:message code="app.common.title.success" />',
+	        				    			callback: function(){
+	        				    				location.href = '${contextPath}/website/index';
+	        				    			}
+	        				    		});
+	        				    	} else if(result.resultCode == '020001'){
+	        				    		BootstrapDialog.alert({
+	        				    			type: BootstrapDialog.TYPE_WARNING,
+	        				    			message: '<spring:message code="app.errorNo.020001" />'
+	        				    		});
+	        				    	} else{
+	        				    		BootstrapDialog.alert({
+	        				    			type: BootstrapDialog.TYPE_WARNING,
+	        				    			message: '<spring:message code="app.errorNo.000001" />'
+	        				    		});
+	        				    	}
+	        				    } else{
+	        				    	BootstrapDialog.alert({
+	        				    		type: BootstrapDialog.TYPE_WARNING,
+	        				    		message: '<spring:message code="app.errorNo.000001" />'
+        				    		});
+	        				    }
+	        				}
+	        			});
+	        		}
+	        	});
 		    });
 	    </script>
     </body>

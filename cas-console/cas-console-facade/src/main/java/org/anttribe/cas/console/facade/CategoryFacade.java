@@ -23,7 +23,7 @@ public interface CategoryFacade
      * @param categoryDTO
      * @return List<CategoryDTO>
      */
-    List<CategoryDTO> listCategories(CategoryDTO categoryDTO);
+    List<CategoryDTO> listCategorys(CategoryDTO categoryDTO);
     
     /**
      * 加载分类信息
@@ -34,11 +34,19 @@ public interface CategoryFacade
     CategoryDTO loadCategory(CategoryDTO categoryDTO);
     
     /**
-     * 添加分类信息
+     * 校验分类名称唯一
+     * 
+     * @param categoryDTO
+     * @return boolean
+     */
+    boolean validateNameUnique(CategoryDTO categoryDTO);
+    
+    /**
+     * 添加或修改分类信息
      * 
      * @param categoryDTO CategoryDTO
      */
-    void editCategory(CategoryDTO categoryDTO);
+    void saveOrUpdateCategory(CategoryDTO categoryDTO);
     
     /**
      * 删除分类信息

@@ -16,22 +16,21 @@ $.extend(cas, {
 		},
 		goEditCategory: function(categoryId){
 			if(categoryId){
-				location.href = contextPath + '/category/goEdit' + '?id=' + categoryId;
+				location.href = contextPath + '/category/edit' + '?id=' + categoryId;
 			}
 		},
 		deleteCategory: function(categoryId){
 			if(categoryId){
-				location.href = contextPath + '/category/delete' + '?id=' + categoryId;
 			}
 		},
-		categorySelector: function(){
+		categorySelector: function(options){
 			return new BootstrapDialog({
 				size: BootstrapDialog.SIZE_NORMAL,
 				type: BootstrapDialog.TYPE_DEFAULT,
 				draggable: true,
 				closable: true,
-	            title: '<div class="model-header-title">选择分类</div>',
-	            message: $('<div></div>').load(contextPath + '/category/select.tool')
+	            title: (options && options.title) || '',
+	            message: $('<div></div>').load(contextPath + '/category/tool/selector')
 	        });
 		},
 		selectCategory: function(category){

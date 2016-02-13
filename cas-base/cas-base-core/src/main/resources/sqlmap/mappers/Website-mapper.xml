@@ -36,6 +36,14 @@
 			<if test="null != category and '' != category.id">
 				AND t.category_id = #{category.id}
 			</if>
+			
+			<!-- 校验唯一性参数 -->
+			<if test="null != notId and '' != notId">
+				<![CDATA[ AND t.id <> #{notId} ]]>
+			</if>
+			<if test="null != uniqueName and '' != uniqueName">
+				AND t.site_name = #{uniqueName}
+			</if>
 		</where>
 	</sql>
 
@@ -73,7 +81,7 @@
 		</selectKey>
 		<![CDATA[
 		    INSERT INTO cas_t_core_website(site_name, domain, logo, charset, user_agent, category_id, create_time)
-		        VALUES(#{siteName}, #{domain}, #{logo}, #{charset}, #{userAgent}, #{categoryId}, #{createTime})
+		        VALUES(#{siteName}, #{domain}, #{logo}, #{charset}, #{userAgent}, #{category.id}, #{createTime})
 		]]>
 	</insert>
 
@@ -91,7 +99,7 @@
 			#{logo},
 			#{charset},
 			#{userAgent},
-			#{categoryId},
+			#{category.id},
 			#{createTime}
 		</foreach>
 	</insert>
@@ -103,28 +111,27 @@
         ]]>
 		<set>
 			<if test="null != siteName and siteName != ''">
-				t.site_name = #{siteName}
+				t.site_name = #{siteName},
 			</if>
 			<if test="null != domain and domain != ''">
-				t.domain = #{domain}
+				t.domain = #{domain},
 			</if>
 			<if test="null != logo and logo != ''">
-				t.logo = #{logo}
+				t.logo = #{logo},
 			</if>
 			<if test="null != charset and charset != ''">
-				t.charset = #{charset}
+				t.charset = #{charset},
 			</if>
 			<if test="null != userAgent and userAgent != ''">
-				t.user_agent = #{userAgent}
+				t.user_agent = #{userAgent},
 			</if>
-			<if test="null != categoryId and categoryId != ''">
-				t.category_id = #{categoryId}
-			</if>
-			<if test="null != createTime and createTime != ''">
-				t.create_time = #{createTime}
+			<if test="null != category and null != category.id and category.id != ''">
+				t.category_id = #{category.id},
 			</if>
 		</set>
-		<include refid="where"></include>
+		<![CDATA[
+            WHERE t.id = #{id}
+        ]]>
 	</update>
 
 	<!-- batchUpdate: 批量更新数据 -->
@@ -170,15 +177,8 @@
 			</trim>
 			<trim prefix="category_id = case id" suffix="end,">
 				<foreach collection="list" item="item">
-					<if test="null != categoryId and categoryId != ''">
-						when #{item.id} then #{categoryId}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="create_time = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != createTime and createTime != ''">
-						when #{item.id} then #{createTime}
+					<if test="null != category and null != category.id and category.id != ''">
+						when #{item.id} then #{category.id}
 					</if>
 				</foreach>
 			</trim>
@@ -195,9 +195,9 @@
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Website">
 	    <![CDATA[
-            DELETE FROM cas_t_core_website t
+            DELETE FROM cas_t_core_website
         ]]>
-		<include refid="where"></include>
+		<include refid="where-no-alias"></include>
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->
@@ -221,7 +221,7 @@
 	</select>
 
 	<!-- queryDataCount: 根据条件查询数据条数 -->
-	<select id="queryDataCount" resultMap="int" parameterType="Map">
+	<select id="queryDataCount" resultType="int" parameterType="Map">
 		<![CDATA[
             SELECT COUNT(1)
               FROM cas_t_core_website t

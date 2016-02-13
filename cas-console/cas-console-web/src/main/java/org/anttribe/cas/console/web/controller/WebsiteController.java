@@ -11,12 +11,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.anttribe.cas.base.infra.common.Result;
+import org.anttribe.cas.base.infra.constants.Keys;
+import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.infra.errorno.WebsiteErrorNo;
 import org.anttribe.cas.console.facade.WebsiteFacade;
 import org.anttribe.cas.console.facade.dto.WebsiteDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 
@@ -32,16 +38,31 @@ public class WebsiteController
     private WebsiteFacade websiteFacade;
     
     @RequestMapping("/index")
-    public String index(HttpServletRequest request, WebsiteDTO websiteDTO)
+    public ModelAndView index(HttpServletRequest request, ModelAndView mv, WebsiteDTO websiteDTO, Pagination pagination)
     {
-        return "/website/list";
+        return this.list(request, mv, websiteDTO, pagination);
     }
     
     @RequestMapping("/list")
-    @ResponseBody
-    public List<WebsiteDTO> listWebsites(HttpServletRequest request, WebsiteDTO websiteDTO)
+    public ModelAndView list(HttpServletRequest request, ModelAndView mv, WebsiteDTO websiteDTO, Pagination pagination)
     {
-        return websiteFacade.listWebsites(websiteDTO);
+        pagination = websiteFacade.listWebsites(websiteDTO, pagination);
+        
+        mv.setViewName("/website/list");
+        mv.addObject(Keys.KEY_PARAM, websiteDTO);
+        mv.addObject(Keys.KEY_PAGE, pagination);
+        if (null != pagination)
+        {
+            mv.addObject(Keys.KEY_PAGE_DATA, pagination.getDatas());
+        }
+        return mv;
+    }
+    
+    @ResponseBody
+    @RequestMapping("/list/exec")
+    public List<WebsiteDTO> doList(HttpServletRequest request, WebsiteDTO websiteDTO)
+    {
+        return this.websiteFacade.listWebsites(websiteDTO);
     }
     
     @RequestMapping("/load")
@@ -51,13 +72,13 @@ public class WebsiteController
         return websiteFacade.loadWebsite(websiteDTO);
     }
     
-    @RequestMapping("/goAdd")
+    @RequestMapping("/add")
     public String goAddWebsite()
     {
         return "/website/edit";
     }
     
-    @RequestMapping("/goEdit")
+    @RequestMapping("/edit")
     public String goEditWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
     {
         websiteDTO = websiteFacade.loadWebsite(websiteDTO);
@@ -69,23 +90,46 @@ public class WebsiteController
         return "redirect:/category/index";
     }
     
-    @RequestMapping("/edit")
-    public String doEditWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
+    @ResponseBody
+    @RequestMapping("/edit/exec")
+    public Result<?> doEditWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
     {
+        Result<?> result = new Result<Object>();
         if (null != websiteDTO)
         {
-            websiteFacade.editWebsite(websiteDTO);
+            boolean validateResult = this.validateNameUnique(request, websiteDTO);
+            if (!validateResult)
+            {
+                result.setResultCode(WebsiteErrorNo.WEBSITE_NAME_UNIQUE);
+                return result;
+            }
+            websiteFacade.saveOrUpdateWebsite(websiteDTO);
+            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
-        return "redirect:/website/index";
+        return result;
     }
     
-    @RequestMapping("/delete")
-    public String doDeleteWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
+    @ResponseBody
+    @RequestMapping("/delete/exec")
+    public Result<?> doDeleteWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
     {
+        Result<?> result = new Result<Object>();
         if (null != websiteDTO)
         {
             websiteFacade.deleteWebsite(websiteDTO);
+            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
-        return "redirect:/website/index";
+        return result;
+    }
+    
+    @ResponseBody
+    @RequestMapping("/validate/nameUnique")
+    public boolean validateNameUnique(HttpServletRequest request, WebsiteDTO websiteDTO)
+    {
+        if (null != websiteDTO && !StringUtils.isEmpty(websiteDTO.getSiteName()))
+        {
+            return this.websiteFacade.validateNameUnique(websiteDTO);
+        }
+        return false;
     }
 }

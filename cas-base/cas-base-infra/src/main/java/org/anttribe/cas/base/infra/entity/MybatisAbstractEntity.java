@@ -192,6 +192,12 @@ public class MybatisAbstractEntity implements Entity
     {
         String statement =
             (new StringBuilder()).append(entityClass.getCanonicalName()).append(".queryDataCount").toString();
-        return Integer.parseInt(getSqlSessionTemplate().selectOne(statement, criteria).toString());
+        Object dataCount = getSqlSessionTemplate().selectOne(statement, criteria);
+        if (null != dataCount)
+        {
+            return Integer.parseInt(dataCount.toString());
+        }
+        
+        return 0;
     }
 }

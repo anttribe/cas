@@ -7,12 +7,14 @@
  */
 package org.anttribe.cas.base.application.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.anttribe.cas.base.core.entity.Crawler;
 import org.anttribe.cas.base.core.entity.CrawlerRegular;
+import org.anttribe.cas.base.core.type.CrawlerState;
 import org.anttribe.cas.base.infra.constants.Constants;
 import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.base.infra.errorno.SystemErrorNo;
@@ -110,25 +112,30 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
         
         if (null == crawler.getId())
         {
+            crawler.setCreateTime(new Date());
+            // 设置默认初始状态
+            crawler.setState(CrawlerState.INIT);
             crawler.save();
             logger.debug("crawler id not there, then save new crawler to DB, crawler: {}", crawler.getId());
-            this.persistentCrawlerContentRegulars(crawler);
+            this.persistentCrawlerRegulars(crawler);
             return;
         }
         
         Crawler tempCrawler = Crawler.load(Crawler.class, crawler.getId());
         if (null == tempCrawler)
         {
+            crawler.setCreateTime(new Date());
+            // 设置默认初始状态
+            crawler.setState(CrawlerState.INIT);
             crawler.save();
             logger.debug("crawler not exist in DB, then save new crawler to DB, crawler: {}", crawler.getId());
-            
-            this.persistentCrawlerContentRegulars(crawler);
+            this.persistentCrawlerRegulars(crawler);
             return;
         }
         crawler.update();
         logger.debug("crawler exist in DB, then update crawler info, crawler: {}", crawler.getId());
         
-        this.persistentCrawlerContentRegulars(crawler);
+        this.persistentCrawlerRegulars(crawler);
     }
     
     /**
@@ -136,18 +143,22 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
      * 
      * @param crawler Crawler
      */
-    private void persistentCrawlerContentRegulars(Crawler crawler)
+    private void persistentCrawlerRegulars(Crawler crawler)
     {
         // 删除数据库中保存的内容属性规则
-        // CrawlerRegular.removeByCrawler(crawler);
-        // 保存内容属性
+        CrawlerRegular deleteRegular = new CrawlerRegular();
+        deleteRegular.setCrawler(crawler);
+        deleteRegular.remove();
+        // 保存爬虫内容属性规则
         List<CrawlerRegular> regulars = crawler.getRegulars();
         if (!CollectionUtils.isEmpty(regulars))
         {
             for (CrawlerRegular regular : regulars)
             {
-                regular.save();
+                regular.setCrawler(crawler);
             }
+            CrawlerRegular.batchSave(CrawlerRegular.class, regulars);
+            
             logger.debug("save regulars to DB, regulars: {}", regulars);
         }
     }
@@ -159,10 +170,12 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
         
         if (null != crawler)
         {
-            crawler.remove();
-            
             // 删除内容属性规则
-            // CrawlerRegular.removeByCrawler(crawler);
+            CrawlerRegular deleteRegular = new CrawlerRegular();
+            deleteRegular.setCrawler(crawler);
+            deleteRegular.remove();
+            
+            crawler.remove();
         }
     }
     

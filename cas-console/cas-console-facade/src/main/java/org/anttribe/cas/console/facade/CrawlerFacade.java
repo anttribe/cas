@@ -9,6 +9,7 @@ package org.anttribe.cas.console.facade;
 
 import java.util.List;
 
+import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.console.facade.dto.CrawlerDTO;
 
 /**
@@ -24,6 +25,23 @@ public interface CrawlerFacade
      * @return List<CrawlerDTO>
      */
     List<CrawlerDTO> listCrawlers(CrawlerDTO crawlerDTO);
+    
+    /**
+     * 分页列表数据
+     * 
+     * @param crawlerDTO
+     * @param pagination
+     * @return Pagination
+     */
+    Pagination listCrawlers(CrawlerDTO crawlerDTO, Pagination pagination);
+    
+    /**
+     * 校验title是否唯一
+     * 
+     * @param crawlerDTO
+     * @return
+     */
+    boolean validateTitleUnique(CrawlerDTO crawlerDTO);
     
     /**
      * 编辑爬虫

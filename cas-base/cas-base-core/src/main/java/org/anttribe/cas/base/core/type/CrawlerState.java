@@ -22,5 +22,5 @@ public enum CrawlerState
     /** 休眠 */
     DORMANCY,
     /** 停止 */
-    Stop;
+    STOP;
 }

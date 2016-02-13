@@ -52,7 +52,7 @@
 		</selectKey>
 		<![CDATA[
 		    INSERT INTO cas_t_core_content(link, content_type, create_time, website)
-		        VALUES(#{link}, #{contentType}, #{createTime}, #{website})
+		        VALUES(#{link}, #{contentType.id}, #{createTime}, #{website.id})
 		]]>
 	</insert>
 
@@ -66,9 +66,9 @@
 			separator=", ">
 			#{id},
 			#{link},
-			#{contentType},
+			#{contentType.id},
 			#{createTime},
-			#{website}
+			#{website.id}
 		</foreach>
 	</insert>
 
@@ -81,11 +81,11 @@
 			<if test="null != link and link != ''">
 				t.link = #{link}
 			</if>
-			<if test="null != contentType and contentType != ''">
-				t.content_type = #{contentType}
+			<if test="null != contentType and contentType.id != ''">
+				t.content_type = #{contentType.id}
 			</if>
-			<if test="null != website and website != ''">
-				t.website = #{website}
+			<if test="null != website and website.id != ''">
+				t.website = #{website.id}
 			</if>
 		</set>
 		<include refid="where"></include>
@@ -106,15 +106,15 @@
 			</trim>
 			<trim prefix="content_type = case id" suffix="end,">
 				<foreach collection="list" item="item">
-					<if test="null != contentType and contentType != ''">
-						when #{item.id} then #{contentType}
+					<if test="null != contentType and contentType.id != ''">
+						when #{item.id} then #{contentType.id}
 					</if>
 				</foreach>
 			</trim>
 			<trim prefix="website = case id" suffix="end,">
 				<foreach collection="list" item="item">
-					<if test="null != website and website != ''">
-						when #{item.id} then #{website}
+					<if test="null != website and website.id != ''">
+						when #{item.id} then #{website.id}
 					</if>
 				</foreach>
 			</trim>
@@ -157,7 +157,7 @@
 	</select>
 
 	<!-- queryDataCount: 根据条件查询数据条数 -->
-	<select id="queryDataCount" resultMap="int" parameterType="Map">
+	<select id="queryDataCount" resultType="int" parameterType="Map">
 		<![CDATA[
             SELECT COUNT(1)
               FROM cas_t_core_content t

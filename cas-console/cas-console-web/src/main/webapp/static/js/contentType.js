@@ -5,7 +5,7 @@ $.extend(cas, {
 	        $.ajax({
 	        	type: 'POST',
 	        	async: false,
-	        	url: contextPath + '/contentType/list',
+	        	url: contextPath + '/contentType/list/exec',
 	        	data: {},
 	        	success: function(result){
 	        		if(result && callback){
@@ -16,7 +16,7 @@ $.extend(cas, {
 		},
     	goEditContentType: function(contentTypeId){
 			if(contentTypeId){
-				location.href = contextPath + '/contentType/goEdit' + '?id=' + contentTypeId;
+				location.href = contextPath + '/contentType/edit' + '?id=' + contentTypeId;
 			}
 		},
 		deleteContentType: function(contentTypeId){

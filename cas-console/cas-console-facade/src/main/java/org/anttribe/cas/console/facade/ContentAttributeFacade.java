@@ -9,6 +9,7 @@ package org.anttribe.cas.console.facade;
 
 import java.util.List;
 
+import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.console.facade.dto.ContentAttributeDTO;
 
 /**
@@ -24,6 +25,14 @@ public interface ContentAttributeFacade
      * @return List<ContentAttributeDTO>
      */
     List<ContentAttributeDTO> listContentAttributes(ContentAttributeDTO contentAttributeDTO);
+    
+    /**
+     * 根据条件列表内容属性
+     * @param contentAttributeDTO
+     * @param pagination
+     * @return
+     */
+    Pagination listContentAttributes(ContentAttributeDTO contentAttributeDTO, Pagination pagination);
     
     /**
      * 加载内容属性数据

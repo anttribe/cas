@@ -11,12 +11,16 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.anttribe.cas.base.infra.common.Result;
+import org.anttribe.cas.base.infra.constants.Keys;
+import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.console.facade.ContentAttributeFacade;
 import org.anttribe.cas.console.facade.dto.ContentAttributeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author zhaoyong
@@ -30,53 +34,76 @@ public class ContentAttributeController
     private ContentAttributeFacade contentAttributeFacade;
     
     @RequestMapping("/index")
-    public String index(HttpServletRequest request)
+    public ModelAndView index(HttpServletRequest request, ModelAndView mv, ContentAttributeDTO contentAttributeDTO,
+        Pagination pagination)
     {
-        return "/content_attribute/list";
+        return this.list(request, mv, contentAttributeDTO, pagination);
     }
     
     @RequestMapping("/list")
-    @ResponseBody
-    public List<ContentAttributeDTO> listCategories(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
+    public ModelAndView list(HttpServletRequest request, ModelAndView mv, ContentAttributeDTO contentAttributeDTO,
+        Pagination pagination)
     {
-        return contentAttributeFacade.listContentAttributes(contentAttributeDTO);
+        pagination = contentAttributeFacade.listContentAttributes(contentAttributeDTO, pagination);
+        
+        mv.setViewName("/contentAttribute/list");
+        mv.addObject(Keys.KEY_PARAM, contentAttributeDTO);
+        mv.addObject(Keys.KEY_PAGE, pagination);
+        if (null != pagination)
+        {
+            mv.addObject(Keys.KEY_PAGE_DATA, pagination.getDatas());
+        }
+        return mv;
     }
     
-    @RequestMapping("/goAdd")
+    @RequestMapping("/list/exec")
+    @ResponseBody
+    public List<ContentAttributeDTO> doList(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
+    {
+        return  contentAttributeFacade.listContentAttributes(contentAttributeDTO);
+    }
+    
+    @RequestMapping("/add")
     public String goAddContentAttribute()
     {
-        return "/content_attribute/edit";
+        return "/contentAttribute/edit";
     }
     
-    @RequestMapping("/goEdit")
+    @RequestMapping("/edit")
     public String goEditContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
     {
         contentAttributeDTO = contentAttributeFacade.loadContentAttribute(contentAttributeDTO);
         if (null != contentAttributeDTO)
         {
             request.setAttribute("contentAttribute", contentAttributeDTO);
-            return "/content_attribute/edit";
+            return "/contentAttribute/edit";
         }
         return "redirect:/contentAttribute/index";
     }
     
-    @RequestMapping("/edit")
-    public String doEditContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
+    @ResponseBody
+    @RequestMapping("/edit/exec")
+    public Result<?> doEditContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
     {
+        Result<?> result = new Result<Object>();
         if (null != contentAttributeDTO)
         {
             contentAttributeFacade.editContentAttribute(contentAttributeDTO);
+            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
-        return "redirect:/contentAttribute/index";
+        return result;
     }
     
-    @RequestMapping("/delete")
-    public String doDeleteContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
+    @ResponseBody
+    @RequestMapping("/delete/exec")
+    public Result<?> doDeleteContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
     {
+        Result<?> result = new Result<Object>();
         if (null != contentAttributeDTO)
         {
             contentAttributeFacade.deleteContentAttribute(contentAttributeDTO);
+            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
-        return "redirect:/contentAttribute/index";
+        return result;
     }
 }

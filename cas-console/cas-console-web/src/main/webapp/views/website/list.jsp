@@ -1,13 +1,13 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html lang="en_US">
     <head>
-        <title><spring:message code="app.appname" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.css" >
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css" >
+        <title><spring:message code="app.website.title" /></title>
     </head>
     <body>
         <div class="clearfix"></div>
@@ -21,22 +21,54 @@
                             <span class="tools pull-right"></span>
                         </header>
                         <div class="panel-body">
-                            <div class="btn-group mb10">
-                                <a href="${contextPath}/website/goAdd" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.website.action.add" /></a>
+                            <div class="search-body">
+                                <div class="btn-group">
+                                    <a href="${contextPath}/website/add" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.website.action.add" /></a>
+                                </div>
+                                <form class="search-form form-inline pull-right" role="form" action="${contextPath}/website/list" method="POST">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" name="siteName" value="<c:out value="${PARAMS.siteName}" />" class="form-control" placeholder="">
+                                            <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="adv-table">
-                                <table id="website-table" class="display table table-striped">
+                            <div class="clearfix"></div>
+                            <div class="mt10 table-responsive">
+                                <table id="website-table" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th><spring:message code="app.website.title.siteName" /></th>
-                                            <th><spring:message code="app.website.title.domain" /></th>
+                                            <th width="60%"><spring:message code="app.website.title.siteName" /></th>
                                             <th><spring:message code="app.category.title.category" /></th>
                                             <th><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <c:forEach items="${PAGE_DATA}" var="website">
+                                            <tr data-id="${website.id}">
+                                                <td>
+                                                    <a href="${website.domain}" target="_blank">
+                                                        <c:choose>
+                                                            <c:when test="${website.logo != null and website.logo != ''}">
+                                                                <img alt="" src="${website.logo}" />
+                                                            </c:when>
+                                                        </c:choose>
+                                                        <span><c:out value="${website.siteName}" /></span>
+                                                    </a>
+                                                </td>
+                                                <td><c:out value="${website.category.name}" /></td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="text-primary edit" title="<spring:message code="app.common.action.edit" />"><i class="fa fa-edit"></i></a>
+                                                    <a href="javascript:void(0);" class="pl10 text-danger delete" title="<spring:message code="app.common.action.delete" />"><i class="fa fa-trash-o"></i></a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
                                     </tbody>
                                 </table>
+                                <%@include file="../components/pagination.jsp" %>
                             </div>
                         </div>
                     </section>
@@ -45,31 +77,22 @@
         </div>
         <!--body wrapper end-->
         
-        <script type="text/javascript" src="${contextPath}/static/assets/jquery-datatable/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/assets/adminEx/js/data-tables/DT_bootstrap.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/static/js/datatable_ext.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/website.js"></script>
         <script type="text/javascript">
-            var showWebsiteDetail = function(website){
-            	if(website){
-            		return '<table>' 
-            		     + '<tr>' + '<td><spring:message code="app.website.title.siteName" />:</td><td>' + (website['siteName'] || '') + '</td>' + '</tr>'
-            		     + '<tr>' + '<td><spring:message code="app.website.title.domain" />:</td><td>' + (website['domain'] || '') + '</td><td><spring:message code="app.category.title.category" />:</td><td>' + ((website['category'] && website['category']['name']) || '') + '</td>' + '</tr>'
-            		     + '<tr>' + '<td><spring:message code="app.website.title.charset" />:</td><td>' + (website['charset'] || '') + '</td><td><spring:message code="app.website.title.userAgent" />:</td><td>' + (website['userAgent'] || '') + '</td>' + '</tr>'
-            		     + '</table>';
-            	}
-            };
-            var goEditWebsite = function(){
+            var goEditWebsite = function(e){
+            	e.preventDefault();
+            	
             	var nTr = $(this).parents('tr');
             	if(nTr){
             		var websiteId = $(nTr).attr('data-id');
             		if(websiteId){
-            			cas.website.goEditWebsite(websiteId);
+            			location.href = contextPath + '/website/edit' + '?id=' + websiteId;
             		}
             	}
             };
-            var goDeleteWebsite = function(){
+            var goDeleteWebsite = function(e){
+            	e.preventDefault();
+            	
             	var nTr = $(this).parents('tr');
             	if(nTr){
             		var websiteId = $(nTr).attr('data-id');
@@ -81,12 +104,37 @@
             				closable: true,
             	            title: '<spring:message code="app.website.delete.title" />',
             	            message: '<spring:message code="app.website.delete.confirm" />',
-            	            btnCancelLabel: '<spring:message code="app.common.action.cancel" />',
-            	            btnOKLabel: '<spring:message code="app.common.action.confirm" />',
             	            btnOKClass: 'btn-warning',
-            	            callback: function(result) {
-            	                if(result) {
-            	                	cas.website.deleteWebsite(websiteId);
+            	            callback: function(r) {
+            	                if(r) {
+            	                	$.ajax({
+            	                		type: 'POST',
+            	                		url: '${contextPath}/website/delete/exec',
+            	                		data: {id: websiteId},
+            	                		success: function(result){
+            	                			if(result && result.resultCode){
+            	        				    	if(result.resultCode == '000000'){
+            	        				    		BootstrapDialog.alert({
+            	        				    			type: BootstrapDialog.TYPE_SUCCESS,
+            	        				    			message: '<spring:message code="app.common.title.success" />',
+            	        				    			callback: function(){
+            	        				    				location.href = '${contextPath}/website/index';
+            	        				    			}
+            	        				    		});
+            	        				    	} else{
+            	        				    		BootstrapDialog.alert({
+            	        				    			type: BootstrapDialog.TYPE_WARNING,
+            	        				    			message: '<spring:message code="app.errorNo.000001" />'
+            	        				    		});
+            	        				    	}
+            	        				    } else{
+            	        				    	BootstrapDialog.alert({
+            	        				    		type: BootstrapDialog.TYPE_WARNING,
+            	        				    		message: '<spring:message code="app.errorNo.000001" />'
+            	    				    		});
+            	        				    }
+            	                		}
+            	                	});
             	                }
             	            }
             	        });
@@ -96,59 +144,8 @@
         </script>
         <script type="text/javascript">
 	        $(function(){
-	        	cas.website.listWebsites({}, function(websites){
-	        		if(websites && websites.length>0){
-	        			var $html = '';
-	        			for(var i=0; i<websites.length; i++){
-	        				var website = websites[i];
-	        				if(website){
-	        					$html += '<tr data-id="' + website['id'] + '">' 
-		        				       + '<td>' + (website['siteName'] || '') + '</td>'
-		        				       + '<td><a href="' + (website['domain'] || '#') + '" target="_blank">' + (website['domain'] || '') + '</a></td>'
-		        				       + '<td>' + ((website['category'] && website['category']['name']) || '') + '</td>'
-		        				       + '<td><a href="javascript:void(0);" class="edit"><i class="fa fa-edit"></i><spring:message code="app.common.action.edit" /></a><a href="javascript:void(0);" class="pl5 delete"><i class="fa fa-trash-o"></i><spring:message code="app.common.action.delete" /></a></td>'
-		        				       + '</tr>';
-	        				}
-	        			}
-	        			if($html){
-	        				$('tbody', '#website-table').empty().append($html);
-	        			}
-	        			
-	        			$('.edit', '#website-table').click(goEditWebsite);
-	        			$('.delete', '#website-table').click(goDeleteWebsite);
-	        		}
-	        		
-	        		var websites = {};
-	        		$('#website-table').dataTable_ext({
-		        		'bAutoWidth': true,
-	     				'bStateSave': true,
-	 		        	'aoColumnDefs': [
-	 		        	],
-			        	'bSort': false,
-	     				'bFilter': false,
-		        		'oLanguage': {
-		        			'sUrl': contextPath + '/static/static/i18n/datatable_zh_CN.txt'
-		        		},
-		        		bRowDetail: true,
-		        		fnRowDetailCallback: function(oTable, nTr){
-		        			if(nTr){
-		        				var websiteId = $(nTr).attr('data-id');
-		        				if(websiteId){
-		        					var website = websites[websiteId];
-		        					if(!website){
-		        						cas.website.loadWebsite(websiteId, function(w){
-		        							if(w){
-		        								website = w;
-		        							}
-		        						});
-		        					}
-		        					return showWebsiteDetail(website);
-		        				}
-		        			}
-		        			return '';
-		        		}
-		        	});
-	        	});
+	        	$('.edit', '#website-table').bind('click', goEditWebsite);
+    			$('.delete', '#website-table').bind('click', goDeleteWebsite);
 	        });
 	    </script>
     </body>

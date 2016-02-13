@@ -32,7 +32,7 @@ public class CategoryFacadeImpl implements CategoryFacade
     private CategoryApplication categoryApplication;
     
     @Override
-    public List<CategoryDTO> listCategories(CategoryDTO categoryDTO)
+    public List<CategoryDTO> listCategorys(CategoryDTO categoryDTO)
     {
         // 将对象转换成Map
         Map<String, Object> criteria = new HashMap<String, Object>();
@@ -40,22 +40,22 @@ public class CategoryFacadeImpl implements CategoryFacade
         criteria.put("name", categoryDTO.getName());
         criteria.put("parent", CategoryAssembler.toEntity(categoryDTO.getParent()));
         
-        List<Category> categories = categoryApplication.listCategories(criteria);
+        List<Category> categories = categoryApplication.listCategorys(criteria);
         return CategoryAssembler.toDTO(categories);
     }
     
     @Override
     public CategoryDTO loadCategory(CategoryDTO categoryDTO)
     {
-        if (null != categoryDTO && !StringUtils.isEmpty(categoryDTO.getId()))
+        if (null != categoryDTO && null != categoryDTO.getId())
         {
             // 将对象转换成Map
             Map<String, Object> criteria = new HashMap<String, Object>();
             criteria.put("id", categoryDTO.getId());
-            List<Category> categories = categoryApplication.listCategories(criteria);
-            if (!CollectionUtils.isEmpty(categories))
+            Category category = categoryApplication.findCategory(criteria);
+            if (null != category)
             {
-                return CategoryAssembler.toDTO(categories.get(0));
+                return CategoryAssembler.toDTO(category);
             }
         }
         
@@ -63,7 +63,26 @@ public class CategoryFacadeImpl implements CategoryFacade
     }
     
     @Override
-    public void editCategory(CategoryDTO categoryDTO)
+    public boolean validateNameUnique(CategoryDTO categoryDTO)
+    {
+        if (null != categoryDTO && !StringUtils.isEmpty(categoryDTO.getName()))
+        {
+            // 将对象转换成Map
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("notId", categoryDTO.getId());
+            criteria.put("uniqueName", categoryDTO.getName());
+            List<Category> categorys = this.categoryApplication.listCategorys(criteria);
+            if (CollectionUtils.isEmpty(categorys))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    @Override
+    public void saveOrUpdateCategory(CategoryDTO categoryDTO)
     {
         Category category = CategoryAssembler.toEntity(categoryDTO);
         if (null != category)

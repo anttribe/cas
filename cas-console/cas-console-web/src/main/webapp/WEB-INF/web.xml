@@ -22,7 +22,7 @@
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
 	<listener>
-		<listener-class>org.anttribe.opengadget.runtime.listener.ApplicationContextLoaderListener</listener-class>
+		<listener-class>org.anttribe.cas.base.infra.web.listener.ApplicationContextLoaderListener</listener-class>
 	</listener>
 
 	<!-- characterEncodingFilter -->

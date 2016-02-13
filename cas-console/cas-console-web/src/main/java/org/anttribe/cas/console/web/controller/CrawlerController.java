@@ -7,16 +7,20 @@
  */
 package org.anttribe.cas.console.web.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
+import org.anttribe.cas.base.infra.common.Result;
+import org.anttribe.cas.base.infra.constants.Keys;
+import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.infra.errorno.CrawlerErrorNo;
 import org.anttribe.cas.console.facade.CrawlerFacade;
 import org.anttribe.cas.console.facade.dto.CrawlerDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author zhaoyong
@@ -30,47 +34,79 @@ public class CrawlerController
     private CrawlerFacade crawlerFacade;
     
     @RequestMapping("/index")
-    public String index(HttpServletRequest request)
+    public ModelAndView index(HttpServletRequest request, ModelAndView mv, CrawlerDTO crawlerDTO, Pagination pagination)
     {
-        return "/crawler/list";
+        return this.listCrawlers(request, mv, crawlerDTO, pagination);
     }
     
     @RequestMapping("/list")
-    @ResponseBody
-    public List<CrawlerDTO> listCrawlers(HttpServletRequest request, CrawlerDTO crawlerDTO)
+    public ModelAndView listCrawlers(HttpServletRequest request, ModelAndView mv, CrawlerDTO crawlerDTO,
+        Pagination pagination)
     {
-        return crawlerFacade.listCrawlers(crawlerDTO);
+        pagination = crawlerFacade.listCrawlers(crawlerDTO, pagination);
+        
+        mv.setViewName("/crawler/list");
+        mv.addObject(Keys.KEY_PARAM, crawlerDTO);
+        mv.addObject(Keys.KEY_PAGE, pagination);
+        if (null != pagination)
+        {
+            mv.addObject(Keys.KEY_PAGE_DATA, pagination.getDatas());
+        }
+        return mv;
     }
     
-    @RequestMapping("/goAdd")
+    @RequestMapping("/add")
     public String goAddCrawler()
     {
         return "/crawler/edit";
     }
     
-    @RequestMapping("/goEdit")
+    @RequestMapping("/edit")
     public String goEditCrawler()
     {
         return "/crawler/edit";
     }
     
-    @RequestMapping("/edit")
-    public String doEditCrawler(HttpServletRequest request, CrawlerDTO crawlerDTO)
+    @RequestMapping("/edit/exec")
+    @ResponseBody
+    public Result<?> doEditCrawler(HttpServletRequest request, CrawlerDTO crawlerDTO)
     {
+        Result<?> result = new Result<Object>();
         if (null != crawlerDTO)
         {
+            boolean validateResult = this.validateTitleUnique(request, crawlerDTO);
+            if (!validateResult)
+            {
+                result.setResultCode(CrawlerErrorNo.CRAWLER_TITLE_UNIQUE);
+                return result;
+            }
             crawlerFacade.editCrawler(crawlerDTO);
+            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
-        return "redirect:/crawler/index";
+        return result;
     }
     
-    @RequestMapping("/delete")
-    public String doDeleteCrawler(HttpServletRequest request, CrawlerDTO crawlerDTO)
+    @RequestMapping("/delete/exec")
+    @ResponseBody
+    public Result<?> doDeleteCrawler(HttpServletRequest request, CrawlerDTO crawlerDTO)
     {
+        Result<?> result = new Result<Object>();
         if (null != crawlerDTO)
         {
             crawlerFacade.deleteCrawler(crawlerDTO);
+            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
-        return "redirect:/crawler/index";
+        return result;
+    }
+    
+    @RequestMapping("/validate/titleUnique")
+    @ResponseBody
+    public boolean validateTitleUnique(HttpServletRequest request, CrawlerDTO crawlerDTO)
+    {
+        if (null != crawlerDTO && !StringUtils.isEmpty(crawlerDTO.getTitle()))
+        {
+            return crawlerFacade.validateTitleUnique(crawlerDTO);
+        }
+        return false;
     }
 }

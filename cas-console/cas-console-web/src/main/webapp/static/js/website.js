@@ -5,11 +5,11 @@ $.extend(cas, {
 	        $.ajax({
 	        	type: 'POST',
 	        	async: false,
-	        	url: contextPath + '/website/list',
+	        	url: contextPath + '/website/list/exec',
 	        	data: criteria || {},
-	        	success: function(result){
-	        		if(result && callback){
-	        			callback.call(this, result);
+	        	success: function(websites){
+	        		if(websites && callback){
+	        			callback.call(this, websites);
 	        		}
 	        	}
 	        });
@@ -31,12 +31,11 @@ $.extend(cas, {
 		},
 		goEditWebsite: function(websiteId){
 			if(websiteId){
-				location.href = contextPath + '/website/goEdit' + '?id=' + websiteId;
+				location.href = contextPath + '/website/edit' + '?id=' + websiteId;
 			}
 		},
 		deleteWebsite: function(websiteId){
 			if(websiteId){
-				location.href = contextPath + '/website/delete' + '?id=' + websiteId;
 			}
 		}
 	}

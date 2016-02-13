@@ -7,18 +7,24 @@
  */
 package org.anttribe.cas.console.facade.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author zhaoyong
  * @version 2015年10月31日
  */
-public class WebsiteDTO
+public class WebsiteDTO implements Serializable
 {
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 4673326250647102583L;
+    
     /**
      * id
      */
-    private String id;
+    private Long id;
     
     /**
      * 网站名
@@ -55,12 +61,12 @@ public class WebsiteDTO
      */
     private Date createTime;
     
-    public String getId()
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }

@@ -13,5 +13,4 @@ package org.anttribe.cas.console.web.constants;
  */
 public final class Constants
 {
-    public static final String DEFAULT_RESULT_CODE = "000000";
 }

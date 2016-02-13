@@ -1,5 +1,5 @@
 /*
- * 文  件   名: CrawlerContentRegularDTO.java
+ * 文  件   名: CrawlerRegularDTO.java
  * 版         本 : (Anttribe).cas-console-facade All rights reserved
  * 描         述 : <描述>
  * 修   改  人: zhaoyong
@@ -7,16 +7,23 @@
  */
 package org.anttribe.cas.console.facade.dto;
 
+import java.io.Serializable;
+
 /**
  * @author zhaoyong
  * @version 2015年11月6日
  */
-public class CrawlerContentRegularDTO
+public class CrawlerRegularDTO implements Serializable
 {
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = -3653334187608956900L;
+    
     /**
      * 编号
      */
-    private String id;
+    private Long id;
     
     /**
      * 所属爬虫
@@ -33,12 +40,12 @@ public class CrawlerContentRegularDTO
      */
     private String regular;
     
-    public String getId()
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }

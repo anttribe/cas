@@ -2,13 +2,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html lang="en_US">
     <head>
-        <title><spring:message code="app.appname" /></title>
+        <title><spring:message code="app.category.title.list" /></title>
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-treetable/css/jquery.treetable.css" >
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/static/css/jquery.treetable.theme.custom.css" >
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -23,14 +23,14 @@
                         </header>
                         <div class="panel-body">
                             <div class="btn-group mb10">
-                                <a href="${contextPath}/category/goAdd" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.category.action.add" /></a>
+                                <a href="${contextPath}/category/add" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.category.action.add" /></a>
                             </div>
                             <div class="table-responsive">
                                 <table id="category-table" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th width="60%"><spring:message code="app.category.title.name" /></th>
-                                            <th width="24%"><spring:message code="app.common.action.operate" /></th>
+                                            <th width=""><spring:message code="app.category.title.name" /></th>
+                                            <th width="10%"><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -45,7 +45,6 @@
         <!--body wrapper end-->
         
         <script type="text/javascript" src="${contextPath}/static/assets/jquery-treetable/js/jquery.treetable.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
         <script type="text/javascript">
             var listCategories = function(parentCategory){
@@ -62,14 +61,16 @@
 	        					'data-tt-parent-id': (data['parent'] && data['parent']['id']) || '',
 	        					'data-tt-branch': (data['children'] && data['children'].length>0 ? true : false),
 	        					'html': '<td>' + (data['name'] || '') + '</td>'
-		        				      + '<td><a href="javascript:void(0);" class="edit"><i class="fa fa-edit"></i><spring:message code="app.common.action.edit" /></a><a href="javascript:void(0);" class="pl5 delete"><i class="fa fa-trash-o"></i><spring:message code="app.common.action.delete" /></a></td>'
+		        				      + '<td><a href="javascript:void(0);" class="text-primary edit" title="<spring:message code="app.common.action.edit" />"><i class="fa fa-edit"></i></a><a href="javascript:void(0);" class="pl10 text-danger delete" title="<spring:message code="app.common.action.delete" />"><i class="fa fa-trash-o"></i></a></td>'
 	        				}));
 	        			}
 	        		}
 	        	});
             	return nTrs;
             };
-            var goEditCategory = function(){
+            var goEditCategory = function(e){
+            	e.preventDefault();
+            	
             	var nTr = $(this).parents('tr');
             	if(nTr){
             		var categoryId = $(nTr).attr('data-tt-id');
@@ -78,7 +79,9 @@
             		}
             	}
             };
-            var goDeleteCategory = function(){
+            var goDeleteCategory = function(e){
+            	e.preventDefault();
+            	
             	var nTr = $(this).parents('tr');
             	if(nTr){
             		var categoryId = $(nTr).attr('data-tt-id');
@@ -88,14 +91,38 @@
             				type: BootstrapDialog.TYPE_WARNING,
             				draggable: true,
             				closable: true,
-            	            title: '<spring:message code="app.category.delete.title" />',
-            	            message: '<spring:message code="app.category.delete.confirm" />',
-            	            btnCancelLabel: '<spring:message code="app.common.action.cancel" />',
-            	            btnOKLabel: '<spring:message code="app.common.action.confirm" />',
-            	            btnOKClass: 'btn-warning',
-            	            callback: function(result) {
-            	                if(result) {
-            	                	cas.category.deleteCategory(categoryId);
+            	            title: '<spring:message code="app.category.title.delete" />',
+            	            message: '<spring:message code="app.category.title.delete.confirm" />',
+            	            callback: function(r) {
+            	                if(r) {
+            	                	$.ajax({
+            	                		type: 'POST',
+            	                		url: '${contextPath}/category/delete/exec',
+            	                		data: {id: categoryId},
+            	                		success: function(result){
+            	                			if(result && result.resultCode){
+            	        				    	if(result.resultCode == '000000'){
+            	        				    		BootstrapDialog.alert({
+            	        				    			type: BootstrapDialog.TYPE_SUCCESS,
+            	        				    			message: '<spring:message code="app.common.title.success" />',
+            	        				    			callback: function(){
+            	        				    				location.href = '${contextPath}/category/index';
+            	        				    			}
+            	        				    		});
+            	        				    	} else{
+            	        				    		BootstrapDialog.alert({
+            	        				    			type: BootstrapDialog.TYPE_WARNING,
+            	        				    			message: '<spring:message code="app.errorNo.000001" />'
+            	        				    		});
+            	        				    	}
+            	        				    } else{
+            	        				    	BootstrapDialog.alert({
+            	        				    		type: BootstrapDialog.TYPE_WARNING,
+            	        				    		message: '<spring:message code="app.errorNo.000001" />'
+            	    				    		});
+            	        				    }
+            	                		}
+            	                	});
             	                }
             	            }
             	        });
@@ -117,8 +144,8 @@
     	        		stringCollapse: '',
     	        		onNodeInitialized: function(){
     	        			// 绑定事件
-    	        			$('.edit', '#category-table').click(goEditCategory);
-    	        			$('.delete', '#category-table').click(goDeleteCategory);
+    	        			$('.edit', '#category-table').unbind('click').bind('click', goEditCategory);
+    	        			$('.delete', '#category-table').unbind('click').bind('click', goDeleteCategory);
     	        		},
     	        		onNodeExpand: function(){
     	        			if(this.children && this.children.length>0){

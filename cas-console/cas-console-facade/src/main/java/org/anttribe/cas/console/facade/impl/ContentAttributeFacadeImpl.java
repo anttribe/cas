@@ -13,11 +13,11 @@ import java.util.Map;
 
 import org.anttribe.cas.base.application.ContentAttributeApplication;
 import org.anttribe.cas.base.core.entity.ContentAttribute;
+import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.console.facade.ContentAttributeFacade;
 import org.anttribe.cas.console.facade.assembler.ContentAttributeAssembler;
 import org.anttribe.cas.console.facade.dto.ContentAttributeDTO;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,10 +45,29 @@ public class ContentAttributeFacadeImpl implements ContentAttributeFacade
         return ContentAttributeAssembler.toDTO(contentAttributes);
     }
     
+    @SuppressWarnings("unchecked")
+    @Override
+    public Pagination listContentAttributes(ContentAttributeDTO contentAttributeDTO, Pagination pagination)
+    {
+        // 将对象转换成Map
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", contentAttributeDTO.getId());
+        criteria.put("name", contentAttributeDTO.getName());
+        criteria.put("attrValueType", contentAttributeDTO.getAttrValueType());
+        criteria.put("contentType", contentAttributeDTO.getContentType());
+        
+        pagination = contentAttributeApplication.listContentAttributes(criteria, pagination);
+        if (null != pagination)
+        {
+            pagination.setDatas(ContentAttributeAssembler.toDTO((List<ContentAttribute>)pagination.getDatas()));
+        }
+        return pagination;
+    }
+    
     @Override
     public ContentAttributeDTO loadContentAttribute(ContentAttributeDTO contentAttributeDTO)
     {
-        if (null != contentAttributeDTO && !StringUtils.isEmpty(contentAttributeDTO.getId()))
+        if (null != contentAttributeDTO && null != contentAttributeDTO.getId())
         {
             // 将对象转换成Map
             Map<String, Object> criteria = new HashMap<String, Object>();

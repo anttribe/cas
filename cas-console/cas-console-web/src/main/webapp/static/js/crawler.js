@@ -14,43 +14,45 @@ $.extend(cas, {
 	        	}
 	        });
 		},
-		_angulars: {},
-		listContentAttrAngulars: function(contentType){
+		_regulars: {},
+		listContentAttrRegulars: function(contentType){
 			if(contentType){
-				var angulars = cas.crawler._angulars[contentType];
-				if(!angulars){
+				var regulars = cas.crawler._regulars[contentType];
+				if(!regulars){
 					cas.contentAttribute.listContentAttributes({
 						'contentType.id': contentType
 					}, function(attributes){
-						var angulars = [];
+						var regulars = [];
 						if(attributes && attributes.length>0){
 							for(var i=0; i<attributes.length; i++){
 								var attribute = attributes[i];
 								if(attribute){
-									angulars.push({
+									regulars.push({
 										attribute: attribute
 									});
 								}
 							}
 						}
-						cas.crawler.showContentAttrAngulars(angulars);
+						cas.crawler.showContentAttrAngulars(regulars);
 					});
 					return;
 				}
-				cas.crawler.showContentAttrAngulars(angulars);
+				cas.crawler.showContentAttrAngulars(regulars);
 			}
 		},
-		showContentAttrAngulars: function(angulars){
+		showContentAttrAngulars: function(regulars){
 			var $html = '';
-			if(angulars && angulars.length>0){
-				cas.crawler._angulars[contentType] = angulars;
-				for(var i=0; i<angulars.length; i++){
-					var angular = angulars[i];
-					if(angular){
+			if(regulars && regulars.length>0){
+				cas.crawler._regulars[contentType] = regulars;
+				for(var i=0; i<regulars.length; i++){
+					var regular = regulars[i];
+					if(regular){
+						console.log(regular);
 						$html += '<div class="form-group">'
-							   + '<label for="' + (angular['id'] || '') + '">' + (angular['attribute'] && angular['attribute']['name'])  + '</label>'
-							   + '<input type="hidden" name="regulars[' + i + '].id" value="' + (angular['id'] || '') + '" />'
-							   + '<input type="text" class="form-control" id="' + (angular['id'] || '') + '" name="regulars[' + i + '].regular" value="' + (angular['regular'] || '') + '" placeholder="" />'
+							   + '<label class="control-label">' + (regular['attribute'] && regular['attribute']['name']) + '</label>'
+							   + '<input type="hidden" name="regulars[' + i + '].id" value="' + (regular['id'] || '') + '" />'
+							   + '<input type="hidden" name="regulars[' + i + '].attribute" value="' + (regular['attribute'] && regular['attribute']['id']) + '" />'
+							   + '<input type="text" class="form-control" name="regulars[' + i + '].regular" value="' + (regular['regular'] || '') + '" placeholder="" />'
 							   + '</div>';
 					}
 				}

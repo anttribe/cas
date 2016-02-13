@@ -36,6 +36,11 @@ public class Crawler extends MybatisAbstractEntity
     private Website website;
     
     /**
+     * 爬虫url地址
+     */
+    private String crawlerUrl;
+    
+    /**
      * 处理2个page之间的间隔时间
      */
     private Integer intervalTime;
@@ -125,6 +130,16 @@ public class Crawler extends MybatisAbstractEntity
         this.website = website;
     }
     
+    public String getCrawlerUrl()
+    {
+        return crawlerUrl;
+    }
+
+    public void setCrawlerUrl(String crawlerUrl)
+    {
+        this.crawlerUrl = crawlerUrl;
+    }
+
     public Integer getIntervalTime()
     {
         return intervalTime;

@@ -1,11 +1,13 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html lang="en_US">
     <head>
-        <title><spring:message code="app.appname" /></title>
+        <title><spring:message code="app.category.title.category" /></title>
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/zTree/css/zTreeStyle/zTreeStyle.css" >
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/zTree/css/metroStyle/metroStyle.css" >
     </head>
@@ -17,8 +19,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <section class="">
-                        <div id="category-list-tree" class="ztree">
-                        </div>
+                        <div id="category-list-tree" class="ztree"></div>
                     </section>
                 </div>
             </div>
@@ -49,6 +50,9 @@
 	                    }
 	                },
 	                callback: {
+	                	onAsyncSuccess: function(event, treeId, treeNode, msg){
+	                		console.log(treeNode);
+	                	},
 	                	onNodeCreated: function(e, treeId, treeNode){
 	                		if(treeNode.children){
 	                			treeNode.isParent = true;

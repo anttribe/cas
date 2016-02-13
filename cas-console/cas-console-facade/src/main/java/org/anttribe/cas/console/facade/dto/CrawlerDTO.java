@@ -7,6 +7,7 @@
  */
 package org.anttribe.cas.console.facade.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -17,12 +18,17 @@ import org.anttribe.cas.base.infra.constants.Constants;
  * @author zhaoyong
  * @version 2015年11月6日
  */
-public class CrawlerDTO
+public class CrawlerDTO implements Serializable
 {
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 823093992375175461L;
+    
     /**
      * id
      */
-    private String id;
+    private Long id;
     
     /**
      * 名称，描述性文字
@@ -33,6 +39,11 @@ public class CrawlerDTO
      * 爬虫站点
      */
     private WebsiteDTO website;
+    
+    /**
+     * 爬虫url地址
+     */
+    private String crawlerUrl;
     
     /**
      * 处理2个page之间的间隔时间
@@ -57,7 +68,7 @@ public class CrawlerDTO
     /**
      * 内容规则
      */
-    private List<CrawlerContentRegularDTO> regulars;
+    private List<CrawlerRegularDTO> regulars;
     
     /**
      * 是否可用
@@ -79,12 +90,12 @@ public class CrawlerDTO
      */
     private CrawlerState state;
     
-    public String getId()
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -107,6 +118,16 @@ public class CrawlerDTO
     public void setWebsite(WebsiteDTO website)
     {
         this.website = website;
+    }
+    
+    public String getCrawlerUrl()
+    {
+        return crawlerUrl;
+    }
+    
+    public void setCrawlerUrl(String crawlerUrl)
+    {
+        this.crawlerUrl = crawlerUrl;
     }
     
     public Integer getIntervalTime()
@@ -149,12 +170,12 @@ public class CrawlerDTO
         this.contentType = contentType;
     }
     
-    public List<CrawlerContentRegularDTO> getRegulars()
+    public List<CrawlerRegularDTO> getRegulars()
     {
         return regulars;
     }
     
-    public void setRegulars(List<CrawlerContentRegularDTO> regulars)
+    public void setRegulars(List<CrawlerRegularDTO> regulars)
     {
         this.regulars = regulars;
     }

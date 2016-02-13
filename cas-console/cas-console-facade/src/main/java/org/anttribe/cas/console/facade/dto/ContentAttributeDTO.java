@@ -7,16 +7,23 @@
  */
 package org.anttribe.cas.console.facade.dto;
 
+import java.io.Serializable;
+
 /**
  * @author zhaoyong
  * @version 2015年11月6日
  */
-public class ContentAttributeDTO
+public class ContentAttributeDTO implements Serializable
 {
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 641271439132402925L;
+    
     /**
      * id编号
      */
-    private String id;
+    private Long id;
     
     /**
      * 属性名
@@ -33,12 +40,12 @@ public class ContentAttributeDTO
      */
     private String attrValueType;
     
-    public String getId()
+    public Long getId()
     {
         return id;
     }
     
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }

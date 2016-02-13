@@ -28,6 +28,7 @@ public class CrawlerAssembler
             CrawlerDTO crawlerDTO = new CrawlerDTO();
             crawlerDTO.setId(crawler.getId());
             crawlerDTO.setTitle(crawler.getTitle());
+            crawlerDTO.setCrawlerUrl(crawler.getCrawlerUrl());
             crawlerDTO.setWebsite(WebsiteAssembler.toDTO(crawler.getWebsite()));
             crawlerDTO.setContentType(ContentTypeAssembler.toDTO(crawler.getContentType()));
             crawlerDTO.setIntervalTime(crawler.getIntervalTime());
@@ -70,6 +71,7 @@ public class CrawlerAssembler
             Crawler crawler = new Crawler();
             crawler.setId(crawlerDTO.getId());
             crawler.setTitle(crawlerDTO.getTitle());
+            crawler.setCrawlerUrl(crawlerDTO.getCrawlerUrl());
             crawler.setWebsite(WebsiteAssembler.toEntity(crawlerDTO.getWebsite()));
             crawler.setContentType(ContentTypeAssembler.toEntity(crawlerDTO.getContentType()));
             crawler.setIntervalTime(crawlerDTO.getIntervalTime());
@@ -79,7 +81,7 @@ public class CrawlerAssembler
             crawler.setCrawlTime(crawlerDTO.getCrawlTime());
             crawler.setCreateTime(crawlerDTO.getCreateTime());
             crawler.setAvailable(crawlerDTO.isAvailable());
-            crawler.setRegulars(CrawlerContentRegularAssembler.toEntity(crawlerDTO.getRegulars()));
+            crawler.setRegulars(CrawlerRegularAssembler.toEntity(crawlerDTO.getRegulars()));
             
             return crawler;
         }

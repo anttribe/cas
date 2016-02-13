@@ -6,7 +6,7 @@
 .stepy-header li span { font-size: 12px; }
 .stepy-header li div { font-size: 16px; font-weight: normal; text-shadow: none; }
 
-.stepy-step { margin-bottom: 50px; border: none; padding-bottom: 50px; width: 100%; color  }
+.stepy-step { margin-bottom: 50px; border: none; padding-bottom: 50px; width: 100%; }
 .stepy-step legend { color: #65CEA7; font-size: 16px; border-bottom: 1px dotted #ddd; padding-bottom: 10px; }
 .stepy-step label { font-size: 1.0em; font-weight: normal; }
 .stepy-step input, .stepy-step textarea, .stepy-step select { margin-left: 0 !important; border: 1px solid #ccc; font-size: 1.0em; height:34px; width: 100%; }

@@ -1,12 +1,13 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html lang="en_US">
     <head>
-        <title><spring:message code="app.appname" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/bootstrap3-dialog/css/bootstrap-dialog.min.css" >
+        <title><spring:message code="app.crawler.title" /></title>
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-stepy/css/jquery.stepy.css" >
         <link rel="stylesheet" type="text/css" href="${contextPath}/static/static/css/jquery.stepy.theme.custom.css" >
     </head>
@@ -21,31 +22,37 @@
                             <span><spring:message code="app.crawler.action.add" /></span>
                         </header>
                         <div class="panel-body">
-                            <div class="stepy-tab">
-                            </div>
-                            <form id="crawler-form" method="post" action="${contextPath}/crawler/edit">
+                            <div class="stepy-tab"></div>
+                            <form id="crawler-form" class="cmxform data-form" method="POST">
                                 <fieldset title="<spring:message code="app.crawler.wizard.foundation" />">
-                                    <legend><spring:message code="app.crawler.wizard.foundation" /></legend>
+                                    <legend><spring:message code="app.crawler.wizard.foundation.legend" /></legend>
                                     <div class="form-group">
                                         <label for="title"><spring:message code="app.crawler.title.title" /></label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="" />
+                                        <input type="text" class="form-control" id="title" name="title" maxLength="30" placeholder="" />
                                     </div>
                                     <div class="form-group">
                                         <label for="website"><spring:message code="app.crawler.title.website" /></label>
                                         <select class="form-control" id="website" name="website.id">
+                                            <option value=""><spring:message code="app.common.title.select" /></option>
                                         </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="title"><spring:message code="app.crawler.title.crawlerUrl" /></label>
+                                        <input type="text" class="form-control" id="crawlerUrl" name="crawlerUrl" maxLength="500" placeholder="" />
                                     </div>
                                 </fieldset>
                                 <fieldset title="<spring:message code="app.crawler.wizard.contentAttrRegulars" />">
-                                    <legend><spring:message code="app.crawler.wizard.contentAttrRegulars" /></legend>
+                                    <legend><spring:message code="app.crawler.wizard.contentAttrRegulars.legend" /></legend>
                                     <div class="form-group">
                                         <label for="contentType"><spring:message code="app.crawler.title.contentType" /></label>
-                                        <select class="form-control" id="contentType" name="contentType.id"></select>
+                                        <select class="form-control" id="contentType" name="contentType.id">
+                                            <option value=""><spring:message code="app.common.title.select" /></option>
+                                        </select>
                                     </div>
                                     <div id="contentAttrRegulars"></div>
                                 </fieldset>
                                 <fieldset title="<spring:message code="app.crawler.wizard.runtime" />">
-                                    <legend><spring:message code="app.crawler.wizard.runtime" /></legend>
+                                    <legend><spring:message code="app.crawler.wizard.runtime.legend" /></legend>
                                     <div class="form-group">
                                         <label for="intervalTime"><spring:message code="app.crawler.title.intervalTime" /></label>
                                         <input type="text" class="form-control" id="intervalTime" name="intervalTime" placeholder="" />
@@ -68,7 +75,6 @@
         </div>
         <!--body wrapper end-->
         
-        <script type="text/javascript" src="${contextPath}/static/assets/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/assets/jquery-stepy/js/jquery.stepy.min.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/website.js"></script>
         <script type="text/javascript" src="${contextPath}/static/static/js/contentType.js"></script>
@@ -76,7 +82,7 @@
         <script type="text/javascript" src="${contextPath}/static/static/js/crawler.js"></script>
         <script type="text/javascript">
             $(function(){
-            	// 站点初始化
+            	// 初始化站点下拉选择
             	cas.website.listWebsites({}, function(websites){
             		if(websites && websites.length>0){
             			var $html = '';
@@ -86,7 +92,7 @@
             					$html += '<option value="' + website['id'] + '">' + website['siteName'] + '</option>';
             				}
             			}
-            			$('#website').empty().append($html);
+            			$('#website').append($html);
             		}
             	});
             	// 内容类型初始化
@@ -99,24 +105,11 @@
             					$html += '<option value="' + contentType['id'] + '">' + contentType['name'] + '</option>';
             				}
             			}
-            			$('#contentType').empty().append($html).change(function(){
-            				cas.crawler.listContentAttrAngulars($(this).val());
+            			$('#contentType').append($html).change(function(){
+            				cas.crawler.listContentAttrRegulars($(this).val());
             		    });
             		}
             	});
-            });
-        </script>
-        <script type="text/javascript">
-            $(function(){
-            	// 页面数据初始化
-            	var contentType = '${contentType}';
-            	if(contentType){
-            		//获取已经配置的属性规则展现
-            		$('option[value="' + contentType + '"]', '#contentType').attr('selected', true);
-            	} else{
-            		contentType = $('#contentType').val();
-                	cas.crawler.listContentAttrAngulars(contentType);
-            	}
             });
         </script>
         <script type="text/javascript">
@@ -127,8 +120,91 @@
                     nextLabel: '<spring:message code="app.common.wizard.next" />',
                     titleClick: true,
                     titleTarget: '.stepy-tab',
-                    legend: true
+                    legend: true,
+                    block: true,
+                    validate: true
         	    });
+        	    $('#crawler-form').validate({
+	        		focusInvalid: true,
+	        		rules: {
+	        			title: {
+	        				required: true,
+	        				maxlength: 30,
+	        				remote: {
+	                        	type: 'POST',
+	                        	url: contextPath + '/crawler/validate/titleUnique',
+	                        	data: {
+	                        		id: function(){ return ($('input[name="id"]').val() || ''); },
+	                        		title: function(){ return ($('input[name="title"]').val() || '');}
+	                        	}
+	                        }
+	        			},
+	        			'website.id': {
+	        				required: true
+	        			},
+	        			crawlerUrl: {
+	        				required: true,
+	        				url: true
+	        			},
+	        			'contentType.id': {
+	        				required: true
+	        			},
+	        			intervalTime: {
+	        				digits: true,
+	        				min: 0,
+	        				max: 999999999
+	        			},
+	        			retryTimes: {
+	        				digits: true,
+	        				min: 0,
+	        				max: 5
+	        			},
+	        			timeout: {
+	        				digits: true,
+	        				min: 0,
+	        				max: 999999999
+	        			}
+	        		},
+	        		messages: {
+	        			title: {
+	        				remote: '<spring:message code="app.errorNo.040001" />'
+	        			}
+	        		},
+	        		submitHandler: function(){
+	        			$('.data-form').ajaxSubmit({
+	        				type: 'POST',
+	        				url: '${contextPath}/crawler/edit/exec',
+	        				success: function(result){
+	        					if(result && result.resultCode){
+	        				    	if(result.resultCode == '000000'){
+	        				    		BootstrapDialog.alert({
+	        				    			type: BootstrapDialog.TYPE_SUCCESS,
+	        				    			message: '<spring:message code="app.common.title.success" />',
+	        				    			callback: function(){
+	        				    				location.href = '${contextPath}/crawler/index';
+	        				    			}
+	        				    		});
+	        				    	} else if(result.resultCode == '040001'){
+	        				    		BootstrapDialog.alert({
+	        				    			type: BootstrapDialog.TYPE_WARNING,
+	        				    			message: '<spring:message code="app.errorNo.040001" />'
+	        				    		});
+	        				    	} else{
+	        				    		BootstrapDialog.alert({
+	        				    			type: BootstrapDialog.TYPE_WARNING,
+	        				    			message: '<spring:message code="app.errorNo.000001" />'
+	        				    		});
+	        				    	}
+	        				    } else{
+	        				    	BootstrapDialog.alert({
+	        				    		type: BootstrapDialog.TYPE_WARNING,
+	        				    		message: '<spring:message code="app.errorNo.000001" />'
+        				    		});
+	        				    }
+	        				}
+	        			});
+	        		}
+	        	});
             });
         </script>
     </body>

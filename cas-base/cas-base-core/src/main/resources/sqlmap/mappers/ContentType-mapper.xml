@@ -28,6 +28,17 @@
 			<if test="null != code and null != code">
 				AND t.code = #{code}
 			</if>
+
+			<!-- 校验唯一性参数 -->
+			<if test="null != notId and '' != notId">
+				<![CDATA[ AND t.id <> #{notId} ]]>
+			</if>
+			<if test="null != uniqueName and '' != uniqueName">
+				AND t.name = #{uniqueName}
+			</if>
+			<if test="null != uniqueCode and '' != uniqueCode">
+				AND t.code = #{uniqueCode}
+			</if>
 		</where>
 	</sql>
 
@@ -86,17 +97,17 @@
 	<!-- update: 更新单条数据 -->
 	<update id="update" parameterType="org.anttribe.cas.base.core.entity.ContentType">
         <![CDATA[
-            UPDATE cas_t_core_content_type t
+            UPDATE cas_t_core_content_type
         ]]>
 		<set>
 			<if test="null != name and name != ''">
-				t.name = #{name}
+				name = #{name},
 			</if>
 			<if test="null != code and code != ''">
-				t.code = #{code}
+				code = #{code},
 			</if>
 		</set>
-		<include refid="where"></include>
+		<include refid="where-no-alias"></include>
 	</update>
 
 	<!-- batchUpdate: 批量更新数据 -->
@@ -132,9 +143,9 @@
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.ContentType">
 	    <![CDATA[
-            DELETE FROM cas_t_core_content_type t
+            DELETE FROM cas_t_core_content_type
         ]]>
-		<include refid="where"></include>
+		<include refid="where-no-alias"></include>
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->
@@ -158,7 +169,7 @@
 	</select>
 
 	<!-- queryDataCount: 根据条件查询数据条数 -->
-	<select id="queryDataCount" resultMap="int" parameterType="Map">
+	<select id="queryDataCount" resultType="int" parameterType="Map">
 		<![CDATA[
             SELECT COUNT(1)
               FROM cas_t_core_content_type t

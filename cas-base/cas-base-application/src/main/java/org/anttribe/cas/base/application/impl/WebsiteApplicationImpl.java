@@ -8,6 +8,7 @@
 package org.anttribe.cas.base.application.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,7 +82,6 @@ public class WebsiteApplicationImpl implements WebsiteApplication
             logger.warn("persistenting website to DB, param website is null.");
             throw new UnifyException(SystemErrorNo.PARAMETER_IS_NULL);
         }
-        
         if (StringUtils.isEmpty(website.getSiteName()))
         {
             logger.warn("persistenting website to DB, param website name is null.");
@@ -92,12 +92,13 @@ public class WebsiteApplicationImpl implements WebsiteApplication
         {
             website.setCreateTime(new Date());
             website.save();
-            
             logger.debug("website's id not there, then save new website to DB, website: {}", website.getId());
             return;
         }
         
-        Website tempWebsite = Website.load(Website.class, website.getId());
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", website.getId());
+        Website tempWebsite =this.findWebsite(criteria);
         if (null == tempWebsite)
         {
             website.setCreateTime(new Date());

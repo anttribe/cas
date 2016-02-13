@@ -14,6 +14,20 @@ package org.anttribe.cas.base.infra.constants;
 public class Constants
 {
     /**
+     * 公用模块
+     * 
+     * @author zhaoyong
+     * @version 2016年2月8日
+     */
+    public class Common
+    {
+        /**
+         * 默认的操作结果: 成功
+         */
+        public static final String DEFAULT_RESULT_CODE = "000000";
+    }
+    
+    /**
      * 爬虫模块相关常量定义
      * 
      * @author zhaoyong

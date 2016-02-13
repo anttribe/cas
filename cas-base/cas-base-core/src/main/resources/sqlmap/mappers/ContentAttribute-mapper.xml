@@ -17,7 +17,7 @@
 	<!-- select -->
 	<sql id="select">
         <![CDATA[
-            SELECT t.id, t.name, t.attr_value_type, t.content_type, t1.name as content_type_name
+            SELECT t.id, t.name, t.attr_value_type, t.content_type, t1.id AS content_type_id, t1.name AS content_type_name
               FROM cas_t_core_content_attr t
               LEFT JOIN cas_t_core_content_type t1 ON t1.id = t.content_type
         ]]>
@@ -52,15 +52,15 @@
 			</if>
 		</where>
 	</sql>
-	
+
 	<!-- orderBy -->
 	<sql id="orderBy">
 	    <![CDATA[]]>
 	</sql>
-	
+
 	<!-- limit -->
 	<sql id="limit">
-	    <if test="null != pagination">
+		<if test="null != pagination">
 			limit #{pagination.offset}, #{pagination.pagesize}
 		</if>
 	</sql>
@@ -155,19 +155,19 @@
 	</delete>
 
 	<!-- queryAll: 查询所有数据 -->
-	<select id="queryAll" resultMap="ContentAttr-resultMap">
+	<select id="queryAll" resultMap="ContentAttribute-resultMap">
 		<include refid="select"></include>
 		<include refid="orderBy"></include>
 	</select>
 
 	<!-- queryById: 根据id查询单条数据 -->
-	<select id="queryById" resultMap="ContentAttr-resultMap">
+	<select id="queryById" resultMap="ContentAttribute-resultMap">
 		<include refid="select"></include>
 		<include refid="where"></include>
 	</select>
 
 	<!-- queryByCriteria: 根据条件查询数据 -->
-	<select id="queryByCriteria" resultMap="ContentAttr-resultMap"
+	<select id="queryByCriteria" resultMap="ContentAttribute-resultMap"
 		parameterType="Map">
 		<include refid="select"></include>
 		<include refid="where"></include>
@@ -175,7 +175,7 @@
 	</select>
 
 	<!-- queryDataCount: 根据条件查询数据条数 -->
-	<select id="queryDataCount" resultMap="int" parameterType="Map">
+	<select id="queryDataCount" resultType="int" parameterType="Map">
 		<![CDATA[
             SELECT COUNT(1)
               FROM cas_t_core_content_attr t
@@ -184,7 +184,7 @@
 	</select>
 
 	<!-- queryByPagination: 根据分页条件查询数据 -->
-	<select id="queryByPagination" resultMap="ContentAttr-resultMap"
+	<select id="queryByPagination" resultMap="ContentAttribute-resultMap"
 		parameterType="Map">
 		<include refid="select"></include>
 		<include refid="where"></include>

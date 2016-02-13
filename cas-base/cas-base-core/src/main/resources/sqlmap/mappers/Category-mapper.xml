@@ -10,11 +10,11 @@
 		<result property="createTime" column="create_time" />
 		<association property="parent"
 			javaType="org.anttribe.cas.base.core.entity.Category">
-			<id property="id" column="parent_id" />
+			<id property="id" column="parent" />
 			<result property="name" column="parent_name" />
 		</association>
 		<collection property="children" javaType="java.util.ArrayList"
-			column="{parent_id=id}" ofType="org.anttribe.cas.base.core.entity.Category"
+			column="{parent.id=id}" ofType="org.anttribe.cas.base.core.entity.Category"
 			select="queryByCriteria">
 		</collection>
 	</resultMap>
@@ -29,6 +29,7 @@
             SELECT t.id, t.name, t.ordinal, t.parent, t.create_time, t1.name as parent_name, t2.id as child_id
               FROM cas_t_core_category t
 		      LEFT JOIN cas_t_core_category t1 ON t1.id = t.parent
+		      LEFT JOIN cas_t_core_category t2 ON t2.parent = t.id
         ]]>
 	</sql>
 
@@ -41,8 +42,20 @@
 			<if test="null != name and name != ''">
 				AND t.name LIKE CONCAT('%', #{name}, '%')
 			</if>
-			<if test="null != parent and null != parent.id">
+			<if
+				test="null == id and (null == parent or null == parent.id or '' == parent.id)">
+				AND t.parent IS NULL
+			</if>
+			<if test="null != parent and null != parent.id and '' != parent.id">
 				AND t.parent = #{parent.id}
+			</if>
+
+			<!-- 校验唯一性参数 -->
+			<if test="null != notId and '' != notId">
+				<![CDATA[ AND t.id <> #{notId} ]]>
+			</if>
+			<if test="null != uniqueName and '' != uniqueName">
+				AND t.name = #{uniqueName}
 			</if>
 		</where>
 	</sql>
@@ -57,9 +70,21 @@
 				AND name LIKE CONCAT('%', '${name}', '%')
 			</if>
 			<if test="null != parent and null != parent.id">
-				AND t.parent = #{parent.id}
+				AND parent = #{parent.id}
 			</if>
 		</where>
+	</sql>
+
+	<!-- orderBy -->
+	<sql id="orderBy">
+	    <![CDATA[]]>
+	</sql>
+
+	<!-- limit -->
+	<sql id="limit">
+		<if test="null != pagination">
+			limit #{pagination.offset}, #{pagination.pagesize}
+		</if>
 	</sql>
 
 	<!-- insert: 插入单条数据 -->
@@ -69,7 +94,7 @@
 		</selectKey>
 		<![CDATA[
 		    INSERT INTO cas_t_core_category(name, parent, tree_code, create_time, ordinal)
-		        VALUES(#{name}, #{parent}, #{treeCode}, #{createTime}, #{ordinal})
+		        VALUES(#{name}, #{parent.id}, #{treeCode}, #{createTime}, #{ordinal})
 		]]>
 	</insert>
 
@@ -83,7 +108,7 @@
 			separator=", ">
 			#{id},
 			#{name},
-			#{parent},
+			#{parent.id},
 			#{treeCode},
 			#{createTime},
 			#{ordinal}
@@ -129,8 +154,8 @@
 			</trim>
 			<trim prefix="parent = case id" suffix="end,">
 				<foreach collection="list" item="item">
-					<if test="null != parent and parent != ''">
-						when #{item.id} then #{parent}
+					<if test="null != parent and parent.id != ''">
+						when #{item.id} then #{parent.id}
 					</if>
 				</foreach>
 			</trim>
@@ -161,7 +186,7 @@
 	<!-- delete: 删除单条数据 -->
 	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Category">
 	    <![CDATA[
-            DELETE FROM cas_t_core_category t
+            DELETE FROM cas_t_core_category
         ]]>
 		<include refid="where-no-alias"></include>
 		<!-- 级联删除 -->
@@ -191,7 +216,7 @@
 	</select>
 
 	<!-- queryDataCount: 根据条件查询数据条数 -->
-	<select id="queryDataCount" resultMap="int" parameterType="Map">
+	<select id="queryDataCount" resultType="Integer" parameterType="Map">
 		<![CDATA[
             SELECT COUNT(1)
               FROM cas_t_core_category t

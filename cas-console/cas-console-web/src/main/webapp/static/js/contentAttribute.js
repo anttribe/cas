@@ -5,7 +5,7 @@ $.extend(cas, {
 	        $.ajax({
 	        	type: 'POST',
 	        	async: false,
-	        	url: contextPath + '/contentAttribute/list',
+	        	url: contextPath + '/contentAttribute/list/exec',
 	        	data: criteria || {},
 	        	success: function(result){
 	        		if(callback){

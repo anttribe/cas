@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en_US">
     <head>
-        <title><spring:message code="app.appname" /></title>
+        <title><spring:message code="app.contentAttribute.title" /></title>
     </head>
     <body>
         <div class="clearfix"></div>
@@ -18,15 +18,16 @@
                             <span><spring:message code="app.contentAttribute.action.add" /></span>
                         </header>
                         <div class="panel-body">
-                            <form role="form" method="post" action="${contextPath}/contentAttribute/edit">
+                            <form role="form" class="cmxform data-form" method="POST">
                                 <input type="hidden" name="id" value="${contentAttribute.id}" />
                                 <div class="form-group">
                                     <label for="name"><spring:message code="app.contentAttribute.title.name" /></label>
-                                    <input type="text" class="form-control" id="name" name="name" value="${contentAttribute.name}" placeholder="" />
+                                    <input type="text" class="form-control" id="name" name="name" maxLength="30" value="${contentAttribute.name}" placeholder="" />
                                 </div>
                                 <div class="form-group">
                                     <label for="contentType"><spring:message code="app.contentType.title.contentType" /></label>
                                     <select class="form-control" id="contentType" name="contentType.id">
+                                        <option value="">---请选择---</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
@@ -52,9 +53,54 @@
             					$html += '<option value="' + contentType['id'] + '" ' + (contentTypeId && contentType['id'] == contentTypeId ? "selected" : "") + '>' + contentType['name'] + '</option>';
             				}
             			}
-            			$('#contentType').empty().append($html);
+            			$('#contentType').append($html);
             		}
             	});
+            });
+        </script>
+        <script type="text/javascript">
+            $(function(){
+            	$('.data-form').validate({
+	        		focusInvalid: true,
+	        		rules: {
+	        			name: {
+	        				required: true,
+	        				maxlength: 30
+	        			},
+	        			'contentType.id': {
+	        				required: true
+	        			}
+	        		},
+	        		submitHandler: function(){
+	        			$('.data-form').ajaxSubmit({
+	        				type: 'POST',
+	        				url: '${contextPath}/contentAttribute/edit/exec',
+	        				success: function(result){
+	        					if(result && result.resultCode){
+	        				    	if(result.resultCode == '000000'){
+	        				    		BootstrapDialog.alert({
+	        				    			type: BootstrapDialog.TYPE_SUCCESS,
+	        				    			message: '<spring:message code="app.common.title.success" />',
+	        				    			callback: function(){
+	        				    				location.href = '${contextPath}/contentAttribute/index';
+	        				    			}
+	        				    		});
+	        				    	} else{
+	        				    		BootstrapDialog.alert({
+	        				    			type: BootstrapDialog.TYPE_WARNING,
+	        				    			message: '<spring:message code="app.errorNo.000001" />'
+	        				    		});
+	        				    	}
+	        				    } else{
+	        				    	BootstrapDialog.alert({
+	        				    		type: BootstrapDialog.TYPE_WARNING,
+	        				    		message: '<spring:message code="app.errorNo.000001" />'
+        				    		});
+	        				    }
+	        				}
+	        			});
+	        		}
+	        	});
             });
         </script>
     </body>

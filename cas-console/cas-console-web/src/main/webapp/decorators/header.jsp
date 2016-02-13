@@ -17,7 +17,7 @@
     <a class="toggle-btn"><i class="fa fa-bars"></i></a>
     <!--toggle button end-->
 
-    <c:if test="null != USER_SESSION">
+    <c:if test="${null != USER_SESSION}">
         <!--notification menu start -->
         <div class="menu-right">
             <ul class="notification-menu">

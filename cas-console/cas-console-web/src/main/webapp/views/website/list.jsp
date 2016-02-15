@@ -25,7 +25,7 @@
                                 <div class="btn-group">
                                     <a href="${contextPath}/website/add" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.website.action.add" /></a>
                                 </div>
-                                <form class="search-form form-inline pull-right" role="form" action="${contextPath}/website/list" method="POST">
+                                <form id="search-form" class="form-inline pull-right" role="form" action="${contextPath}/website/list" method="POST">
                                     <div class="form-group">
                                         <div class="input-group">
                                             <input type="text" name="siteName" value="<c:out value="${PARAMS.siteName}" />" class="form-control" placeholder="">

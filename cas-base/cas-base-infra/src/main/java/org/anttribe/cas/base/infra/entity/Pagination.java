@@ -20,7 +20,7 @@ public class Pagination
     /**
      * 默认分页大小
      */
-    public final static int DEFAULT_PAGESIZE = 10;
+    public final static int DEFAULT_PAGESIZE = 1;
     
     /**
      * 每页大小
@@ -132,7 +132,7 @@ public class Pagination
     
     public void setTotalPages(int totalPages)
     {
-        this.totalPages = totalPages < 1 ? 1 : totalPages;
+        this.totalPages = totalPages < 1 ? 0 : totalPages;
     }
     
     public int getTotalRecords()

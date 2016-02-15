@@ -82,7 +82,8 @@
 	        			$('.data-form').ajaxSubmit({
 	        				type: 'POST',
 	        				url: '${contextPath}/contentType/edit/exec',
-	        				success: function(result){
+	        				success: function(r){
+	        					var result = $.parseJSON(r);
 	        					if(result && result.resultCode){
 	        				    	if(result.resultCode == '000000'){
 	        				    		BootstrapDialog.alert({

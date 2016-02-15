@@ -18,7 +18,7 @@ import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.base.infra.errorno.SystemErrorNo;
 import org.anttribe.cas.base.infra.exception.UnifyException;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

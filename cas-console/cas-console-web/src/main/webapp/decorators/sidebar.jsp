@@ -4,6 +4,15 @@
 
 <!-- left side start-->
 <div class="left-side sticky-left-side">
+    <!--logo and iconic logo start-->
+    <div class="logo">
+        <a href="${contextPath}/"><img src="${contextPath}/static/static/img/logo.png" alt=""></a>
+    </div>
+    <div class="logo-icon text-center">
+        <a href="${contextPath}/"><img src="${contextPath}/static/static/img/logo_icon.png" alt=""></a>
+    </div>
+    <!--logo and iconic logo end-->
+    
     <div class="left-side-inner">
         <!--sidebar nav start-->
         <ul class="nav nav-pills nav-stacked custom-nav">

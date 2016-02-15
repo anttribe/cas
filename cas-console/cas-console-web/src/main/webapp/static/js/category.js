@@ -9,7 +9,7 @@ $.extend(cas, {
 	        	data: {'parent.id': parent},
 	        	success: function(result){
 	        		if(result && callback){
-	        			callback.call(this, result);
+	        			callback.call(this, $.parseJSON(result));
 	        		}
 	        	}
 	        });

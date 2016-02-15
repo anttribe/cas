@@ -16,12 +16,11 @@
         <%@include file="javascript.jsp" %>
         <sitemesh:write property='head'/>
     </head>
-    <body class="sticky-header">
+    <body class="sticky-header left-side-collapsed">
         <%@include file="header.jsp" %>
         <section>
             <%@include file="sidebar.jsp" %>
             <div class="main-content">
-                <%@include file="pageHeadeing.jsp" %>
                 <sitemesh:write property='body'/>
                 <%@include file="footer.jsp" %>
             </div>

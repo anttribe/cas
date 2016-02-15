@@ -17,7 +17,7 @@ import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.base.infra.errorno.ContentTypeErrorNo;
 import org.anttribe.cas.console.facade.ContentTypeFacade;
 import org.anttribe.cas.console.facade.dto.ContentTypeDTO;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -9,7 +9,7 @@ $.extend(cas, {
 	        	data: {},
 	        	success: function(result){
 	        		if(result && callback){
-	        			callback.call(this, result);
+	        			callback.call(this, $.parseJSON(result));
 	        		}
 	        	}
 	        });

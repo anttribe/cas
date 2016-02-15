@@ -9,7 +9,7 @@ $.extend(cas, {
 	        	data: criteria || {},
 	        	success: function(websites){
 	        		if(websites && callback){
-	        			callback.call(this, websites);
+	        			callback.call(this, $.parseJSON(websites));
 	        		}
 	        	}
 	        });
@@ -23,7 +23,7 @@ $.extend(cas, {
 		        	data: {id: websiteId},
 		        	success: function(website){
 		        		if(website && callback){
-		        			callback.call(this, website);
+		        			callback.call(this, $.parseJSON(website));
 		        		}
 		        	}
 		        });

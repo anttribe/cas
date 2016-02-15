@@ -4,15 +4,6 @@
 
 <!-- header section start -->
 <div class="header-section">
-    <!--logo and iconic logo start-->
-    <div class="logo">
-        <a href="${contextPath}/"><img src="${contextPath}/static/static/img/logo.png" alt=""></a>
-    </div>
-    <div class="logo-icon text-center">
-        <a href="${contextPath}/"><img src="${contextPath}/static/static/img/logo_icon.png" alt=""></a>
-    </div>
-    <!--logo and iconic logo end-->
-
     <!--toggle button start-->
     <a class="toggle-btn"><i class="fa fa-bars"></i></a>
     <!--toggle button end-->

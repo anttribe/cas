@@ -84,7 +84,8 @@
             	                		type: 'POST',
             	                		url: '${contextPath}/contentAttribute/delete/exec',
             	                		data: {id: contentAttributeId},
-            	                		success: function(result){
+            	                		success: function(r){
+            	                			var result = $.parseJSON(r);
             	                			if(result && result.resultCode){
             	        				    	if(result.resultCode == '000000'){
             	        				    		BootstrapDialog.alert({

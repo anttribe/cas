@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.anttribe.cas.base.infra.context.SpringContextHolder;
 import org.apache.commons.collections.MapUtils;
-import org.dayatang.domain.InstanceFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 
 /**
@@ -42,7 +42,7 @@ public class MybatisAbstractEntity implements Entity
     {
         if (null == sqlSessionTemplate)
         {
-            sqlSessionTemplate = InstanceFactory.getInstance(SqlSessionTemplate.class);
+            sqlSessionTemplate = SpringContextHolder.getBean(SqlSessionTemplate.class);
         }
         return sqlSessionTemplate;
     }

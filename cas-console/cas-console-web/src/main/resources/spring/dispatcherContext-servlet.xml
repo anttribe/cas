@@ -11,6 +11,22 @@
 
 	<context:component-scan base-package="org.anttribe.cas.console.web" />
 
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/plain;charset=utf-8</value>
+						<value>text/html;charset=utf-8</value>
+						<value>text/json;charset=utf-8</value>
+						<value>application/json;charset=utf-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
 	<!-- 使用ResourceHttpRequestHandler -->
 	<mvc:resources mapping="static/assets/**" location="/assets/"
 		cache-period="3600" />
@@ -18,8 +34,6 @@
 		cache-period="3600" />
 	<mvc:resources mapping="static/static/**" location="/static/"
 		cache-period="3600" />
-
-	<mvc:annotation-driven />
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

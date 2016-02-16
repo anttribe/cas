@@ -32,7 +32,7 @@
 	padding: 6px 12px;
 	line-height: 1.42857143;
 	text-decoration: none;
-	color: #337ab7;
+	color: #797979;
 	background-color: #ffffff;
 	border: 1px solid #dddddd;
 	margin-left: -1px;
@@ -53,9 +53,8 @@
 .pagination ul>li>a:hover, .pagination ul>li>span:hover, .pagination>li>a:focus,
 	.pagination ul>li>span:focus {
 	z-index: 3;
-	color: #23527c;
-	background-color: #eeeeee;
-	border-color: #dddddd;
+	color: #ffffff;
+	background-color: #65cea7;
 }
 
 .pagination ul>li.active>a, .pagination ul>li.active>span, .pagination ul>li.active>a:hover,
@@ -63,9 +62,7 @@
 	.pagination ul>li.active>span:focus {
 	z-index: 2;
 	color: #ffffff;
-	background-color: #337ab7;
-	border-color: #337ab7;
-	cursor: default;
+	background-color: #65cea7;
 }
 
 .pagination ul>li.disabled>span, .pagination ul>li.disabled>span:hover,

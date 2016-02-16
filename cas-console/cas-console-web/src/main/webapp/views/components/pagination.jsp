@@ -33,44 +33,48 @@
                     }
                 },
     	    	onPageClicked: function(event, originalEvent, type, page){
-    	    		// 页面搜索表单
-    	    		var searchForm = $('#search-form');
-    	    		if(searchForm && searchForm.length>0){
-    	    			$('<input>', {
-    	    				'type': 'hidden',
-    	    				'name': 'currentPage'
-    	    			}).val(page).appendTo(searchForm);
-    	    			$(searchForm).submit();
+    	    		var currentPage = parseInt('${pagination.currentPage}' || 0);
+    	    		if(page != currentPage){
+    	    			// 页面搜索表单
+        	    		var searchForm = $('#search-form');
+        	    		if(searchForm && searchForm.length>0){
+        	    			$('<input>', {
+        	    				'type': 'hidden',
+        	    				'name': 'currentPage'
+        	    			}).val(page).appendTo(searchForm);
+        	    			$(searchForm).submit();
+        	    		} else{
+        	    			// 获取当前请求url
+         	    			var requestUrl = location.href;
+         	    			if(requestUrl){
+         	    				var params = {};
+         	    				var parameterString = requestUrl.substring(requestUrl.lastIndexOf('?') + 1);
+         	    				if(parameterString){
+         	    					var parameters = parameterString.split('&');
+         	    					if(parameters && parameters.length>0){
+         	    						for(var i=0; i<parameters.length; i++){
+         	    							var param = parameters[i];
+         	    							if(param){
+         	    								params[param.substring(0, param.indexOf('='))] = '' + param.substring(param.indexOf('=') + 1);
+         	    							}
+         	    						}
+         	    					}
+         	    				}
+         	    				params['currentPage'] = page;
+         	    				
+         	    				var index = 0;
+         	    				requestUrl = requestUrl.substring(0, requestUrl.lastIndexOf('?')) + '?';
+         	    				for(var paramName in params){
+         	    					if(index > 0){
+     									requestUrl += '&';
+     								}
+         	    					requestUrl += paramName + '=' + params[paramName];
+     								index++;
+         	    				}
+         	    				location.href = requestUrl;
+         	    			}
+        	    		}
     	    		}
-//     	    		 else{
-//      	    			// 获取当前请求url
-//      	    			var requestUrl = location.href;
-//      	    			if(requestUrl){
-//      	    				if(requestUrl.lastIndexOf('?') == -1){
-//          	    				requestUrl += '?';
-//          	    			}
-//      	    				var parameters = [];
-//      	    				var parameterString = requestUrl.substring(requestUrl.lastIndexOf('?') + 1);
-//      	    				if(parameterString){
-//      	    					parameters = parameterString.split('&');
-//      	    				}
-//      	    				if(parameters && parameters.length>0){
-//  	    						var index = 0;
-//      	    					for(var i=0; i<parameters.length; i++){
-//  	    							var param = parameters[i];
-//  	    							if(param){
-//  	    								if(index > 0){
-//  	    									requestUrl += '&';
-//  	    								}
-//  	    								if(param.indexOf('currentPage=') == -1){
-//  	    									requestUrl += param;
-//  	    								}
-//  	    								index++;
-//  	    							}
-//  	    						}
-//  	    					}
-//      	    			}
-//      	    		}
     	    	}
     	    });
         });

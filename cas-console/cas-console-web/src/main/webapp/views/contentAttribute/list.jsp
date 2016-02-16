@@ -24,17 +24,19 @@
                                 <a href="${contextPath}/contentAttribute/add" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.contentAttribute.action.add" /></a>
                             </div>
                             <div class="adv-table">
-                                <table id="contentAttribute-table" class="display table table-striped">
+                                <table id="contentAttribute-table" class="display table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th width="80"><spring:message code="app.common.title.serial" /></th>
                                             <th><spring:message code="app.contentAttribute.title.name" /></th>
                                             <th><spring:message code="app.contentType.title.contentType" /></th>
                                             <th width="10%"><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${PAGE_DATA}" var="contentAttribute">
+                                        <c:forEach items="${PAGE_DATA}" var="contentAttribute" varStatus="s">
                                             <tr data-id="${contentAttribute.id}">
+                                                <td><c:out value="${s.index + 1}" /></td>
                                                 <td><c:out value="${contentAttribute.name}" /></td>
                                                 <td><c:out value="${contentAttribute.contentType.name}" /></td>
                                                 <td>

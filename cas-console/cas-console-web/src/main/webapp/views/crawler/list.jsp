@@ -39,20 +39,22 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="mt10 table-responsive">
-                                <table id="crawler-table" class="table table-striped">
+                                <table id="crawler-table" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th width="80"><spring:message code="app.common.title.serial" /></th>
                                             <th><spring:message code="app.crawler.title.title" /></th>
                                             <th><spring:message code="app.crawler.title.website" /></th>
                                             <th><spring:message code="app.crawler.title.contentType" /></th>
                                             <th><spring:message code="app.crawler.title.state" /></th>
                                             <th><spring:message code="app.crawler.title.crawlTime" /></th>
-                                            <th><spring:message code="app.common.action.operate" /></th>
+                                            <th width="10%"><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${PAGE_DATA}" var="crawler">
+                                        <c:forEach items="${PAGE_DATA}" var="crawler" varStatus="s">
                                             <tr data-id="${crawler.id}">
+                                                <td><c:out value="${s.index + 1}" /></td>
                                                 <td><c:out value="${crawler.title}" /></td>
                                                 <td><c:out value="${crawler.website.siteName}" /></td>
                                                 <td><c:out value="${crawler.contentType.name}" /></td>

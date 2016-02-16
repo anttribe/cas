@@ -26,17 +26,19 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="mt10 table-responsive">
-                                <table id="contentType-table" class="display table table-striped">
+                                <table id="contentType-table" class="display table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th width="80"><spring:message code="app.common.title.serial" /></th>
                                             <th><spring:message code="app.contentType.title.name" /></th>
                                             <th><spring:message code="app.contentType.title.code" /></th>
                                             <th width="10%"><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${PAGE_DATA}" var="contentType">
+                                        <c:forEach items="${PAGE_DATA}" var="contentType" varStatus="s">
                                             <tr data-id="${contentType.id}">
+                                                <td><c:out value="${s.index + 1}" /></td>
                                                 <td><c:out value="${contentType.name}" /></td>
                                                 <td><c:out value="${contentType.code}" /></td>
                                                 <td>

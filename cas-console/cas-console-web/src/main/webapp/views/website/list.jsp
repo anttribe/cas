@@ -38,17 +38,19 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="mt10 table-responsive">
-                                <table id="website-table" class="table table-striped">
+                                <table id="website-table" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
+                                            <th width="80"><spring:message code="app.common.title.serial" /></th>
                                             <th width="60%"><spring:message code="app.website.title.siteName" /></th>
                                             <th><spring:message code="app.category.title.category" /></th>
-                                            <th><spring:message code="app.common.action.operate" /></th>
+                                            <th width="10%"><spring:message code="app.common.action.operate" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${PAGE_DATA}" var="website">
+                                        <c:forEach items="${PAGE_DATA}" var="website" varStatus="s">
                                             <tr data-id="${website.id}">
+                                                <td><c:out value="${s.index + 1}" /></td>
                                                 <td>
                                                     <a href="${website.domain}" target="_blank">
                                                         <c:choose>

@@ -20,7 +20,7 @@ public class Pagination
     /**
      * 默认分页大小
      */
-    public final static int DEFAULT_PAGESIZE = 1;
+    public final static int DEFAULT_PAGESIZE = 10;
     
     /**
      * 每页大小

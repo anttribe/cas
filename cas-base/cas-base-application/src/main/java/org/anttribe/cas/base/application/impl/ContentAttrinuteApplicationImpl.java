@@ -110,7 +110,9 @@ public class ContentAttrinuteApplicationImpl implements ContentAttributeApplicat
             return;
         }
         
-        ContentAttribute tempContentAttribute = ContentAttribute.load(ContentAttribute.class, contentAttribute.getId());
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", contentAttribute.getId());
+        ContentAttribute tempContentAttribute = this.findContentAttribute(criteria);
         if (null == tempContentAttribute)
         {
             contentAttribute.save();

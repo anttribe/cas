@@ -29,7 +29,6 @@
                                 <table id="category-table" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th width="80"><spring:message code="app.common.title.serial" /></th>
                                             <th><spring:message code="app.category.title.name" /></th>
                                             <th width="10%"><spring:message code="app.common.action.operate" /></th>
                                         </tr>
@@ -61,8 +60,7 @@
 	        					'data-tt-id': data['id'],
 	        					'data-tt-parent-id': (data['parent'] && data['parent']['id']) || '',
 	        					'data-tt-branch': (data['children'] && data['children'].length>0 ? true : false),
-	        					'html': '<td>' + (i + 1) + '</td>'
-	        						  + '<td>' + (data['name'] || '') + '</td>'
+	        					'html': '<td>' + (data['name'] || '') + '</td>'
 		        				      + '<td><a href="javascript:void(0);" class="text-primary edit" title="<spring:message code="app.common.action.edit" />"><i class="fa fa-edit"></i></a><a href="javascript:void(0);" class="pl10 text-danger delete" title="<spring:message code="app.common.action.delete" />"><i class="fa fa-trash-o"></i></a></td>'
 	        				}));
 	        			}

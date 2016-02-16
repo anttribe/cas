@@ -33,8 +33,8 @@
 			<if test="null != siteName and siteName != ''">
 				AND t.site_name LIKE CONCAT('%', '${siteName}', '%')
 			</if>
-			<if test="null != category and '' != category.id">
-				AND t.category_id = #{category.id}
+			<if test="null != category and null != category.id and '' != category.id">
+				AND (t.category_id = #{category.id} OR t.category_id IN (select id from cas_t_core_category where tree_code LIKE CONCAT('%', '-', #{category.id}, '-', '%')))
 			</if>
 			
 			<!-- 校验唯一性参数 -->
@@ -56,8 +56,8 @@
 			<if test="null != siteName and siteName != ''">
 				AND site_name LIKE CONCAT('%', '${siteName}', '%')
 			</if>
-			<if test="null != category and '' != category.id">
-				AND category_id = #{category.id}
+			<if test="null != category and null != category.id and '' != category.id">
+				AND (category_id = #{category.id} OR category_id IN (select id from cas_t_core_category where tree_code LIKE CONCAT('%', '-', #{category.id}, '-', '%')))
 			</if>
 		</where>
 	</sql>
@@ -70,7 +70,7 @@
 	<!-- limit -->
 	<sql id="limit">
 		<if test="null != pagination">
-			limit #{pagination.offset}, #{pagination.pagesize}
+			LIMIT #{pagination.offset}, #{pagination.pagesize}
 		</if>
 	</sql>
 

@@ -121,7 +121,9 @@ public class CrawlerApplicationImpl implements org.anttribe.cas.base.application
             return;
         }
         
-        Crawler tempCrawler = Crawler.load(Crawler.class, crawler.getId());
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", crawler.getId());
+        Crawler tempCrawler = this.findCrawler(criteria);
         if (null == tempCrawler)
         {
             crawler.setCreateTime(new Date());

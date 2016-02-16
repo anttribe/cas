@@ -26,6 +26,25 @@
                                     <a href="${contextPath}/website/add" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.website.action.add" /></a>
                                 </div>
                                 <form id="search-form" class="form-inline pull-right" role="form" action="${contextPath}/website/list" method="POST">
+                                    <div class="btn-group">
+					                    <input type="hidden" name="category.id" value="${PARAM.category.id}">
+					                    <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle"><i class="fa fa-list"></i>
+					                        <c:choose>
+					                            <c:when test="${null != PARAM.category and null != PARAM.category.id}">
+					                                <c:forEach items="${categorys}" var="category">
+					                                    <c:if test="${category.id == PARAM.category.id}"><c:out value="${category.name}" /></c:if>
+						                            </c:forEach>
+					                            </c:when>
+					                            <c:otherwise><spring:message code="app.common.title.all" /></c:otherwise>
+					                        </c:choose>
+					                    </button>
+						                <ul id="category-selector" class="dropdown-menu">
+						                    <li data-value=""><a href="#none"><spring:message code="app.common.title.all" /></a></li>
+						                    <c:forEach items="${categorys}" var="category">
+						                        <li data-value="${category.id}"><a href="#none"><c:out value="${category.name}" /></a></li>
+						                    </c:forEach>
+						                </ul>
+					                </div>
                                     <div class="form-group">
                                         <div class="input-group">
                                             <input type="text" name="siteName" value="<c:out value="${PARAMS.siteName}" />" class="form-control" placeholder="">
@@ -149,6 +168,13 @@
 	        $(function(){
 	        	$('.edit', '#website-table').bind('click', goEditWebsite);
     			$('.delete', '#website-table').bind('click', goDeleteWebsite);
+    			
+    			// 分类搜索
+    			$('li', '#category-selector').click(function(){
+    				var categoryId = $(this).attr('data-value');
+    				$('input[name="category.id"]').val(categoryId);
+					$('#search-form').submit();
+    			});
 	        });
 	    </script>
     </body>

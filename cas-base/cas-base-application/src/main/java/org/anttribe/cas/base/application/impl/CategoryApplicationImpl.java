@@ -107,23 +107,50 @@ public class CategoryApplicationImpl implements CategoryApplication
         {
             category.setCreateTime(new Date());
             category.save();
-            
             logger.debug("category's id not there, then save new category to DB, category: {}", category.getId());
-            return;
+            this.processCategoryTreeCode(category);
         }
-        
-        Map<String, Object> criteria = new HashMap<String, Object>();
-        criteria.put("id", category.getId());
-        Category tempCategory = this.findCategory(criteria);
-        if (null == tempCategory)
+        else
         {
-            category.setCreateTime(new Date());
-            category.save();
-            logger.debug("category not exist in DB, then save new category to DB, category: {}", category.getId());
-            return;
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", category.getId());
+            Category tempCategory = this.findCategory(criteria);
+            if (null == tempCategory)
+            {
+                category.setCreateTime(new Date());
+                category.save();
+                logger.debug("category not exist in DB, then save new category to DB, category: {}", category.getId());
+                this.processCategoryTreeCode(category);
+            }
         }
         category.update();
         logger.debug("category exist in DB, then update category info, category: {}", category.getId());
+    }
+    
+    /**
+     * 处理分类的treeCode
+     * 
+     * @param category
+     */
+    private void processCategoryTreeCode(Category category)
+    {
+        if (null != category && null != category.getId())
+        {
+            String treeCode = "";
+            Category parent = category.getParent();
+            if (null != parent && null != parent.getId())
+            {
+                Map<String, Object> criteria = new HashMap<String, Object>();
+                criteria.put("id", parent.getId());
+                parent = this.findCategory(criteria);
+                if (null != parent)
+                {
+                    treeCode = treeCode + (StringUtils.isEmpty(parent.getTreeCode()) ? "" : parent.getTreeCode());
+                }
+            }
+            treeCode = treeCode + "-" + category.getId();
+            category.setTreeCode(treeCode);
+        }
     }
     
     @Override

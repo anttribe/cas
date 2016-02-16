@@ -15,7 +15,9 @@ import org.anttribe.cas.base.infra.common.Result;
 import org.anttribe.cas.base.infra.constants.Keys;
 import org.anttribe.cas.base.infra.entity.Pagination;
 import org.anttribe.cas.base.infra.errorno.WebsiteErrorNo;
+import org.anttribe.cas.console.facade.CategoryFacade;
 import org.anttribe.cas.console.facade.WebsiteFacade;
+import org.anttribe.cas.console.facade.dto.CategoryDTO;
 import org.anttribe.cas.console.facade.dto.WebsiteDTO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/website")
 public class WebsiteController
 {
+    
+    @Autowired
+    private CategoryFacade categoryFacade;
     
     @Autowired
     private WebsiteFacade websiteFacade;
@@ -55,6 +60,10 @@ public class WebsiteController
         {
             mv.addObject(Keys.KEY_PAGE_DATA, pagination.getDatas());
         }
+        
+        // 获取一级分类
+        List<CategoryDTO> categorys = this.categoryFacade.listCategorys(new CategoryDTO());
+        mv.addObject("categorys", categorys);
         return mv;
     }
     

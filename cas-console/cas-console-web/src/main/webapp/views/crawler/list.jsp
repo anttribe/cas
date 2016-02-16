@@ -46,7 +46,7 @@
                                             <th><spring:message code="app.crawler.title.title" /></th>
                                             <th><spring:message code="app.crawler.title.website" /></th>
                                             <th><spring:message code="app.crawler.title.contentType" /></th>
-                                            <th><spring:message code="app.crawler.title.state" /></th>
+                                            <th width="120"><spring:message code="app.crawler.title.state" /></th>
                                             <th><spring:message code="app.crawler.title.crawlTime" /></th>
                                             <th width="10%"><spring:message code="app.common.action.operate" /></th>
                                         </tr>

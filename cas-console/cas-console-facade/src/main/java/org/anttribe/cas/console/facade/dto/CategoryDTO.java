@@ -57,6 +57,10 @@ public class CategoryDTO implements Serializable
      */
     private Date updateTime;
     
+    public CategoryDTO()
+    {
+    }
+    
     public Long getId()
     {
         return id;

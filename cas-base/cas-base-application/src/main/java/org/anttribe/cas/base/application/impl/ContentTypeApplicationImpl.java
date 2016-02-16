@@ -109,7 +109,9 @@ public class ContentTypeApplicationImpl implements ContentTypeApplication
             return;
         }
         
-        ContentType tempContentType = ContentType.load(ContentType.class, contentType.getId());
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", contentType.getId());
+        ContentType tempContentType = this.findContentType(criteria);
         if (null == tempContentType)
         {
             contentType.save();

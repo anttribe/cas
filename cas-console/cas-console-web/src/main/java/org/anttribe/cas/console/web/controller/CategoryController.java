@@ -7,19 +7,27 @@
  */
 package org.anttribe.cas.console.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.anttribe.cas.base.infra.common.Result;
-import org.anttribe.cas.base.infra.errorno.CategoryErrorNo;
-import org.anttribe.cas.console.facade.CategoryFacade;
-import org.anttribe.cas.console.facade.dto.CategoryDTO;
+import org.anttribe.cas.base.application.ICategoryApplication;
+import org.anttribe.cas.base.core.entity.Category;
+import org.anttribe.vigor.infra.common.constants.Constants;
+import org.anttribe.vigor.infra.common.constants.Keys;
+import org.anttribe.vigor.infra.common.entity.Result;
+import org.anttribe.vigor.infra.common.errorno.SystemErrorNo;
+import org.anttribe.vigor.infra.common.exception.ServiceException;
+import org.anttribe.vigor.infra.common.exception.UnifyException;
+import org.anttribe.vigor.infra.common.web.controller.AbstractController;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author zhaoyong
@@ -27,94 +35,153 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/category")
-public class CategoryController
+public class CategoryController extends AbstractController
 {
     
     @Autowired
-    private CategoryFacade categoryFacade;
+    private ICategoryApplication categoryApplication;
     
-    @RequestMapping("/index")
-    public String index(HttpServletRequest request)
+    @RequestMapping({"", "/", "/index"})
+    public ModelAndView index(HttpServletRequest request, ModelAndView mv, Category category)
     {
-        return "/category/list";
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("parent", category.getParent());
+        List<Category> categorys = this.categoryApplication.listEntities(criteria);
+        
+        mv.setViewName(Views.INDEX_VIEW);
+        mv.addObject(Keys.KEY_PAGE_DATA, categorys);
+        return mv;
     }
     
-    @RequestMapping("/list")
+    @RequestMapping("/list/exec")
     @ResponseBody
-    public List<CategoryDTO> listCategories(HttpServletRequest request, CategoryDTO categoryDTO)
+    public Result<?> doList(HttpServletRequest request, Category category)
     {
-        List<CategoryDTO> categorys = this.categoryFacade.listCategorys(categoryDTO);
-        return categorys;
+        Result<List<Category>> result = new Result<List<Category>>();
+        try
+        {
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("name", category.getName());
+            criteria.put("parent", category.getParent());
+            List<Category> resources = categoryApplication.listEntities(criteria);
+            result.setData(resources);
+            
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
+        }
+        catch (ServiceException e)
+        {
+            result.setResultCode(e.getErrorNo());
+        }
+        return result;
     }
     
     @RequestMapping("/tool/selector")
-    public String select(HttpServletRequest request, CategoryDTO categoryDTO)
+    public String select(HttpServletRequest request, Category Category)
     {
-        return "/category/tool.selector";
+        return Views.SELECTOR_VIEW;
     }
     
     @RequestMapping("/add")
-    public String goAddCategory()
+    public ModelAndView add(HttpServletRequest request, ModelAndView mv, Category category)
     {
-        return "/category/edit";
+        mv.setViewName(Views.ADD_VIEW);
+        
+        if (null != category.getParent() && null != category.getParent().getId())
+        {
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", category.getParent().getId());
+            Category parent = categoryApplication.findEntity(criteria);
+            category.setParent(parent);
+        }
+        mv.addObject(Keys.KEY_PARAM, category);
+        
+        return mv;
     }
     
     @RequestMapping("/edit")
-    public String goEditCategory(HttpServletRequest request, CategoryDTO categoryDTO)
+    public ModelAndView edit(HttpServletRequest request, ModelAndView mv, Category category)
     {
-        if (null != categoryDTO && null != categoryDTO.getId())
+        if (null == category || null == category.getId())
         {
-            categoryDTO = categoryFacade.loadCategory(categoryDTO);
-            if (null != categoryDTO)
-            {
-                request.setAttribute("category", categoryDTO);
-                return "/category/edit";
-            }
+            throw new UnifyException(SystemErrorNo.DATA_NOT_EXIST_ERROR);
         }
-        return "redirect:/category/index";
+        
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", category.getId());
+        category = this.categoryApplication.findEntity(criteria);
+        if (null == category || null == category.getId())
+        {
+            throw new UnifyException(SystemErrorNo.DATA_NOT_EXIST_ERROR);
+        }
+        
+        mv.setViewName(Views.EDIT_VIEW);
+        mv.addObject(Keys.KEY_PARAM, category);
+        return mv;
     }
     
     @ResponseBody
     @RequestMapping("/edit/exec")
-    public Result<?> doEditCategory(HttpServletRequest request, CategoryDTO categoryDTO)
+    public Result<?> doEdit(HttpServletRequest request, Category category)
     {
-        Result<?> result = new Result<Object>();
-        if (null != categoryDTO)
+        Result<?> result = new Result<String>();
+        try
         {
-            boolean validateResult = this.categoryFacade.validateNameUnique(categoryDTO);
-            if (!validateResult)
-            {
-                result.setResultCode(CategoryErrorNo.CATEGORY_NAME_UNIQUE);
-                return result;
-            }
-            categoryFacade.saveOrUpdateCategory(categoryDTO);
-            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
+            // TODO： 数据校验
+            categoryApplication.persistentEntity(category);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
         }
-        
+        catch (ServiceException e)
+        {
+            result.setResultCode(e.getErrorNo());
+        }
         return result;
     }
     
     @ResponseBody
     @RequestMapping("/delete/exec")
-    public Result<?> doDeleteCategory(HttpServletRequest request, CategoryDTO categoryDTO)
+    public Result<?> doDeleteCategory(HttpServletRequest request, Category category)
     {
-        Result<?> result = new Result<Object>();
-        if (null != categoryDTO)
+        Result<?> result = new Result<String>();
+        try
         {
-            categoryFacade.deleteCategory(categoryDTO);
-            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", category.getId());
+            categoryApplication.removeEntity(criteria);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
+        }
+        catch (ServiceException e)
+        {
+            result.setResultCode(e.getErrorNo());
         }
         return result;
     }
     
     @ResponseBody
     @RequestMapping("/validate/nameUnique")
-    public boolean validateNameUnique(HttpServletRequest request, CategoryDTO categoryDTO)
+    public boolean validateNameUnique(HttpServletRequest request, Category category)
     {
-        if (null != categoryDTO && !StringUtils.isEmpty(categoryDTO.getName()))
+        if (null != category && !StringUtils.isEmpty(category.getName()))
         {
-            return this.categoryFacade.validateNameUnique(categoryDTO);
+            return this.categoryApplication.validateNameUnique(category);
         }
         return false;
+    }
+    
+    class Views
+    {
+        
+        public static final String INDEX_VIEW = "/category/list";
+        
+        public static final String LIST_VIEW = "/category/list";
+        
+        public static final String ADD_VIEW = "/category/edit";
+        
+        public static final String EDIT_VIEW = "/category/edit";
+        
+        /**
+         * 选择器视图
+         */
+        public static final String SELECTOR_VIEW = "/category/tool.selector";
+        
     }
 }

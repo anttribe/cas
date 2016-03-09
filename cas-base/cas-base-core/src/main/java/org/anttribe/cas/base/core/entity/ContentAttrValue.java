@@ -7,7 +7,7 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
+import org.anttribe.vigor.infra.persist.entity.Entity;
 
 /**
  * 抽象内容属性值
@@ -15,13 +15,13 @@ import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
  * @author zhaoyong
  * @version 2015年11月4日
  */
-public class ContentAttrValue extends MybatisAbstractEntity
+public class ContentAttrValue extends Entity
 {
     
     /**
-     * id编号
+     * serialVersionUID
      */
-    private Long id;
+    private static final long serialVersionUID = 1L;
     
     /**
      * 内容属性
@@ -43,37 +43,6 @@ public class ContentAttrValue extends MybatisAbstractEntity
      */
     public ContentAttrValue()
     {
-    }
-    
-    @Override
-    public String toString()
-    {
-        StringBuilder strB = new StringBuilder();
-        strB.append("ContentAttrValue")
-            .append("{")
-            .append("id=")
-            .append(this.getId())
-            .append(',')
-            .append("content=")
-            .append(this.getContent())
-            .append(',')
-            .append("attrValue=")
-            .append(this.getAttrValue())
-            .append(',')
-            .append("contentAttr=")
-            .append(this.getContentAttr())
-            .append("}");
-        return strB.toString();
-    }
-    
-    public Long getId()
-    {
-        return id;
-    }
-    
-    public void setId(Long id)
-    {
-        this.id = id;
     }
     
     public ContentAttribute getContentAttr()

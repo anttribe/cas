@@ -11,19 +11,19 @@ import java.util.Date;
 import java.util.List;
 
 import org.anttribe.cas.base.core.type.CrawlerState;
-import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
+import org.anttribe.vigor.infra.persist.entity.Entity;
 
 /**
  * @author zhaoyong
  * @version 2015年11月3日
  */
-public class Crawler extends MybatisAbstractEntity
+public class Crawler extends Entity
 {
     
     /**
-     * id编号
+     * serialVersionUID
      */
-    private Long id;
+    private static final long serialVersionUID = 1L;
     
     /**
      * 名称，描述性文字
@@ -66,11 +66,6 @@ public class Crawler extends MybatisAbstractEntity
     List<CrawlerRegular> regulars;
     
     /**
-     * 创建时间
-     */
-    private Date createTime;
-    
-    /**
      * 爬取数据时间
      */
     private Date crawlTime;
@@ -90,24 +85,6 @@ public class Crawler extends MybatisAbstractEntity
      */
     public Crawler()
     {
-    }
-    
-    /**
-     * @param id
-     */
-    public Crawler(Long id)
-    {
-        this.id = id;
-    }
-    
-    public Long getId()
-    {
-        return id;
-    }
-    
-    public void setId(Long id)
-    {
-        this.id = id;
     }
     
     public String getTitle()
@@ -134,12 +111,12 @@ public class Crawler extends MybatisAbstractEntity
     {
         return crawlerUrl;
     }
-
+    
     public void setCrawlerUrl(String crawlerUrl)
     {
         this.crawlerUrl = crawlerUrl;
     }
-
+    
     public Integer getIntervalTime()
     {
         return intervalTime;
@@ -188,16 +165,6 @@ public class Crawler extends MybatisAbstractEntity
     public void setRegulars(List<CrawlerRegular> regulars)
     {
         this.regulars = regulars;
-    }
-    
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-    
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
     }
     
     public Date getCrawlTime()

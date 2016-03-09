@@ -7,16 +7,18 @@
  */
 package org.anttribe.cas.console.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.anttribe.cas.base.infra.common.Result;
-import org.anttribe.cas.base.infra.constants.Keys;
-import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.application.IContentTypeApplication;
+import org.anttribe.cas.base.core.entity.ContentType;
 import org.anttribe.cas.base.infra.errorno.ContentTypeErrorNo;
-import org.anttribe.cas.console.facade.ContentTypeFacade;
-import org.anttribe.cas.console.facade.dto.ContentTypeDTO;
+import org.anttribe.vigor.infra.common.constants.Keys;
+import org.anttribe.vigor.infra.common.entity.Result;
+import org.anttribe.vigor.infra.persist.entity.Pagination;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,23 +35,25 @@ import org.springframework.web.servlet.ModelAndView;
 public class ContentTypeController
 {
     @Autowired
-    private ContentTypeFacade contentTypeFacade;
+    private IContentTypeApplication contentTypeApplication;
     
     @RequestMapping("/index")
-    public ModelAndView index(HttpServletRequest request, ModelAndView mv, ContentTypeDTO contentTypeDTO,
+    public ModelAndView index(HttpServletRequest request, ModelAndView mv, ContentType contentType,
         Pagination pagination)
     {
-        return this.list(request, mv, contentTypeDTO, pagination);
+        return this.list(request, mv, contentType, pagination);
     }
     
     @RequestMapping("/list")
-    public ModelAndView list(HttpServletRequest request, ModelAndView mv, ContentTypeDTO contentTypeDTO,
+    public ModelAndView list(HttpServletRequest request, ModelAndView mv, ContentType contentType,
         Pagination pagination)
     {
-        pagination = contentTypeFacade.listContentTypes(contentTypeDTO, pagination);
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("name", contentType.getName());
+        pagination = contentTypeApplication.listEntities(criteria, pagination);
         
         mv.setViewName("/contentType/list");
-        mv.addObject(Keys.KEY_PARAM, contentTypeDTO);
+        mv.addObject(Keys.KEY_PARAM, contentType);
         mv.addObject(Keys.KEY_PAGE, pagination);
         if (null != pagination)
         {
@@ -60,9 +64,11 @@ public class ContentTypeController
     
     @ResponseBody
     @RequestMapping("/list/exec")
-    public List<ContentTypeDTO> list(HttpServletRequest request, ModelAndView mv, ContentTypeDTO contentTypeDTO)
+    public List<ContentType> list(HttpServletRequest request, ModelAndView mv, ContentType contentType)
     {
-        return contentTypeFacade.listContentTypes(contentTypeDTO);
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("name", contentType.getName());
+        return contentTypeApplication.listEntities(criteria);
     }
     
     @RequestMapping("/add")
@@ -72,12 +78,14 @@ public class ContentTypeController
     }
     
     @RequestMapping("/edit")
-    public String goEditContentType(HttpServletRequest request, ContentTypeDTO contentTypeDTO)
+    public String goEditContentType(HttpServletRequest request, ContentType contentType)
     {
-        contentTypeDTO = contentTypeFacade.loadContentType(contentTypeDTO);
-        if (null != contentTypeDTO)
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", contentType.getId());
+        contentType = contentTypeApplication.findEntity(criteria);
+        if (null != contentType)
         {
-            request.setAttribute("contentType", contentTypeDTO);
+            request.setAttribute("contentType", contentType);
             return "/contentType/edit";
         }
         return "redirect:/contentType/index";
@@ -85,24 +93,24 @@ public class ContentTypeController
     
     @RequestMapping("/edit/exec")
     @ResponseBody
-    public Result<?> doEditContentType(HttpServletRequest request, ContentTypeDTO contentTypeDTO)
+    public Result<?> doEditContentType(HttpServletRequest request, ContentType contentType)
     {
         Result<?> result = new Result<Object>();
-        if (null != contentTypeDTO)
+        if (null != contentType)
         {
-            boolean validateResult = this.validateNameUnique(request, contentTypeDTO);
+            boolean validateResult = this.validateNameUnique(request, contentType);
             if (!validateResult)
             {
                 result.setResultCode(ContentTypeErrorNo.CONTENTTYPE_NAME_UNIQUE);
                 return result;
             }
-            validateResult = this.validateCodeUnique(request, contentTypeDTO);
+            validateResult = this.validateCodeUnique(request, contentType);
             if (!validateResult)
             {
                 result.setResultCode(ContentTypeErrorNo.CONTENTTYPE_CODE_UNIQUE);
                 return result;
             }
-            contentTypeFacade.saveOrUpdateWebsite(contentTypeDTO);
+            contentTypeApplication.persistentEntity(contentType);
             result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
@@ -110,12 +118,14 @@ public class ContentTypeController
     
     @RequestMapping("/delete/exec")
     @ResponseBody
-    public Result<?> doDeleteContentType(HttpServletRequest request, ContentTypeDTO contentTypeDTO)
+    public Result<?> doDeleteContentType(HttpServletRequest request, ContentType contentType)
     {
         Result<?> result = new Result<Object>();
-        if (null != contentTypeDTO)
+        if (null != contentType)
         {
-            contentTypeFacade.deleteContentType(contentTypeDTO);
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", contentType.getId());
+            contentTypeApplication.removeEntity(criteria);
             result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
@@ -123,22 +133,22 @@ public class ContentTypeController
     
     @ResponseBody
     @RequestMapping("/validate/nameUnique")
-    public boolean validateNameUnique(HttpServletRequest request, ContentTypeDTO contentTypeDTO)
+    public boolean validateNameUnique(HttpServletRequest request, ContentType contentType)
     {
-        if (null != contentTypeDTO && !StringUtils.isEmpty(contentTypeDTO.getName()))
+        if (null != contentType && !StringUtils.isEmpty(contentType.getName()))
         {
-            return contentTypeFacade.validateNameUnique(contentTypeDTO);
+            return contentTypeApplication.validateNameUnique(contentType);
         }
         return false;
     }
     
     @ResponseBody
     @RequestMapping("/validate/codeUnique")
-    public boolean validateCodeUnique(HttpServletRequest request, ContentTypeDTO contentTypeDTO)
+    public boolean validateCodeUnique(HttpServletRequest request, ContentType contentType)
     {
-        if (null != contentTypeDTO && !StringUtils.isEmpty(contentTypeDTO.getCode()))
+        if (null != contentType && !StringUtils.isEmpty(contentType.getCode()))
         {
-            return contentTypeFacade.validateCodeUnique(contentTypeDTO);
+            return contentTypeApplication.validateCodeUnique(contentType);
         }
         return false;
     }

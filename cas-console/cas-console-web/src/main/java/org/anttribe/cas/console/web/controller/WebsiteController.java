@@ -7,19 +7,24 @@
  */
 package org.anttribe.cas.console.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.anttribe.cas.base.infra.common.Result;
-import org.anttribe.cas.base.infra.constants.Keys;
-import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.application.ICategoryApplication;
+import org.anttribe.cas.base.application.IWebsiteApplication;
+import org.anttribe.cas.base.core.entity.Category;
+import org.anttribe.cas.base.core.entity.Website;
 import org.anttribe.cas.base.infra.errorno.WebsiteErrorNo;
-import org.anttribe.cas.console.facade.CategoryFacade;
-import org.anttribe.cas.console.facade.WebsiteFacade;
-import org.anttribe.cas.console.facade.dto.CategoryDTO;
-import org.anttribe.cas.console.facade.dto.WebsiteDTO;
-import org.apache.commons.lang.StringUtils;
+import org.anttribe.vigor.infra.common.constants.Keys;
+import org.anttribe.vigor.infra.common.entity.Result;
+import org.anttribe.vigor.infra.common.errorno.SystemErrorNo;
+import org.anttribe.vigor.infra.common.exception.UnifyException;
+import org.anttribe.vigor.infra.common.web.controller.AbstractController;
+import org.anttribe.vigor.infra.persist.entity.Pagination;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,28 +38,30 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/website")
-public class WebsiteController
+public class WebsiteController extends AbstractController
 {
+    @Autowired
+    private IWebsiteApplication websiteApplication;
     
     @Autowired
-    private CategoryFacade categoryFacade;
+    private ICategoryApplication categoryApplication;
     
-    @Autowired
-    private WebsiteFacade websiteFacade;
-    
-    @RequestMapping("/index")
-    public ModelAndView index(HttpServletRequest request, ModelAndView mv, WebsiteDTO websiteDTO, Pagination pagination)
+    @RequestMapping({"", "/", "/index"})
+    public ModelAndView index(HttpServletRequest request, ModelAndView mv, Website website, Pagination pagination)
     {
-        return this.list(request, mv, websiteDTO, pagination);
+        return this.list(request, mv, website, pagination);
     }
     
     @RequestMapping("/list")
-    public ModelAndView list(HttpServletRequest request, ModelAndView mv, WebsiteDTO websiteDTO, Pagination pagination)
+    public ModelAndView list(HttpServletRequest request, ModelAndView mv, Website website, Pagination pagination)
     {
-        pagination = websiteFacade.listWebsites(websiteDTO, pagination);
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("category", website.getCategory());
+        criteria.put("siteName", website.getSiteName());
+        pagination = websiteApplication.listEntities(criteria, pagination);
         
-        mv.setViewName("/website/list");
-        mv.addObject(Keys.KEY_PARAM, websiteDTO);
+        mv.setViewName(Views.LIST_VIEW);
+        mv.addObject(Keys.KEY_PARAM, website);
         mv.addObject(Keys.KEY_PAGE, pagination);
         if (null != pagination)
         {
@@ -62,57 +69,51 @@ public class WebsiteController
         }
         
         // 获取一级分类
-        List<CategoryDTO> categorys = this.categoryFacade.listCategorys(new CategoryDTO());
+        List<Category> categorys = this.categoryApplication.listEntities(new HashMap<String, Object>());
         mv.addObject("categorys", categorys);
         return mv;
     }
     
-    @ResponseBody
-    @RequestMapping("/list/exec")
-    public List<WebsiteDTO> doList(HttpServletRequest request, WebsiteDTO websiteDTO)
-    {
-        return this.websiteFacade.listWebsites(websiteDTO);
-    }
-    
-    @RequestMapping("/load")
-    @ResponseBody
-    public WebsiteDTO loadWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
-    {
-        return websiteFacade.loadWebsite(websiteDTO);
-    }
-    
     @RequestMapping("/add")
-    public String goAddWebsite()
+    public String add()
     {
-        return "/website/edit";
+        return Views.ADD_VIEW;
     }
     
     @RequestMapping("/edit")
-    public String goEditWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
+    public ModelAndView edit(HttpServletRequest request, ModelAndView mv, Website website)
     {
-        websiteDTO = websiteFacade.loadWebsite(websiteDTO);
-        if (null != websiteDTO)
+        if (null == website || null == website.getId())
         {
-            request.setAttribute("website", websiteDTO);
-            return "/website/edit";
+            throw new UnifyException(SystemErrorNo.DATA_NOT_EXIST_ERROR);
         }
-        return "redirect:/category/index";
+        
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        website = this.websiteApplication.findEntity(criteria);
+        if (null == website)
+        {
+            throw new UnifyException(SystemErrorNo.DATA_NOT_EXIST_ERROR);
+        }
+        
+        mv.setViewName(Views.EDIT_VIEW);
+        mv.addObject(Keys.KEY_PARAM, website);
+        return mv;
     }
     
     @ResponseBody
     @RequestMapping("/edit/exec")
-    public Result<?> doEditWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
+    public Result<?> doEdit(HttpServletRequest request, Website website)
     {
         Result<?> result = new Result<Object>();
-        if (null != websiteDTO)
+        if (null != website)
         {
-            boolean validateResult = this.validateNameUnique(request, websiteDTO);
+            boolean validateResult = this.validateNameUnique(request, website);
             if (!validateResult)
             {
                 result.setResultCode(WebsiteErrorNo.WEBSITE_NAME_UNIQUE);
                 return result;
             }
-            websiteFacade.saveOrUpdateWebsite(websiteDTO);
+            this.websiteApplication.persistentEntity(website);
             result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
@@ -120,12 +121,14 @@ public class WebsiteController
     
     @ResponseBody
     @RequestMapping("/delete/exec")
-    public Result<?> doDeleteWebsite(HttpServletRequest request, WebsiteDTO websiteDTO)
+    public Result<?> doDelete(HttpServletRequest request, Website website)
     {
         Result<?> result = new Result<Object>();
-        if (null != websiteDTO)
+        if (null != website && null != website.getId())
         {
-            websiteFacade.deleteWebsite(websiteDTO);
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", website.getId());
+            this.websiteApplication.removeEntity(criteria);
             result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
@@ -133,12 +136,24 @@ public class WebsiteController
     
     @ResponseBody
     @RequestMapping("/validate/nameUnique")
-    public boolean validateNameUnique(HttpServletRequest request, WebsiteDTO websiteDTO)
+    public boolean validateNameUnique(HttpServletRequest request, Website website)
     {
-        if (null != websiteDTO && !StringUtils.isEmpty(websiteDTO.getSiteName()))
+        if (null != website && !StringUtils.isEmpty(website.getSiteName()))
         {
-            return this.websiteFacade.validateNameUnique(websiteDTO);
+            return this.websiteApplication.validateNameUnique(website);
         }
         return false;
+    }
+    
+    class Views
+    {
+        public static final String INDEX_VIEW = "/website/list";
+        
+        public static final String LIST_VIEW = "/website/list";
+        
+        public static final String ADD_VIEW = "/website/edit";
+        
+        public static final String EDIT_VIEW = "/website/edit";
+        
     }
 }

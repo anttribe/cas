@@ -7,19 +7,19 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
+import org.anttribe.vigor.infra.persist.entity.Entity;
 
 /**
  * @author zhaoyong
  * @version 2015年7月22日
  */
-public class ContentType extends MybatisAbstractEntity
+public class ContentType extends Entity
 {
     
     /**
-     * id编号
+     * serialVersionUID
      */
-    private Long id;
+    private static final long serialVersionUID = 1L;
     
     /**
      * 名称
@@ -36,34 +36,6 @@ public class ContentType extends MybatisAbstractEntity
      */
     public ContentType()
     {
-    }
-    
-    @Override
-    public String toString()
-    {
-        StringBuilder strB = new StringBuilder();
-        strB.append("ContentType")
-            .append("{")
-            .append("id=")
-            .append(this.getId())
-            .append(',')
-            .append("name=")
-            .append(this.getName())
-            .append(',')
-            .append("code=")
-            .append(this.getCode())
-            .append("}");
-        return strB.toString();
-    }
-    
-    public Long getId()
-    {
-        return id;
-    }
-    
-    public void setId(Long id)
-    {
-        this.id = id;
     }
     
     public String getName()
@@ -85,4 +57,5 @@ public class ContentType extends MybatisAbstractEntity
     {
         this.code = code;
     }
+    
 }

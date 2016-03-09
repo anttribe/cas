@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	id="cas-console" version="2.5">
+<web-app id="vigor-defensor-console" version="3.0"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
 	<display-name>cas-console</display-name>
 
 	<context-param>
@@ -46,6 +46,16 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<!-- Shiro -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<!-- sitemeth -->
 	<filter>
 		<filter-name>sitemesh</filter-name>
@@ -60,15 +70,14 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- SpringMVC的请求处理分派servlet -->
 	<servlet>
 		<servlet-name>dispatcherServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:spring/dispatcherContext-servlet.xml</param-value>
+			<param-value>classpath:spring/dispatcherContext.xml</param-value>
 		</init-param>
-		<load-on-startup>0</load-on-startup>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>dispatcherServlet</servlet-name>

@@ -5,7 +5,7 @@ $.extend(cas, {
 	        $.ajax({
 	        	type: 'POST',
 	        	async: false,
-	        	url: contextPath + '/category/list',
+	        	url: contextPath + '/category/list/exec',
 	        	data: {'parent.id': parent},
 	        	success: function(result){
 	        		if(result && callback){
@@ -30,7 +30,13 @@ $.extend(cas, {
 				draggable: true,
 				closable: true,
 	            title: (options && options.title) || '',
-	            message: $('<div></div>').load(contextPath + '/category/tool/selector')
+	            message: $('<div></div>').load(contextPath + '/category/tool/selector'),
+	            buttons: [{
+	            	label: BootstrapDialog.DEFAULT_TEXTS.CANCEL,
+	            	action: function(dialogRef) {
+	            		dialogRef.close();
+	                }
+	            }]
 	        });
 		},
 		selectCategory: function(category){

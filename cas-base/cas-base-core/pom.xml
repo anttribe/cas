@@ -22,6 +22,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.anttribe.vigor.vigor-infra</groupId>
+			<artifactId>vigor-infra-persist</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.anttribe.cas</groupId>
 			<artifactId>cas-base-infra</artifactId>
 			<version>${project.version}</version>

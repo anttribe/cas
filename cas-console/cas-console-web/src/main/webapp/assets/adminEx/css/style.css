@@ -139,7 +139,7 @@ hr {
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s;
-    font-size: 30px;
+    font-size: 22px;
 }
 
 .form-signin .btn-login:hover {

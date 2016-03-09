@@ -13,7 +13,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>cas-console-facade</module>
 		<module>cas-console-web</module>
 	</modules>
 

@@ -7,15 +7,17 @@
  */
 package org.anttribe.cas.console.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.anttribe.cas.base.infra.common.Result;
-import org.anttribe.cas.base.infra.constants.Keys;
-import org.anttribe.cas.base.infra.entity.Pagination;
-import org.anttribe.cas.console.facade.ContentAttributeFacade;
-import org.anttribe.cas.console.facade.dto.ContentAttributeDTO;
+import org.anttribe.cas.base.application.IContentAttributeApplication;
+import org.anttribe.cas.base.core.entity.ContentAttribute;
+import org.anttribe.vigor.infra.common.constants.Keys;
+import org.anttribe.vigor.infra.common.entity.Result;
+import org.anttribe.vigor.infra.persist.entity.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,23 +33,25 @@ import org.springframework.web.servlet.ModelAndView;
 public class ContentAttributeController
 {
     @Autowired
-    private ContentAttributeFacade contentAttributeFacade;
+    private IContentAttributeApplication contentAttributeApplication;
     
     @RequestMapping("/index")
-    public ModelAndView index(HttpServletRequest request, ModelAndView mv, ContentAttributeDTO contentAttributeDTO,
+    public ModelAndView index(HttpServletRequest request, ModelAndView mv, ContentAttribute contentAttribute,
         Pagination pagination)
     {
-        return this.list(request, mv, contentAttributeDTO, pagination);
+        return this.list(request, mv, contentAttribute, pagination);
     }
     
     @RequestMapping("/list")
-    public ModelAndView list(HttpServletRequest request, ModelAndView mv, ContentAttributeDTO contentAttributeDTO,
+    public ModelAndView list(HttpServletRequest request, ModelAndView mv, ContentAttribute contentAttribute,
         Pagination pagination)
     {
-        pagination = contentAttributeFacade.listContentAttributes(contentAttributeDTO, pagination);
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("contentType", contentAttribute.getContentType());
+        pagination = contentAttributeApplication.listEntities(criteria, pagination);
         
         mv.setViewName("/contentAttribute/list");
-        mv.addObject(Keys.KEY_PARAM, contentAttributeDTO);
+        mv.addObject(Keys.KEY_PARAM, contentAttribute);
         mv.addObject(Keys.KEY_PAGE, pagination);
         if (null != pagination)
         {
@@ -58,9 +62,11 @@ public class ContentAttributeController
     
     @RequestMapping("/list/exec")
     @ResponseBody
-    public List<ContentAttributeDTO> doList(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
+    public List<ContentAttribute> doList(HttpServletRequest request, ContentAttribute contentAttribute)
     {
-        return  contentAttributeFacade.listContentAttributes(contentAttributeDTO);
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("contentType", contentAttribute.getContentType());
+        return contentAttributeApplication.listEntities(criteria);
     }
     
     @RequestMapping("/add")
@@ -70,12 +76,14 @@ public class ContentAttributeController
     }
     
     @RequestMapping("/edit")
-    public String goEditContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
+    public String goEditContentAttribute(HttpServletRequest request, ContentAttribute contentAttribute)
     {
-        contentAttributeDTO = contentAttributeFacade.loadContentAttribute(contentAttributeDTO);
-        if (null != contentAttributeDTO)
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", contentAttribute.getId());
+        contentAttribute = contentAttributeApplication.findEntity(criteria);
+        if (null != contentAttribute)
         {
-            request.setAttribute("contentAttribute", contentAttributeDTO);
+            request.setAttribute("contentAttribute", contentAttribute);
             return "/contentAttribute/edit";
         }
         return "redirect:/contentAttribute/index";
@@ -83,12 +91,12 @@ public class ContentAttributeController
     
     @ResponseBody
     @RequestMapping("/edit/exec")
-    public Result<?> doEditContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
+    public Result<?> doEditContentAttribute(HttpServletRequest request, ContentAttribute contentAttribute)
     {
         Result<?> result = new Result<Object>();
-        if (null != contentAttributeDTO)
+        if (null != contentAttribute)
         {
-            contentAttributeFacade.editContentAttribute(contentAttributeDTO);
+            contentAttributeApplication.persistentEntity(contentAttribute);
             result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
@@ -96,12 +104,14 @@ public class ContentAttributeController
     
     @ResponseBody
     @RequestMapping("/delete/exec")
-    public Result<?> doDeleteContentAttribute(HttpServletRequest request, ContentAttributeDTO contentAttributeDTO)
+    public Result<?> doDeleteContentAttribute(HttpServletRequest request, ContentAttribute contentAttribute)
     {
         Result<?> result = new Result<Object>();
-        if (null != contentAttributeDTO)
+        if (null != contentAttribute)
         {
-            contentAttributeFacade.deleteContentAttribute(contentAttributeDTO);
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", contentAttribute.getId());
+            contentAttributeApplication.removeEntity(criteria);
             result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;

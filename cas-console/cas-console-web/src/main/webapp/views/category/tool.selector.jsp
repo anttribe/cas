@@ -8,8 +8,8 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.category.title.category" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/zTree/css/zTreeStyle/zTreeStyle.css" >
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/zTree/css/metroStyle/metroStyle.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/assets/zTree/css/zTreeStyle/zTreeStyle.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/assets/zTree/css/metroStyle/metroStyle.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -26,64 +26,71 @@
         </div>
         <!--body wrapper end-->
         
-        <script type="text/javascript" src="${contextPath}/static/assets/zTree/js/jquery.ztree.all-3.5.min.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
+        <script type="text/javascript" src="${contextPath}/assets/zTree/js/jquery.ztree.all-3.5.min.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/js/category.js"></script>
         <script type="text/javascript">
 	        $(function(){
-	        	var categories = {};
-	        	// 初始化分类树
-	        	$.fn.zTree.init($("#category-list-tree"), {
-	        		async: {
-	        			enable: true,
-	        			type: 'POST',
-	        			autoParam: ['parent.id'],
-	        			url: contextPath + '/category/list' + '?parent.id=' + ''
-	        		},
-	        		view: {
-	                    selectedMulti: false,
-	                    dblClickExpand: false
-	                },
-	                data: {
-	                    simpleData: {
-	                        enable: true,
-	                        idKey: 'id'
-	                    }
-	                },
-	                callback: {
-	                	onAsyncSuccess: function(event, treeId, treeNode, msg){
-	                		console.log(treeNode);
-	                	},
-	                	onNodeCreated: function(e, treeId, treeNode){
-	                		if(treeNode.children){
-	                			treeNode.isParent = true;
-	                			treeNode.children = null;
-	                		}
-	                	},
-	                	onClick: function(e, treeId, treeNode){
-	                		var zTree = $.fn.zTree.getZTreeObj(treeId);
-	                		if(zTree){
-	                			if(treeNode.isParent){
-	                				zTree.expandNode(treeNode, null, false, true, true);
-	                			}
-	                		}
-	                	},
-	                	onExpand: function(e, treeId, treeNode){
-	                		var zTree = $.fn.zTree.getZTreeObj(treeId);
-	                		if(zTree && !treeNode.children){
-	                			// 异步加载子节点
-	                			cas.category.listCategoriesByParent(treeNode.id, function(datas){
-	                				zTree.addNodes(treeNode, datas);
-	                			});
-	                		}
-	                	},
-	                	onDblClick: function(e, treeId, treeNode){
-	                		var category = {
-	                			id: treeNode.id,
-	                			name: treeNode.name
-	                		};
-	                		cas.category.selectCategory(category);
-	                	}
-	                }
+	        	function processCategoryTreeData(categorys){
+	        		if(categorys && categorys.length > 0){
+    					var categoryTreeDatas = [];
+						for(var i=0; i<categorys.length; i++){
+							var category = categorys[i];
+							if(category && category['id']){
+								categoryTreeDatas.push({
+									'id': category['id'],
+									'name': category['name'] || '',
+									'parentId': (category['parent'] && category['parent']['id']) || null,
+									'children': processCategoryTreeData(category['children']) || null
+								});
+							}
+						}
+						return categoryTreeDatas;
+	        		}
+	        	}
+	        	$.ajax({
+	        		type: 'POST',
+	        		url: '${contextPath}/category/list/exec',
+	        		success: function(r){
+	        			if(r){
+	        				var result = $.parseJSON(r);
+	        				if(result && result.resultCode == '000000'){
+	        					var categorys = result.data;
+	        					// 构造成tree数据
+	        					var categoryTreeDatas = processCategoryTreeData(categorys);
+	        					// 初始化tree
+	        		            zTreeObj = $.fn.zTree.init($("#category-list-tree"), {
+	        		        		view: {
+	        		                    dblClickExpand: false
+	        		                },
+	        		                data: {
+	        		                    simpleData: {
+	        		                        enable: true,
+	        		                        idKey: 'id',
+	        		                        pIdKey: 'parentId'
+	        		                    }
+	        		                },
+	        		                callback: {
+	        		                	onClick: function(e, treeId, treeNode){
+	        		                		var zTree = $.fn.zTree.getZTreeObj(treeId);
+	        		                		if(zTree){
+	        		                			if(treeNode.isParent){
+	        		                				zTree.expandNode(treeNode, null, false, true, true);
+	        		                			}
+	        		                		}
+	        		                	},
+	        		                	onDblClick: function(e, treeId, treeNode){
+	        		                		var resurce = {
+	        		                			id: treeNode.id,
+	        		                			name: treeNode.name
+	        		                		};
+	        		                		cas.category.selectCategory(resurce);
+	        		                	}
+	        		                }
+	        		            }, categoryTreeDatas);
+	        		            zTreeObj.expandAll(true);
+	        				}
+	        			}
+	        		}
 	        	});
 	        });
 	    </script>

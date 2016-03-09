@@ -7,10 +7,7 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import java.util.Date;
-import java.util.List;
-
-import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
+import org.anttribe.vigor.infra.persist.entity.TreeEntity;
 
 /**
  * 分类信息
@@ -18,13 +15,13 @@ import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
  * @author zhaoyong
  * @version 2015年8月27日
  */
-public class Category extends MybatisAbstractEntity
+public class Category extends TreeEntity<Category>
 {
     
     /**
-     * 编号
+     * serialVersionUID
      */
-    private Long id;
+    private static final long serialVersionUID = 1L;
     
     /**
      * 分类名称
@@ -32,29 +29,9 @@ public class Category extends MybatisAbstractEntity
     private String name;
     
     /**
-     * 顺序
-     */
-    private Integer ordinal;
-    
-    /**
-     * 父分类
-     */
-    private Category parent;
-    
-    /**
-     * 子分类
-     */
-    private List<Category> children;
-    
-    /**
      * 树节点标记
      */
     private String treeCode;
-    
-    /**
-     * 创建时间
-     */
-    private Date createTime;
     
     /**
      * <构造器>
@@ -71,43 +48,6 @@ public class Category extends MybatisAbstractEntity
         this.id = id;
     }
     
-    @Override
-    public String toString()
-    {
-        StringBuilder strB = new StringBuilder();
-        strB.append("Category")
-            .append("{")
-            .append("id=")
-            .append(this.getId())
-            .append(',')
-            .append("name=")
-            .append(this.getName())
-            .append(',')
-            .append("parent=")
-            .append(this.getParent())
-            .append(',')
-            .append("treeCode=")
-            .append(this.getTreeCode())
-            .append(',')
-            .append("createTime=")
-            .append(this.getCreateTime())
-            .append(',')
-            .append("ordinal=")
-            .append(this.getOrdinal())
-            .append("}");
-        return strB.toString();
-    }
-    
-    public Long getId()
-    {
-        return id;
-    }
-    
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-    
     public String getName()
     {
         return name;
@@ -118,36 +58,6 @@ public class Category extends MybatisAbstractEntity
         this.name = name;
     }
     
-    public Integer getOrdinal()
-    {
-        return ordinal;
-    }
-    
-    public void setOrdinal(Integer ordinal)
-    {
-        this.ordinal = ordinal;
-    }
-    
-    public Category getParent()
-    {
-        return parent;
-    }
-    
-    public void setParent(Category parent)
-    {
-        this.parent = parent;
-    }
-    
-    public List<Category> getChildren()
-    {
-        return children;
-    }
-    
-    public void setChildren(List<Category> children)
-    {
-        this.children = children;
-    }
-    
     public String getTreeCode()
     {
         return treeCode;
@@ -156,16 +66,6 @@ public class Category extends MybatisAbstractEntity
     public void setTreeCode(String treeCode)
     {
         this.treeCode = treeCode;
-    }
-    
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-    
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
     }
     
 }

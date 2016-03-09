@@ -7,14 +7,17 @@
  */
 package org.anttribe.cas.console.web.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.anttribe.cas.base.infra.common.Result;
-import org.anttribe.cas.base.infra.constants.Keys;
-import org.anttribe.cas.base.infra.entity.Pagination;
+import org.anttribe.cas.base.application.ICrawlerApplication;
+import org.anttribe.cas.base.core.entity.Crawler;
 import org.anttribe.cas.base.infra.errorno.CrawlerErrorNo;
-import org.anttribe.cas.console.facade.CrawlerFacade;
-import org.anttribe.cas.console.facade.dto.CrawlerDTO;
+import org.anttribe.vigor.infra.common.constants.Keys;
+import org.anttribe.vigor.infra.common.entity.Result;
+import org.anttribe.vigor.infra.persist.entity.Pagination;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,22 +34,24 @@ import org.springframework.web.servlet.ModelAndView;
 public class CrawlerController
 {
     @Autowired
-    private CrawlerFacade crawlerFacade;
+    private ICrawlerApplication crawlerApplication;
     
     @RequestMapping("/index")
-    public ModelAndView index(HttpServletRequest request, ModelAndView mv, CrawlerDTO crawlerDTO, Pagination pagination)
+    public ModelAndView index(HttpServletRequest request, ModelAndView mv, Crawler crawler, Pagination pagination)
     {
-        return this.listCrawlers(request, mv, crawlerDTO, pagination);
+        return this.listCrawlers(request, mv, crawler, pagination);
     }
     
     @RequestMapping("/list")
-    public ModelAndView listCrawlers(HttpServletRequest request, ModelAndView mv, CrawlerDTO crawlerDTO,
+    public ModelAndView listCrawlers(HttpServletRequest request, ModelAndView mv, Crawler crawler,
         Pagination pagination)
     {
-        pagination = crawlerFacade.listCrawlers(crawlerDTO, pagination);
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("contentType", crawler.getContentType());
+        pagination = crawlerApplication.listEntities(criteria, pagination);
         
         mv.setViewName("/crawler/list");
-        mv.addObject(Keys.KEY_PARAM, crawlerDTO);
+        mv.addObject(Keys.KEY_PARAM, crawler);
         mv.addObject(Keys.KEY_PAGE, pagination);
         if (null != pagination)
         {
@@ -69,18 +74,18 @@ public class CrawlerController
     
     @RequestMapping("/edit/exec")
     @ResponseBody
-    public Result<?> doEditCrawler(HttpServletRequest request, CrawlerDTO crawlerDTO)
+    public Result<?> doEditCrawler(HttpServletRequest request, Crawler crawler)
     {
         Result<?> result = new Result<Object>();
-        if (null != crawlerDTO)
+        if (null != crawler)
         {
-            boolean validateResult = this.validateTitleUnique(request, crawlerDTO);
+            boolean validateResult = this.validateTitleUnique(request, crawler);
             if (!validateResult)
             {
                 result.setResultCode(CrawlerErrorNo.CRAWLER_TITLE_UNIQUE);
                 return result;
             }
-            crawlerFacade.editCrawler(crawlerDTO);
+            crawlerApplication.persistentEntity(crawler);
             result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
@@ -88,12 +93,14 @@ public class CrawlerController
     
     @RequestMapping("/delete/exec")
     @ResponseBody
-    public Result<?> doDeleteCrawler(HttpServletRequest request, CrawlerDTO crawlerDTO)
+    public Result<?> doDeleteCrawler(HttpServletRequest request, Crawler crawler)
     {
         Result<?> result = new Result<Object>();
-        if (null != crawlerDTO)
+        if (null != crawler)
         {
-            crawlerFacade.deleteCrawler(crawlerDTO);
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("id", crawler.getId());
+            crawlerApplication.removeEntity(criteria);
             result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
@@ -101,11 +108,11 @@ public class CrawlerController
     
     @RequestMapping("/validate/titleUnique")
     @ResponseBody
-    public boolean validateTitleUnique(HttpServletRequest request, CrawlerDTO crawlerDTO)
+    public boolean validateTitleUnique(HttpServletRequest request, Crawler crawler)
     {
-        if (null != crawlerDTO && !StringUtils.isEmpty(crawlerDTO.getTitle()))
+        if (null != crawler && !StringUtils.isEmpty(crawler.getTitle()))
         {
-            return crawlerFacade.validateTitleUnique(crawlerDTO);
+            return crawlerApplication.validateTitleUnique(crawler);
         }
         return false;
     }

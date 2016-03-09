@@ -11,14 +11,13 @@
 
 	<modules>
 		<module>cas-base</module>
-		<module>cas-cis</module>
-		<module>cas-crs</module>
 		<module>cas-console</module>
 	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.version>0.0.1-SNAPSHOT</project.version>
+		<vigor.version>0.0.1-SNAPSHOT</vigor.version>
 		<slf4j.version>1.7.7</slf4j.version>
 		<dom4j.version>1.6.1</dom4j.version>
 		<quartz.version>2.2.1</quartz.version>
@@ -101,7 +100,7 @@
 				<artifactId>dom4j</artifactId>
 				<version>${dom4j.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
@@ -176,6 +175,39 @@
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql.version}</version>
+			</dependency>
+
+			<!-- vigor-framework -->
+			<dependency>
+				<groupId>org.anttribe.vigor.vigor-infra</groupId>
+				<artifactId>vigor-infra-common</artifactId>
+				<version>${vigor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.vigor.vigor-infra</groupId>
+				<artifactId>vigor-infra-persist</artifactId>
+				<version>${vigor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.vigor.vigor-infra</groupId>
+				<artifactId>vigor-infra-dict</artifactId>
+				<version>${vigor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.vigor.vigor-infra</groupId>
+				<artifactId>vigor-infra-security</artifactId>
+				<version>${vigor.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.anttribe.vigor.vigor-defensor</groupId>
+				<artifactId>vigor-defensor-service</artifactId>
+				<version>${vigor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.vigor.vigor-defensor</groupId>
+				<artifactId>vigor-defensor-auth</artifactId>
+				<version>${vigor.version}</version>
 			</dependency>
 
 			<dependency>

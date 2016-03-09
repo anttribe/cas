@@ -7,22 +7,21 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import java.util.Date;
 import java.util.List;
 
-import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
+import org.anttribe.vigor.infra.persist.entity.Entity;
 
 /**
  * @author zhaoyong
  * @version 2015年7月22日
  */
-public class Content extends MybatisAbstractEntity
+public class Content extends Entity
 {
     
     /**
-     * id编号
+     * serialVersionUID
      */
-    private Long id;
+    private static final long serialVersionUID = 1L;
     
     /**
      * 原链接
@@ -43,21 +42,6 @@ public class Content extends MybatisAbstractEntity
      * 所属站点
      */
     private Website website;
-    
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-    
-    public Long getId()
-    {
-        return id;
-    }
-    
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
     
     public String getLink()
     {
@@ -97,16 +81,6 @@ public class Content extends MybatisAbstractEntity
     public void setWebsite(Website website)
     {
         this.website = website;
-    }
-    
-    public Date getCreateTime()
-    {
-        return createTime;
-    }
-    
-    public void setCreateTime(Date createTime)
-    {
-        this.createTime = createTime;
     }
     
 }

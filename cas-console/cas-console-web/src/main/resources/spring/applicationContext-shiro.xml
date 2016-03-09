@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/signin" />
+		<property name="unauthorizedUrl" value="/unauthorized/403" />
+		<property name="filters">
+			<map>
+				<entry key="authc" value-ref="formAuthenticationFilter" />
+			</map>
+		</property>
+		<property name="filterChainDefinitionMap">
+			<map>
+				<entry key="/assets/**" value="anon" />
+				<entry key="/static/**" value="anon" />
+				<entry key="/unauthorized" value="anon" />
+				<entry key="/signin" value="authc" />
+				<entry key="/signout" value="logout" />
+				<entry key="/**" value="user" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- 基于Form表单的身份验证过滤器 -->
+	<bean id="formAuthenticationFilter"
+		class="org.anttribe.vigor.defensor.auth.filter.FormAuthenticationFilter">
+		<property name="usernameParam" value="username" />
+		<property name="passwordParam" value="password" />
+		<property name="loginUrl" value="/signin" />
+	</bean>
+
+	<!-- 定义Shiro安全管理配置 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realms">
+			<list>
+				<ref bean="defensorAuthorizingRealm" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="defensorAuthorizingRealm"
+		class="org.anttribe.vigor.defensor.auth.realm.DefensorAuthorizingRealm">
+		<property name="passwordService" ref="passwordService" />
+	</bean>
+	
+	<!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod"
+			value="org.apache.shiro.SecurityUtils.setSecurityManager" />
+		<property name="arguments" ref="securityManager" />
+	</bean>
+
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>

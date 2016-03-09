@@ -17,18 +17,23 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.anttribe.cas</groupId>
-			<artifactId>cas-base-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.anttribe.vigor.vigor-infra</groupId>
+			<artifactId>vigor-infra-common</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.anttribe.cas</groupId>
+			<artifactId>cas-base-core</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

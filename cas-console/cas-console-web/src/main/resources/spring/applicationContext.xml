@@ -6,28 +6,24 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="org.anttribe.cas" />
-
-	<!-- 全局应用配置文件 -->
-	<util:properties id="application" location="classpath:application.properties" />
-
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="localOverride" value="true" />
-		<property name="properties" ref="application" />
+		<property name="locations">
+			<list>
+				<value>classpath:application.properties</value>
+			</list>
+		</property>
 	</bean>
 
-	<bean id="configuration"
-		class="org.apache.commons.configuration.PropertiesConfiguration">
-		<constructor-arg value="application.properties" />
-	</bean>
-
-	<bean class="org.anttribe.cas.base.infra.common.Global"
-		factory-method="me">
-		<property name="configuration" ref="configuration" />
-	</bean>
+	<context:component-scan base-package="org.anttribe.vigor.defensor,org.anttribe.cas">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
 
 	<!-- import other layer definitions -->
 	<import resource="applicationContext-datasource.xml" />
+	<import resource="applicationContext-security.xml" />
+	<import resource="applicationContext-shiro.xml" />
 </beans>

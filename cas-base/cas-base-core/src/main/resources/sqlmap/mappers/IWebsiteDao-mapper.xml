@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.dao.IWebsiteDao">
+	<cache readOnly="true" />
+	<resultMap id="Website-resultMap" type="org.anttribe.cas.base.core.entity.Website">
+		<result property="id" column="id" />
+		<result property="siteName" column="site_name" />
+		<result property="domain" column="domain" />
+		<result property="logo" column="logo" />
+		<result property="charset" column="charset" />
+		<result property="userAgent" column="user_agent" />
+		<result property="createTime" column="create_time" />
+		<association property="category"
+			javaType="org.anttribe.cas.base.core.entity.Category" column="{id=category_id}"
+			select="org.anttribe.cas.base.core.dao.ICategoryDao.find">
+		</association>
+	</resultMap>
+
+	<!-- select -->
+	<sql id="select">
+        <![CDATA[
+            SELECT t.id, t.site_name, t.domain, t.logo, t.charset, t.user_agent, t.category_id, t.create_time
+              FROM cas_t_core_website t
+        ]]>
+	</sql>
+
+	<!-- where -->
+	<sql id="where">
+		<where>
+			<if test="null != id and id != ''">
+				AND t.id = #{id}
+			</if>
+			<if test="null != siteName and siteName != ''">
+				AND t.site_name LIKE CONCAT('%', #{siteName}, '%')
+			</if>
+			<if test="null != category and null != category.id and '' != category.id">
+				<![CDATA[
+				    AND (t.category_id = #{category.id} OR t.category_id IN (select id from cas_t_core_category where tree_code LIKE CONCAT('%', '-', #{category.id}, '-', '%')))
+				]]>
+			</if>
+
+			<!-- 校验唯一性参数 -->
+			<if test="null != notId and '' != notId">
+				<![CDATA[ AND t.id <> #{notId} ]]>
+			</if>
+			<if test="null != uniqueName and '' != uniqueName">
+				AND t.site_name = #{uniqueName}
+			</if>
+		</where>
+	</sql>
+
+	<!-- where-no-alias -->
+	<sql id="where-no-alias">
+		<where>
+			<if test="null != id and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="null != siteName and siteName != ''">
+				AND site_name LIKE CONCAT('%', '${siteName}', '%')
+			</if>
+			<if test="null != category and null != category.id and '' != category.id">
+				<![CDATA[
+				    AND (category_id = #{category.id} OR category_id IN (select id from cas_t_core_category where tree_code LIKE CONCAT('%', '-', #{category.id}, '-', '%')))
+				]]>
+			</if>
+		</where>
+	</sql>
+
+	<!-- order-by -->
+	<sql id="order-by">
+	    <![CDATA[ ORDER BY t.create_time DESC ]]>
+	</sql>
+
+	<!-- limit -->
+	<sql id="limit">
+		<if test="null != pagination">
+			LIMIT #{pagination.offset}, #{pagination.pagesize}
+		</if>
+	</sql>
+
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Website">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
+		</selectKey>
+		<![CDATA[
+		    INSERT INTO cas_t_core_website(site_name, domain, logo, charset, user_agent, category_id, create_time)
+		        VALUES(#{siteName}, #{domain}, #{logo}, #{charset}, #{userAgent}, #{category.id}, #{createTime})
+		]]>
+	</insert>
+
+	<!-- batchInsert: 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		<![CDATA[
+		    INSERT INTO cas_t_core_website(site_name, domain, logo, charset, user_agent, category_id, create_time)
+		        VALUES
+		]]>
+		<foreach collection="list" item="item" separator=", ">
+			(#{item.siteName}, #{item.domain}, #{item.logo}, #{item.charset},
+			#{item.userAgent}, #{item.category.id}, #{item.createTime})
+		</foreach>
+	</insert>
+
+	<!-- update: 更新单条数据 -->
+	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Website">
+        <![CDATA[
+            UPDATE cas_t_core_website t
+        ]]>
+		<set>
+			<if test="null != siteName and siteName != ''">
+				t.site_name = #{siteName},
+			</if>
+			<if test="null != domain and domain != ''">
+				t.domain = #{domain},
+			</if>
+			t.logo = #{logo},
+			t.charset = #{charset},
+			t.user_agent = #{userAgent},
+			<if test="null != category and null != category.id and category.id != ''">
+				t.category_id = #{category.id},
+			</if>
+		</set>
+		<![CDATA[
+            WHERE t.id = #{id}
+        ]]>
+	</update>
+
+	<!-- delete: 删除数据 -->
+	<delete id="delete" parameterType="Map">
+	    <![CDATA[
+            DELETE FROM cas_t_core_website
+        ]]>
+		<include refid="where-no-alias"></include>
+	</delete>
+
+	<!-- findAll: 查询所有数据 -->
+	<select id="findAll" resultMap="Website-resultMap">
+		<include refid="select"></include>
+		<include refid="order-by"></include>
+	</select>
+
+	<!-- findById: 根据id查询单条数据 -->
+	<select id="findById" resultMap="Website-resultMap">
+		<include refid="select"></include>
+		<include refid="where"></include>
+	</select>
+
+	<!-- find: 根据条件查询数据 -->
+	<select id="find" resultMap="Website-resultMap" parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="order-by"></include>
+	</select>
+
+	<!-- count: 根据条件查询数据条数 -->
+	<select id="count" resultType="int" parameterType="Map">
+		<![CDATA[
+            SELECT COUNT(1)
+              FROM cas_t_core_website t
+        ]]>
+		<include refid="where"></include>
+	</select>
+
+</mapper>

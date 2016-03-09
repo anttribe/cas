@@ -87,9 +87,17 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.anttribe.vigor.vigor-defensor</groupId>
+			<artifactId>vigor-defensor-auth</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.anttribe.cas</groupId>
-			<artifactId>cas-console-facade</artifactId>
-			<version>${project.version}</version>
+			<artifactId>cas-base-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.anttribe.cas</groupId>
+			<artifactId>cas-base-application</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.anttribe.cas</groupId>

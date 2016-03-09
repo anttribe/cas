@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.anttribe.cas.base.core.dao.ICategoryDao">
+	<cache readOnly="true" />
+	<resultMap id="Category-resultMap" type="org.anttribe.cas.base.core.entity.Category">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="sortNo" column="sort_no" />
+		<result property="treeCode" column="tree_code" />
+		<result property="remarks" column="remarks" />
+		<result property="createTime" column="create_time" />
+		<association property="parent"
+			javaType="org.anttribe.cas.base.core.entity.Category">
+			<id property="id" column="parent" />
+			<result property="name" column="parent_name" />
+		</association>
+		<collection property="children" javaType="java.util.ArrayList"
+			column="{parent.id=id}" ofType="org.anttribe.cas.base.core.entity.Category"
+			select="find">
+		</collection>
+	</resultMap>
+
+	<resultMap id="Category-child-resultMap" type="org.anttribe.cas.base.core.entity.Category">
+		<id property="id" column="child_id" />
+	</resultMap>
+
+	<!-- select -->
+	<sql id="select">
+        <![CDATA[
+            SELECT t.id, t.name, t.sort_no, t.parent, t.tree_code, t.remarks, t.create_time, t1.name as parent_name
+              FROM cas_t_core_category t
+		      LEFT JOIN cas_t_core_category t1 ON t1.id = t.parent
+        ]]>
+	</sql>
+
+	<!-- where -->
+	<sql id="where">
+		<where>
+			<if test="null != id and id != ''">
+				AND t.id = #{id}
+			</if>
+			<if test="null != name and name != ''">
+				AND t.name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if
+				test="null == id and (null == parent or null == parent.id or '' == parent.id)">
+				AND t.parent IS NULL
+			</if>
+			<if test="null != parent and null != parent.id and '' != parent.id">
+				AND t.parent = #{parent.id}
+			</if>
+
+			<!-- 校验唯一性参数 -->
+			<if test="null != notId and '' != notId">
+				<![CDATA[ AND t.id <> #{notId} ]]>
+			</if>
+			<if test="null != uniqueName and '' != uniqueName">
+				AND t.name = #{uniqueName}
+			</if>
+		</where>
+	</sql>
+
+	<!-- where-no-alias -->
+	<sql id="where-no-alias">
+		<where>
+			<if test="null != id and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="null != name and name != ''">
+				AND name LIKE CONCAT('%', '${name}', '%')
+			</if>
+			<if test="null != parent and null != parent.id">
+				AND parent = #{parent.id}
+			</if>
+		</where>
+	</sql>
+
+	<!-- orderBy -->
+	<sql id="orderBy">
+	    <![CDATA[]]>
+	</sql>
+
+	<!-- limit -->
+	<sql id="limit">
+		<if test="null != pagination">
+			limit #{pagination.offset}, #{pagination.pagesize}
+		</if>
+	</sql>
+
+	<!-- insert: 插入单条数据 -->
+	<insert id="insert" parameterType="org.anttribe.cas.base.core.entity.Category">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
+		</selectKey>
+		<![CDATA[
+		    INSERT INTO cas_t_core_category(name, parent, sort_no, tree_code, remarks, create_time)
+		        VALUES(#{name}, #{parent.id}, #{sortNo}, #{treeCode}, #{remarks}, #{createTime})
+		]]>
+	</insert>
+
+	<!-- batchInsert: 批量插入数据 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		<![CDATA[
+		    INSERT INTO cas_t_core_category(name, parent, sort_no, tree_code, remarks, create_time)
+		        VALUES
+		]]>
+		<foreach collection="list" item="item" separator=", ">
+			(#{item.name}, #{item.parent.id}, #{item.sortNo}, #{item.treeCode},
+			#{item.remarks}, #{item.createTime})
+		</foreach>
+	</insert>
+
+	<!-- update: 更新单条数据 -->
+	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Category">
+        <![CDATA[
+            UPDATE cas_t_core_category
+        ]]>
+		<set>
+			<if test="null != name and name != ''">
+				name = #{name},
+			</if>
+			<if test="null != sortNo and sortNo != ''">
+				sort_no = #{sortNo},
+			</if>
+			<if test="null != parent and parent.id != ''">
+				parent = #{parent.id},
+			</if>
+			<if test="null != treeCode and treeCode != ''">
+				tree_code = #{treeCode},
+			</if>
+			<if test="null != remarks and remarks != ''">
+				remarks = #{remarks},
+			</if>
+		</set>
+		<![CDATA[
+            WHERE id = #{id}
+        ]]>
+	</update>
+
+	<!-- batchUpdate: 批量更新数据 -->
+	<update id="batchUpdate" parameterType="java.util.List">
+		<![CDATA[
+            UPDATE cas_t_core_category t
+        ]]>
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="name = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != name and name != ''">
+						when #{item.id} then #{name}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="parent = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != parent and parent.id != ''">
+						when #{item.id} then #{parent.id}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="tree_code = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != treeCode and treeCode != ''">
+						when #{item.id} then #{treeCode}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="ordinal = case id" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="null != ordinal and ordinal != ''">
+						when #{item.id} then #{ordinal}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		<![CDATA[
+            WHERE id IN 
+        ]]>
+		<foreach collection="list" separator=", " item="item" open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<!-- delete: 删除单条数据 -->
+	<delete id="delete" parameterType="Map">
+	    <![CDATA[
+            DELETE FROM cas_t_core_category
+        ]]>
+		<include refid="where-no-alias"></include>
+		<!-- 级联删除 -->
+		<if test="null != id and id != ''">
+			OR parent = #{id}
+		</if>
+	</delete>
+
+	<!-- findAll: 查询所有数据 -->
+	<select id="findAll" resultMap="Category-resultMap">
+		<include refid="select"></include>
+		<include refid="orderBy"></include>
+	</select>
+
+	<!-- findById: 根据id查询单条数据 -->
+	<select id="findById" resultMap="Category-resultMap">
+		<include refid="select"></include>
+		<include refid="where"></include>
+	</select>
+
+	<!-- find: 根据条件查询数据 -->
+	<select id="find" resultMap="Category-resultMap" parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="orderBy"></include>
+		<include refid="limit"></include>
+	</select>
+
+	<!-- count: 根据条件查询数据条数 -->
+	<select id="count" resultType="Integer" parameterType="Map">
+		<![CDATA[
+            SELECT COUNT(1)
+              FROM cas_t_core_category t
+        ]]>
+		<include refid="where"></include>
+	</select>
+
+</mapper>

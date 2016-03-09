@@ -7,7 +7,7 @@
  */
 package org.anttribe.cas.base.core.entity;
 
-import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
+import org.anttribe.vigor.infra.persist.entity.Entity;
 
 /**
  * 爬虫内容属性规则
@@ -15,13 +15,13 @@ import org.anttribe.cas.base.infra.entity.MybatisAbstractEntity;
  * @author zhaoyong
  * @version 2015年7月22日
  */
-public class CrawlerRegular extends MybatisAbstractEntity
+public class CrawlerRegular extends Entity
 {
     
     /**
-     * id编号
+     * serialVersionUID
      */
-    private Long id;
+    private static final long serialVersionUID = 1L;
     
     /**
      * 所属爬虫
@@ -43,37 +43,6 @@ public class CrawlerRegular extends MybatisAbstractEntity
      */
     public CrawlerRegular()
     {
-    }
-    
-    @Override
-    public String toString()
-    {
-        StringBuilder strB = new StringBuilder();
-        strB.append("CrawlerRegular")
-            .append("{")
-            .append("id=")
-            .append(this.getId())
-            .append(',')
-            .append("crawler=")
-            .append(this.getCrawler())
-            .append(',')
-            .append("attrRegular=")
-            .append(this.getAttrRegular())
-            .append(',')
-            .append("contentAttr=")
-            .append(this.getContentAttr())
-            .append("}");
-        return strB.toString();
-    }
-    
-    public Long getId()
-    {
-        return id;
-    }
-    
-    public void setId(Long id)
-    {
-        this.id = id;
     }
     
     public Crawler getCrawler()

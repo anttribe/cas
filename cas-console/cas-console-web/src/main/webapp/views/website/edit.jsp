@@ -20,32 +20,33 @@
 						    <span><spring:message code="app.website.title" /></span>
 					    </header>
 					    <div class="panel-body">
-						    <form role="form" class="cmxform data-form" method="POST" action="">
-							    <input type="hidden" name="id" value="${website.id}" />
+						    <form role="form" class="data-form" method="POST" action="">
+							    <input type="hidden" name="id" value="${PARAM.id}" />
 							    <div class="form-group">
 								    <label for="siteName" class="control-label"><spring:message code="app.website.title.siteName" /></label>
-								    <input type="text" class="form-control" id="siteName" name="siteName" maxLength="30" value="${website.siteName}" placeholder="" />
+								    <input type="text" class="form-control" id="siteName" name="siteName" maxLength="30" value="${PARAM.siteName}" placeholder="<spring:message code="app.website.placeholder.siteName" />" />
 							    </div>
 							    <div class="form-group">
 								    <label for="domain" class="control-label"><spring:message code="app.website.title.domain" /></label>
-								    <input type="url" class="form-control" id="domain" name="domain" maxLength="500" value="${website.domain}" placeholder="" />
+								    <input type="url" class="form-control" id="domain" name="domain" maxLength="500" value="${PARAM.domain}" placeholder="<spring:message code="app.website.placeholder.domain" />" />
 							    </div>
 							    <div class="form-group">
-                                    <label for="categorySelect"><spring:message code="app.category.title.category" /></label>
-                                    <input type="hidden" name="category.id" value="${website.category.id}" />
-                                    <input type="text" class="form-control" id="categorySelect" name="categorySelect" value="${website.category.name}" placeholder="" />
+                                    <label for="categorySelect" class="control-label"><spring:message code="app.category.title.category" /></label>
+                                    <input type="hidden" name="category.id" value="${PARAM.category.id}" />
+                                    <input type="text" class="form-control" id="categorySelect" name="categorySelect" value="${PARAM.category.name}" placeholder="<spring:message code="app.website.placeholder.category" />" />
                                 </div>
 							    <div class="form-group">
 								    <label for="charset" class="control-label"><spring:message code="app.website.title.charset" /></label>
-								    <input type="text" class="form-control" id="charset" name="charset" maxLength="30" value="${website.charset}" placeholder="" />
+								    <input type="text" class="form-control" id="charset" name="charset" maxLength="30" value="${PARAM.charset}" placeholder="<spring:message code="app.website.placeholder.charset" />" />
 							    </div>
 							    <div class="form-group">
 								    <label for="userAgent" class="control-label"><spring:message code="app.website.title.userAgent" /></label>
-								    <input type="text" class="form-control" id="userAgent" name="userAgent" maxLength="200" value="${website.userAgent}" placeholder="" />
+								    <input type="text" class="form-control" id="userAgent" name="userAgent" maxLength="200" value="${PARAM.userAgent}" placeholder="<spring:message code="app.website.placeholder.userAgent" />" />
 							    </div>
-							    <div class="clearfix"></div>
-							    <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
-							    <a href="${contextPath}/website/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>
+							    <div class="form-group">
+							        <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
+							        <a href="${contextPath}/website/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>
+						        </div>
 						    </form>
 					    </div>
 				    </section>
@@ -54,8 +55,8 @@
 	    </div>
 	    <!--body wrapper end-->
 
-	    <script type="text/javascript" src="${contextPath}/static/static/js/category.js"></script>
-	    <script type="text/javascript" src="${contextPath}/static/static/js/website.js"></script>
+	    <script type="text/javascript" src="${contextPath}/static/js/category.js"></script>
+	    <script type="text/javascript" src="${contextPath}/static/js/website.js"></script>
 	    <script type="text/javascript">
 		    var categorySelector = null;
 		    var selectCategory = function(category) {
@@ -72,7 +73,7 @@
 		    $(function() {
 			    $('input[name="categorySelect"]').bind({
 				    'click' : function() {
-					    categorySelector = cas.category.categorySelector();
+					    categorySelector = cas.category.categorySelector({title: '<spring:message code="app.category.title.selector" />'});
 					    if (categorySelector) {
 						    categorySelector.open();
 					    }

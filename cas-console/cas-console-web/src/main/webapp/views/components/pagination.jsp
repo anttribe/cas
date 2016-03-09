@@ -8,8 +8,8 @@
     <div id="pagination">
     </div>
     
-    <link rel="stylesheet" type="text/css" href="${contextPath}/static/static/css/bootstrap-paginator.css" />
-    <script type="text/javascript" src="${contextPath}/static/assets/bootstrap-paginator/js/bootstrap-paginator.js"></script>
+    <link rel="stylesheet" type="text/css" href="${contextPath}/static/css/bootstrap-paginator.css" />
+    <script type="text/javascript" src="${contextPath}/assets/bootstrap-paginator/js/bootstrap-paginator.js"></script>
     <script type="text/javascript">
         $(function(){
     	    // 分页

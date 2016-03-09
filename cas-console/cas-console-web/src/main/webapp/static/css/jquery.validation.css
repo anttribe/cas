@@ -1,0 +1,21 @@
+label.error, label.valid, label.focus, label.normal {
+	font: 12px/1 verdana, simsun, sans-serif;
+	margin: 0;
+	padding: 6px 0;
+}
+
+label.normal {
+	color: #999999;
+}
+
+label.error {
+	color: #A94442;
+}
+
+label.valid {
+	color: #2666AF;
+}
+
+label.focus {
+	color: #999999;
+}

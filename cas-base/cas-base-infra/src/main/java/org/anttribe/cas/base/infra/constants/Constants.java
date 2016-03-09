@@ -28,6 +28,20 @@ public class Constants
     }
     
     /**
+     * 站点相关
+     * 
+     * @author zhaoyong
+     * @version 2016年3月9日
+     */
+    public class Website
+    {
+        /**
+         * 默认字符集
+         */
+        public static final String DEFAULT_CHARSET = "UTF-8";
+    }
+    
+    /**
      * 爬虫模块相关常量定义
      * 
      * @author zhaoyong

@@ -22,12 +22,12 @@
                                 <input type="hidden" name="id" value="${PARAM.id}" />
                                 <div class="form-group">
                                     <label class="control-label" for="name"><spring:message code="app.category.title.name" /></label>
-                                    <input type="text" class="form-control" id="name" name="name" maxLength="30" value="${PARAM.name}" placeholder="" />
+                                    <input type="text" class="form-control" id="name" name="name" maxLength="30" value="${PARAM.name}" placeholder="<spring:message code="app.category.placeholder.name" />" />
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="parentSelect"><spring:message code="app.category.title.parent" /></label>
                                     <input type="hidden" name="parent.id" value="${PARAM.parent.id}" />
-                                    <input type="text" class="form-control" id="parentSelect" name="parentSelect" value="${PARAM.parent.name}" placeholder="" />
+                                    <input type="text" class="form-control" id="parentSelect" name="parentSelect" value="${PARAM.parent.name}" placeholder="<spring:message code="app.category.placeholder.parent" />" />
                                 </div>
                                 <button type="submit" class="btn btn-primary submit"><spring:message code="app.common.action.submit" /></button>
                                 <a href="${contextPath}/category/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>

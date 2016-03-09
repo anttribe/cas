@@ -16,8 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.anttribe.cas.base.application.IContentTypeApplication;
 import org.anttribe.cas.base.core.entity.ContentType;
 import org.anttribe.cas.base.infra.errorno.ContentTypeErrorNo;
+import org.anttribe.vigor.infra.common.constants.Constants;
 import org.anttribe.vigor.infra.common.constants.Keys;
 import org.anttribe.vigor.infra.common.entity.Result;
+import org.anttribe.vigor.infra.common.errorno.SystemErrorNo;
+import org.anttribe.vigor.infra.common.exception.UnifyException;
 import org.anttribe.vigor.infra.persist.entity.Pagination;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +40,7 @@ public class ContentTypeController
     @Autowired
     private IContentTypeApplication contentTypeApplication;
     
-    @RequestMapping("/index")
+    @RequestMapping({"", "/", "/index"})
     public ModelAndView index(HttpServletRequest request, ModelAndView mv, ContentType contentType,
         Pagination pagination)
     {
@@ -52,7 +55,7 @@ public class ContentTypeController
         criteria.put("name", contentType.getName());
         pagination = contentTypeApplication.listEntities(criteria, pagination);
         
-        mv.setViewName("/contentType/list");
+        mv.setViewName(Views.LIST_VIEW);
         mv.addObject(Keys.KEY_PARAM, contentType);
         mv.addObject(Keys.KEY_PAGE, pagination);
         if (null != pagination)
@@ -64,7 +67,7 @@ public class ContentTypeController
     
     @ResponseBody
     @RequestMapping("/list/exec")
-    public List<ContentType> list(HttpServletRequest request, ModelAndView mv, ContentType contentType)
+    public List<ContentType> doList(HttpServletRequest request, ModelAndView mv, ContentType contentType)
     {
         Map<String, Object> criteria = new HashMap<String, Object>();
         criteria.put("name", contentType.getName());
@@ -72,28 +75,35 @@ public class ContentTypeController
     }
     
     @RequestMapping("/add")
-    public String goAddContentType()
+    public String add()
     {
-        return "/contentType/edit";
+        return Views.ADD_VIEW;
     }
     
     @RequestMapping("/edit")
-    public String goEditContentType(HttpServletRequest request, ContentType contentType)
+    public ModelAndView edit(HttpServletRequest request, ModelAndView mv, ContentType contentType)
     {
+        if (null == contentType || null == contentType.getId())
+        {
+            throw new UnifyException(SystemErrorNo.DATA_NOT_EXIST_ERROR);
+        }
+        
         Map<String, Object> criteria = new HashMap<String, Object>();
         criteria.put("id", contentType.getId());
         contentType = contentTypeApplication.findEntity(criteria);
-        if (null != contentType)
+        if (null == contentType)
         {
-            request.setAttribute("contentType", contentType);
-            return "/contentType/edit";
+            throw new UnifyException(SystemErrorNo.DATA_NOT_EXIST_ERROR);
         }
-        return "redirect:/contentType/index";
+        
+        mv.setViewName(Views.EDIT_VIEW);
+        mv.addObject(Keys.KEY_PARAM, contentType);
+        return mv;
     }
     
     @RequestMapping("/edit/exec")
     @ResponseBody
-    public Result<?> doEditContentType(HttpServletRequest request, ContentType contentType)
+    public Result<?> doEdit(HttpServletRequest request, ContentType contentType)
     {
         Result<?> result = new Result<Object>();
         if (null != contentType)
@@ -110,23 +120,24 @@ public class ContentTypeController
                 result.setResultCode(ContentTypeErrorNo.CONTENTTYPE_CODE_UNIQUE);
                 return result;
             }
+            
             contentTypeApplication.persistentEntity(contentType);
-            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
     }
     
     @RequestMapping("/delete/exec")
     @ResponseBody
-    public Result<?> doDeleteContentType(HttpServletRequest request, ContentType contentType)
+    public Result<?> doDelete(HttpServletRequest request, ContentType contentType)
     {
         Result<?> result = new Result<Object>();
-        if (null != contentType)
+        if (null != contentType && null != contentType.getId())
         {
             Map<String, Object> criteria = new HashMap<String, Object>();
             criteria.put("id", contentType.getId());
             contentTypeApplication.removeEntity(criteria);
-            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
     }
@@ -152,4 +163,18 @@ public class ContentTypeController
         }
         return false;
     }
+    
+    class Views
+    {
+        
+        public static final String INDEX_VIEW = "/contentType/list";
+        
+        public static final String LIST_VIEW = "/contentType/list";
+        
+        public static final String ADD_VIEW = "/contentType/edit";
+        
+        public static final String EDIT_VIEW = "/contentType/edit";
+        
+    }
+    
 }

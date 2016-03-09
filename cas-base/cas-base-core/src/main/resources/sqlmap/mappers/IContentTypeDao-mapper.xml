@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.anttribe.cas.base.core.entity.ContentType">
+<mapper namespace="org.anttribe.cas.base.core.dao.IContentTypeDao">
 	<cache readOnly="true" />
 	<resultMap id="ContentType-resultMap" type="org.anttribe.cas.base.core.entity.ContentType">
 		<id property="id" column="id" />
@@ -57,8 +57,8 @@
 		</where>
 	</sql>
 
-	<!-- orderBy -->
-	<sql id="orderBy">
+	<!-- order-by -->
+	<sql id="order-by">
 	    <![CDATA[]]>
 	</sql>
 
@@ -83,14 +83,11 @@
 	<!-- batchInsert: 批量插入数据 -->
 	<insert id="batchInsert" parameterType="java.util.List">
 		<![CDATA[
-		    INSERT INTO cas_t_core_content_type(id, name, code)
+		    INSERT INTO cas_t_core_content_type(name, code)
 		        VALUES
 		]]>
-		<foreach collection="list" item="item" open="(" close=")"
-			separator=", ">
-			#{id},
-			#{name},
-			#{code}
+		<foreach collection="list" item="item" separator=", ">
+			(#{item.name}, #{item.code})
 		</foreach>
 	</insert>
 
@@ -110,80 +107,42 @@
 		<include refid="where-no-alias"></include>
 	</update>
 
-	<!-- batchUpdate: 批量更新数据 -->
-	<update id="batchUpdate" parameterType="java.util.List">
-		<![CDATA[
-            UPDATE cas_t_core_content_type t
-        ]]>
-		<trim prefix="set" suffixOverrides=",">
-			<trim prefix="name = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != name and name != ''">
-						when #{item.id} then #{name}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="code = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != code and code != ''">
-						when #{item.id} then #{code}
-					</if>
-				</foreach>
-			</trim>
-		</trim>
-		<![CDATA[
-            WHERE id IN 
-        ]]>
-		<foreach collection="list" separator=", " item="item" open="("
-			close=")">
-			#{item.id}
-		</foreach>
-	</update>
 
-	<!-- delete: 删除单条数据 -->
-	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.ContentType">
+	<!-- delete: 删除数据 -->
+	<delete id="delete" parameterType="Map">
 	    <![CDATA[
             DELETE FROM cas_t_core_content_type
         ]]>
 		<include refid="where-no-alias"></include>
 	</delete>
 
-	<!-- queryAll: 查询所有数据 -->
-	<select id="queryAll" resultMap="ContentType-resultMap">
+	<!-- findAll: 查询所有数据 -->
+	<select id="findAll" resultMap="ContentType-resultMap">
 		<include refid="select"></include>
-		<include refid="orderBy"></include>
+		<include refid="order-by"></include>
 	</select>
 
-	<!-- queryById: 根据id查询单条数据 -->
-	<select id="queryById" resultMap="ContentType-resultMap">
+	<!-- findById: 根据id查询单条数据 -->
+	<select id="findById" resultMap="ContentType-resultMap">
 		<include refid="select"></include>
 		<include refid="where"></include>
 	</select>
 
-	<!-- queryByCriteria: 根据条件查询数据 -->
-	<select id="queryByCriteria" resultMap="ContentType-resultMap"
+	<!-- find: 根据条件查询数据 -->
+	<select id="find" resultMap="ContentType-resultMap"
 		parameterType="Map">
 		<include refid="select"></include>
 		<include refid="where"></include>
-		<include refid="orderBy"></include>
+		<include refid="order-by"></include>
 	</select>
 
-	<!-- queryDataCount: 根据条件查询数据条数 -->
-	<select id="queryDataCount" resultType="int" parameterType="Map">
+	<!-- count: 根据条件查询数据条数 -->
+	<select id="count" resultType="int" parameterType="Map">
 		<![CDATA[
             SELECT COUNT(1)
               FROM cas_t_core_content_type t
         ]]>
 		<include refid="where"></include>
-	</select>
-
-	<!-- queryByPagination: 根据分页条件查询数据 -->
-	<select id="queryByPagination" resultMap="ContentType-resultMap"
-		parameterType="Map">
-		<include refid="select"></include>
-		<include refid="where"></include>
-		<include refid="orderBy"></include>
-		<include refid="limit"></include>
 	</select>
 
 </mapper>

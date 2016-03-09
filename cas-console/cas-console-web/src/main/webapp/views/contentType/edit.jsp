@@ -17,18 +17,18 @@
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            <span><spring:message code="app.contentType.action.add" /></span>
+                            <span><spring:message code="app.contentType.title" /></span>
                         </header>
                         <div class="panel-body">
                             <form role="form" class="cmxform data-form" method="POST">
-                                <input type="hidden" name="id" value="${contentType.id}" />
+                                <input type="hidden" name="id" value="${PARAM.id}" />
                                 <div class="form-group">
                                     <label for="name"><spring:message code="app.contentType.title.name" /></label>
-                                    <input type="text" class="form-control" id="name" name="name" maxLength="30" value="${contentType.name}" placeholder="" />
+                                    <input type="text" class="form-control" id="name" name="name" maxLength="30" value="${PARAM.name}" placeholder="<spring:message code="app.contentType.placeholder.name" />" />
                                 </div>
                                 <div class="form-group">
                                     <label for="code"><spring:message code="app.contentType.title.code" /></label>
-                                    <input type="text" class="form-control" id="code" name="code" maxLength="30" value="${contentType.code}" placeholder="" />
+                                    <input type="text" class="form-control" id="code" name="code" maxLength="30" value="${PARAM.code}" placeholder="<spring:message code="app.contentType.placeholder.code" />" />
                                 </div>
                                 <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
                                 <a href="${contextPath}/contentType/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>

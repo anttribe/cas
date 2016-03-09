@@ -65,6 +65,17 @@
 	            		}
 	            	}
 	            });
+	        	$('.action-add-child').click(function(){
+	        		e.preventDefault();
+	            	
+	            	var nTr = $(this).parents('tr');
+	            	if(nTr){
+	            		var categoryId = $(nTr).attr('data-tt-id');
+	            		if(categoryId){
+	            			location.href = contextPath + '/category/add' + '?parent.id=' + categoryId;
+	            		}
+	            	}
+	        	});
 	        	$('.action-delete').click(function(e){
 	            	e.preventDefault();
 	            	

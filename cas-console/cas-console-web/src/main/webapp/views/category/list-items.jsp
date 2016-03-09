@@ -10,8 +10,8 @@
     <tr data-tt-id="${category.id}" data-tt-parent-id="${category.parent.id}" data-tt-branch="${fn:length(category.children) > 0}">
         <td><c:out value="${category.name}" /></td>
         <td>
-            <a href="#none" class="text-primary action-edit" title="<spring:message code="app.common.action.edit" />"><i class="fa fa-edit"></i></a>
-            <a href="${contextPath}/category/add?parent.id=${category.id}" class="pl10 text-info" title="<spring:message code="app.category.action.addChild" />"><i class="fa fa-list-alt"></i></a>
+            <a href="javascript:void(0);" class="text-primary action-edit" title="<spring:message code="app.common.action.edit" />"><i class="fa fa-edit"></i></a>
+            <a href="javascript:void(0);" class="pl10 text-info action-add-child" title="<spring:message code="app.category.action.addChild" />"><i class="fa fa-list-alt"></i></a>
             <a href="javascript:void(0);" class="pl10 text-danger action-delete" title="<spring:message code="app.common.action.delete" />"><i class="fa fa-trash-o"></i></a>
         </td>
     </tr>

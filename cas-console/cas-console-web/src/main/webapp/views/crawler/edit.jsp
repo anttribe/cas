@@ -8,8 +8,8 @@
 <html lang="en_US">
     <head>
         <title><spring:message code="app.crawler.title" /></title>
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/assets/jquery-stepy/css/jquery.stepy.css" >
-        <link rel="stylesheet" type="text/css" href="${contextPath}/static/static/css/jquery.stepy.theme.custom.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/assets/jquery-stepy/css/jquery.stepy.css" >
+        <link rel="stylesheet" type="text/css" href="${contextPath}/static/css/jquery.stepy.theme.custom.css" >
     </head>
     <body>
         <div class="clearfix"></div>
@@ -19,7 +19,7 @@
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            <span><spring:message code="app.crawler.action.add" /></span>
+                            <span><spring:message code="app.crawler.title" /></span>
                         </header>
                         <div class="panel-body">
                             <div class="stepy-tab"></div>
@@ -27,24 +27,24 @@
                                 <fieldset title="<spring:message code="app.crawler.wizard.foundation" />">
                                     <legend><spring:message code="app.crawler.wizard.foundation.legend" /></legend>
                                     <div class="form-group">
-                                        <label for="title"><spring:message code="app.crawler.title.title" /></label>
+                                        <label for="title" class="control-label"><spring:message code="app.crawler.title.title" /></label>
                                         <input type="text" class="form-control" id="title" name="title" maxLength="30" placeholder="" />
                                     </div>
                                     <div class="form-group">
-                                        <label for="website"><spring:message code="app.crawler.title.website" /></label>
+                                        <label for="website" class="control-label"><spring:message code="app.crawler.title.website" /></label>
                                         <select class="form-control" id="website" name="website.id">
                                             <option value=""><spring:message code="app.common.title.select" /></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="title"><spring:message code="app.crawler.title.crawlerUrl" /></label>
+                                        <label for="title" class="control-label"><spring:message code="app.crawler.title.crawlerUrl" /></label>
                                         <input type="text" class="form-control" id="crawlerUrl" name="crawlerUrl" maxLength="500" placeholder="" />
                                     </div>
                                 </fieldset>
                                 <fieldset title="<spring:message code="app.crawler.wizard.contentAttrRegulars" />">
                                     <legend><spring:message code="app.crawler.wizard.contentAttrRegulars.legend" /></legend>
                                     <div class="form-group">
-                                        <label for="contentType"><spring:message code="app.crawler.title.contentType" /></label>
+                                        <label for="contentType" class="control-label"><spring:message code="app.crawler.title.contentType" /></label>
                                         <select class="form-control" id="contentType" name="contentType.id">
                                             <option value=""><spring:message code="app.common.title.select" /></option>
                                         </select>
@@ -54,15 +54,15 @@
                                 <fieldset title="<spring:message code="app.crawler.wizard.runtime" />">
                                     <legend><spring:message code="app.crawler.wizard.runtime.legend" /></legend>
                                     <div class="form-group">
-                                        <label for="intervalTime"><spring:message code="app.crawler.title.intervalTime" /></label>
+                                        <label for="intervalTime" class="control-label"><spring:message code="app.crawler.title.intervalTime" /></label>
                                         <input type="text" class="form-control" id="intervalTime" name="intervalTime" placeholder="" />
                                     </div>
                                     <div class="form-group">
-                                        <label for="retryTimes"><spring:message code="app.crawler.title.retryTimes" /></label>
+                                        <label for="retryTimes" class="control-label"><spring:message code="app.crawler.title.retryTimes" /></label>
                                         <input type="text" class="form-control" id="retryTimes" name="retryTimes" placeholder="" />
                                     </div>
                                     <div class="form-group">
-                                        <label for="timeout"><spring:message code="app.crawler.title.timeout" /></label>
+                                        <label for="timeout" class="control-label"><spring:message code="app.crawler.title.timeout" /></label>
                                         <input type="text" class="form-control" id="timeout" name="timeout" placeholder="" />
                                     </div>
                                 </fieldset>
@@ -75,11 +75,11 @@
         </div>
         <!--body wrapper end-->
         
-        <script type="text/javascript" src="${contextPath}/static/assets/jquery-stepy/js/jquery.stepy.min.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/static/js/website.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/static/js/contentType.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/static/js/contentAttribute.js"></script>
-        <script type="text/javascript" src="${contextPath}/static/static/js/crawler.js"></script>
+        <script type="text/javascript" src="${contextPath}/assets/jquery-stepy/js/jquery.stepy.min.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/js/website.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/js/contentType.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/js/contentAttribute.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/js/crawler.js"></script>
         <script type="text/javascript">
             $(function(){
             	// 初始化站点下拉选择

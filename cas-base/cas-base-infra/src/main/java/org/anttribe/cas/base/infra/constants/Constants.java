@@ -21,10 +21,6 @@ public class Constants
      */
     public class Common
     {
-        /**
-         * 默认的操作结果: 成功
-         */
-        public static final String DEFAULT_RESULT_CODE = "000000";
     }
     
     /**

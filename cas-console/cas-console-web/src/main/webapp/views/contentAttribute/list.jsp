@@ -16,15 +16,47 @@
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            <spring:message code="app.contentAttribute.title.list" />
+                            <spring:message code="app.contentAttribute.title" />
                             <span class="tools pull-right"></span>
                         </header>
                         <div class="panel-body">
-                            <div class="btn-group mb10">
-                                <a href="${contextPath}/contentAttribute/add" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <spring:message code="app.contentAttribute.action.add" /></a>
+                            <div class="search-body">
+                                <div class="btn-group mb10">
+                                    <a href="#none" class="btn btn-primary btn-sm action-add"><i class="fa fa-plus"></i> <spring:message code="app.contentAttribute.action.add" /></a>
+                                </div>
+                                <form id="search-form" class="form-inline pull-right" role="form" action="${contextPath}/contentAttribute/list" method="POST">
+                                    <div class="btn-group">
+					                    <input type="hidden" name="contentType.id" value="${PARAM.contentType.id}">
+					                    <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle"><i class="fa fa-list"></i>
+					                        <c:choose>
+					                            <c:when test="${null != PARAM.contentType and null != PARAM.contentType.id}">
+					                                <c:forEach items="${contentTypes}" var="contentType">
+					                                    <c:if test="${contentType.id == PARAM.contentType.id}"><c:out value="${contentType.name}" /></c:if>
+						                            </c:forEach>
+					                            </c:when>
+					                            <c:otherwise><spring:message code="app.common.title.all" /></c:otherwise>
+					                        </c:choose>
+					                    </button>
+						                <ul id="contentType-selector" class="dropdown-menu">
+						                    <li data-value=""><a href="#none"><spring:message code="app.common.title.all" /></a></li>
+						                    <c:forEach items="${contentTypes}" var="contentType">
+						                        <li data-value="${contentType.id}"><a href="#none"><c:out value="${contentType.name}" /></a></li>
+						                    </c:forEach>
+						                </ul>
+					                </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" name="name" value="<c:out value="${PARAMS.name}" />" class="form-control" placeholder="">
+                                            <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="adv-table">
-                                <table id="contentAttribute-table" class="display table table-bordered table-striped">
+                            <div class="clearfix"></div>
+                            <div class="mt10 table-responsive">
+                                <table id="contentAttribute-table" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th width="80"><spring:message code="app.common.title.serial" /></th>
@@ -40,8 +72,8 @@
                                                 <td><c:out value="${contentAttribute.name}" /></td>
                                                 <td><c:out value="${contentAttribute.contentType.name}" /></td>
                                                 <td>
-                                                    <a href="javascript:void(0);" class="text-primary edit" title="<spring:message code="app.common.action.edit" />"><i class="fa fa-edit"></i></a>
-                                                    <a href="javascript:void(0);" class="pl10 text-danger delete" title="<spring:message code="app.common.action.delete" />"><i class="fa fa-trash-o"></i></a>
+                                                    <a href="javascript:void(0);" class="text-primary action-edit" title="<spring:message code="app.common.action.edit" />"><i class="fa fa-edit"></i></a>
+                                                    <a href="javascript:void(0);" class="pl10 text-danger action-delete" title="<spring:message code="app.common.action.delete" />"><i class="fa fa-trash-o"></i></a>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -56,72 +88,77 @@
         </div>
         <!--body wrapper end-->
         
-        <script type="text/javascript" src="${contextPath}/static/static/js/contentAttribute.js"></script>
-        <script type="text/javascript">
-	        var goEditContentAttribute = function(){
-	        	var nTr = $(this).parents('tr');
-	        	if(nTr){
-	        		var contentAttributeId = $(nTr).attr('data-id');
-	        		if(contentAttributeId){
-	        			location.href = contextPath + '/contentAttribute/edit' + '?id=' + contentAttributeId;
-	        		}
-	        	}
-	        };
-	        var goDeleteContentAttribute = function(){
-	        	var nTr = $(this).parents('tr');
-	        	if(nTr){
-	        		var contentAttributeId = $(nTr).attr('data-id');
-	        		if(contentAttributeId){
-	        			BootstrapDialog.confirm({
-	        				size: BootstrapDialog.SIZE_NORMAL,
-	        				type: BootstrapDialog.TYPE_WARNING,
-	        				draggable: true,
-	        				closable: true,
-	        	            title: '<spring:message code="app.contentAttribute.delete.title" />',
-	        	            message: '<spring:message code="app.contentAttribute.delete.confirm" />',
-	        	            btnOKClass: 'btn-warning',
-	        	            callback: function(r) {
-	        	                if(r) {
-	        	                	$.ajax({
-            	                		type: 'POST',
-            	                		url: '${contextPath}/contentAttribute/delete/exec',
-            	                		data: {id: contentAttributeId},
-            	                		success: function(r){
-            	                			var result = $.parseJSON(r);
-            	                			if(result && result.resultCode){
-            	        				    	if(result.resultCode == '000000'){
-            	        				    		BootstrapDialog.alert({
-            	        				    			type: BootstrapDialog.TYPE_SUCCESS,
-            	        				    			message: '<spring:message code="app.common.title.success" />',
-            	        				    			callback: function(){
-            	        				    				location.href = '${contextPath}/contentAttribute/index';
-            	        				    			}
-            	        				    		});
-            	        				    	} else{
-            	        				    		BootstrapDialog.alert({
-            	        				    			type: BootstrapDialog.TYPE_WARNING,
-            	        				    			message: '<spring:message code="app.errorNo.000001" />'
-            	        				    		});
-            	        				    	}
-            	        				    } else{
-            	        				    	BootstrapDialog.alert({
-            	        				    		type: BootstrapDialog.TYPE_WARNING,
-            	        				    		message: '<spring:message code="app.errorNo.000001" />'
-            	    				    		});
-            	        				    }
-            	                		}
-            	                	});
-	        	                }
-	        	            }
-	        	        });
-	        		}
-	        	}
-	        };
-        </script>
+        <script type="text/javascript" src="${contextPath}/static/js/contentAttribute.js"></script>
         <script type="text/javascript">
 	        $(function(){
-	        	$('.edit', '#contentAttribute-table').click(goEditContentAttribute);
-    			$('.delete', '#contentAttribute-table').click(goDeleteContentAttribute);
+	        	$('.action-add').click(function(){
+	        		location.href = '${contextPath}/contentAttribute/add';
+	        	});
+	        	$('.action-edit', '#contentAttribute-table').click(function(){
+		        	var nTr = $(this).parents('tr');
+		        	if(nTr){
+		        		var contentAttributeId = $(nTr).attr('data-id');
+		        		if(contentAttributeId){
+		        			location.href = contextPath + '/contentAttribute/edit' + '?id=' + contentAttributeId;
+		        		}
+		        	}
+		        });
+    			$('.action-delete', '#contentAttribute-table').click(function(){
+    	        	var nTr = $(this).parents('tr');
+    	        	if(nTr){
+    	        		var contentAttributeId = $(nTr).attr('data-id');
+    	        		if(contentAttributeId){
+    	        			BootstrapDialog.confirm({
+    	        				size: BootstrapDialog.SIZE_NORMAL,
+    	        				type: BootstrapDialog.TYPE_WARNING,
+    	        				draggable: true,
+    	        				closable: true,
+    	        	            title: '<spring:message code="app.contentAttribute.delete.title" />',
+    	        	            message: '<spring:message code="app.contentAttribute.delete.confirm" />',
+    	        	            btnOKClass: 'btn-warning',
+    	        	            callback: function(r) {
+    	        	                if(r) {
+    	        	                	$.ajax({
+                	                		type: 'POST',
+                	                		url: '${contextPath}/contentAttribute/delete/exec',
+                	                		data: {id: contentAttributeId},
+                	                		success: function(r){
+                	                			var result = $.parseJSON(r);
+                	                			if(result && result.resultCode){
+                	        				    	if(result.resultCode == '000000'){
+                	        				    		BootstrapDialog.alert({
+                	        				    			type: BootstrapDialog.TYPE_SUCCESS,
+                	        				    			message: '<spring:message code="app.common.title.success" />',
+                	        				    			callback: function(){
+                	        				    				location.href = '${contextPath}/contentAttribute/index';
+                	        				    			}
+                	        				    		});
+                	        				    	} else{
+                	        				    		BootstrapDialog.alert({
+                	        				    			type: BootstrapDialog.TYPE_WARNING,
+                	        				    			message: '<spring:message code="app.errorNo.000001" />'
+                	        				    		});
+                	        				    	}
+                	        				    } else{
+                	        				    	BootstrapDialog.alert({
+                	        				    		type: BootstrapDialog.TYPE_WARNING,
+                	        				    		message: '<spring:message code="app.errorNo.000001" />'
+                	    				    		});
+                	        				    }
+                	                		}
+                	                	});
+    	        	                }
+    	        	            }
+    	        	        });
+    	        		}
+    	        	}
+    	        });
+    			
+    			$('li', '#contentType-selector').click(function(){
+    				var categoryId = $(this).attr('data-value');
+    				$('input[name="contentType.id"]').val(categoryId);
+					$('#search-form').submit();
+    			});
 	        });
 	    </script>
     </body>

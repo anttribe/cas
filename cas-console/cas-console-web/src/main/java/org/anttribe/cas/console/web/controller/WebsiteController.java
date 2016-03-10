@@ -18,6 +18,7 @@ import org.anttribe.cas.base.application.IWebsiteApplication;
 import org.anttribe.cas.base.core.entity.Category;
 import org.anttribe.cas.base.core.entity.Website;
 import org.anttribe.cas.base.infra.errorno.WebsiteErrorNo;
+import org.anttribe.vigor.infra.common.constants.Constants;
 import org.anttribe.vigor.infra.common.constants.Keys;
 import org.anttribe.vigor.infra.common.entity.Result;
 import org.anttribe.vigor.infra.common.errorno.SystemErrorNo;
@@ -114,7 +115,7 @@ public class WebsiteController extends AbstractController
                 return result;
             }
             this.websiteApplication.persistentEntity(website);
-            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
     }
@@ -129,7 +130,7 @@ public class WebsiteController extends AbstractController
             Map<String, Object> criteria = new HashMap<String, Object>();
             criteria.put("id", website.getId());
             this.websiteApplication.removeEntity(criteria);
-            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
     }

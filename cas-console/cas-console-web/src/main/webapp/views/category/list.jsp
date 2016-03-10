@@ -65,7 +65,7 @@
 	            		}
 	            	}
 	            });
-	        	$('.action-add-child').click(function(){
+	        	$('.action-add-child').click(function(e){
 	        		e.preventDefault();
 	            	
 	            	var nTr = $(this).parents('tr');

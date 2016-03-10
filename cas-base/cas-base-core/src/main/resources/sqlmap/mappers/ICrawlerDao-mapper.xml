@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.anttribe.cas.base.core.entity.Crawler">
+<mapper namespace="org.anttribe.cas.base.core.dao.ICrawlerDao">
 	<cache readOnly="true" />
 	<resultMap id="Crawler-resultMap" type="org.anttribe.cas.base.core.entity.Crawler">
 		<id property="id" column="id" />
@@ -93,9 +93,9 @@
 		</where>
 	</sql>
 
-	<!-- orderBy -->
-	<sql id="orderBy">
-	    <![CDATA[]]>
+	<!-- order-by -->
+	<sql id="order-by">
+	    <![CDATA[ ORDER BY crawl_time DESC, create_time DESC ]]>
 	</sql>
 
 	<!-- limit -->
@@ -119,23 +119,14 @@
 	<!-- batchInsert: 批量插入数据 -->
 	<insert id="batchInsert" parameterType="java.util.List">
 		<![CDATA[
-		    INSERT INTO cas_t_core_crawler(id, title, website, crawler_url, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
+		    INSERT INTO cas_t_core_crawler(title, website, crawler_url, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
 		        VALUES
 		]]>
-		<foreach collection="list" item="item" open="(" close=")"
-			separator=", ">
-			#{id},
-			#{title},
-			#{website.id},
-			#{crawlerUrl},
-			#{intervalTime},
-			#{retryTimes},
-			#{timeout},
-			#{contentType.id},
-			#{createTime},
-			#{crawlTime},
-			#{state},
-			#{available}
+		<foreach collection="list" item="item" separator=", ">
+			(#{title},
+			#{website.id}, #{crawlerUrl}, #{intervalTime}, #{retryTimes},
+			#{timeout}, #{contentType.id}, #{createTime}, #{crawlTime}, #{state},
+			#{available})
 		</foreach>
 	</insert>
 
@@ -176,129 +167,40 @@
 		<include refid="where"></include>
 	</update>
 
-	<!-- batchUpdate: 批量更新数据 -->
-	<update id="batchUpdate" parameterType="java.util.List">
-		<![CDATA[
-            UPDATE cas_t_core_crawler t
-        ]]>
-		<trim prefix="set" suffixOverrides=",">
-			<trim prefix="title = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != title and title != ''">
-						when #{item.id} then #{title}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="crawler_url = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != crawlerUrl and crawlerUrl != ''">
-						when #{item.id} then #{crawlerUrl}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="interval_time = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != intervalTime and intervalTime != ''">
-						when #{item.id} then #{intervalTime}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="retry_times = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != retryTimes and retryTimes != ''">
-						when #{item.id} then #{retryTimes}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="timeout = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != timeout and timeout != ''">
-						when #{item.id} then #{timeout}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="content_type = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != contentType and contentType.id != ''">
-						when #{item.id} then #{contentType.id}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="crawl_time = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != crawlTime and crawlTime != ''">
-						when #{item.id} then #{crawlTime}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="state = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != state and state != ''">
-						when #{item.id} then #{state}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="available = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != available and available != ''">
-						when #{item.id} then #{available}
-					</if>
-				</foreach>
-			</trim>
-		</trim>
-		<![CDATA[
-            WHERE id IN 
-        ]]>
-		<foreach collection="list" separator=", " item="item" open="("
-			close=")">
-			#{item.id}
-		</foreach>
-	</update>
-
 	<!-- delete: 删除单条数据 -->
-	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.Crawler">
+	<delete id="delete" parameterType="Map">
 	    <![CDATA[
             DELETE FROM cas_t_core_crawler
         ]]>
 		<include refid="where-no-alias"></include>
 	</delete>
 
-	<!-- queryAll: 查询所有数据 -->
-	<select id="queryAll" resultMap="Crawler-resultMap">
+	<!-- findAll: 查询所有数据 -->
+	<select id="findAll" resultMap="Crawler-resultMap">
 		<include refid="select"></include>
-		<include refid="orderBy"></include>
+		<include refid="order-by"></include>
 	</select>
 
-	<!-- queryById: 根据id查询单条数据 -->
-	<select id="queryById" resultMap="Crawler-resultMap">
-		<include refid="select"></include>
-		<include refid="where"></include>
-	</select>
-
-	<!-- queryByCriteria: 根据条件查询数据 -->
-	<select id="queryByCriteria" resultMap="Crawler-resultMap"
-		parameterType="Map">
+	<!-- findById: 根据id查询单条数据 -->
+	<select id="findById" resultMap="Crawler-resultMap">
 		<include refid="select"></include>
 		<include refid="where"></include>
-		<include refid="orderBy"></include>
 	</select>
 
-	<!-- queryDataCount: 根据条件查询数据条数 -->
-	<select id="queryDataCount" resultType="int" parameterType="Map">
+	<!-- find: 根据条件查询数据 -->
+	<select id="find" resultMap="Crawler-resultMap" parameterType="Map">
+		<include refid="select"></include>
+		<include refid="where"></include>
+		<include refid="order-by"></include>
+	</select>
+
+	<!-- count: 根据条件查询数据条数 -->
+	<select id="count" resultType="int" parameterType="Map">
 		<![CDATA[
             SELECT COUNT(1)
               FROM cas_t_core_crawler t
         ]]>
 		<include refid="where"></include>
-	</select>
-
-	<!-- queryByPagination: 根据分页条件查询数据 -->
-	<select id="queryByPagination" resultMap="Crawler-resultMap"
-		parameterType="Map">
-		<include refid="select"></include>
-		<include refid="where"></include>
-		<include refid="orderBy"></include>
-		<include refid="limit"></include>
 	</select>
 
 </mapper>

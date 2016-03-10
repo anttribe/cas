@@ -15,19 +15,19 @@
                 <div class="col-sm-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            <span><spring:message code="app.contentAttribute.action.add" /></span>
+                            <span><spring:message code="app.contentAttribute.title" /></span>
                         </header>
                         <div class="panel-body">
                             <form role="form" class="cmxform data-form" method="POST">
-                                <input type="hidden" name="id" value="${contentAttribute.id}" />
+                                <input type="hidden" name="id" value="${PARAM.id}" />
                                 <div class="form-group">
-                                    <label for="name"><spring:message code="app.contentAttribute.title.name" /></label>
-                                    <input type="text" class="form-control" id="name" name="name" maxLength="30" value="${contentAttribute.name}" placeholder="" />
+                                    <label for="name" class="control-label"><spring:message code="app.contentAttribute.title.name" /></label>
+                                    <input type="text" class="form-control" id="name" name="name" maxLength="30" value="${PARAM.name}" placeholder="" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="contentType"><spring:message code="app.contentType.title.contentType" /></label>
+                                    <label for="contentType" class="control-label"><spring:message code="app.contentType.title.contentType" /></label>
                                     <select class="form-control" id="contentType" name="contentType.id">
-                                        <option value="">---请选择---</option>
+                                        <option value=""><spring:message code="app.common.title.select" /></option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
@@ -40,10 +40,10 @@
         </div>
         <!--body wrapper end-->
         
-        <script type="text/javascript" src="${contextPath}/static/static/js/contentType.js"></script>
+        <script type="text/javascript" src="${contextPath}/static/js/contentType.js"></script>
         <script type="text/javascript">
             $(function(){
-            	var contentTypeId = '${contentAttribute.contentType.id}';
+            	var contentTypeId = '${PARAM.contentType.id}';
             	cas.contentType.listContentTypes(function(contentTypes){
             		if(contentTypes && contentTypes.length>0){
             			var $html = '';

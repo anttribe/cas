@@ -15,8 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.anttribe.cas.base.application.ICrawlerApplication;
 import org.anttribe.cas.base.core.entity.Crawler;
 import org.anttribe.cas.base.infra.errorno.CrawlerErrorNo;
+import org.anttribe.vigor.infra.common.constants.Constants;
 import org.anttribe.vigor.infra.common.constants.Keys;
 import org.anttribe.vigor.infra.common.entity.Result;
+import org.anttribe.vigor.infra.common.errorno.SystemErrorNo;
+import org.anttribe.vigor.infra.common.exception.UnifyException;
 import org.anttribe.vigor.infra.persist.entity.Pagination;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,21 +39,20 @@ public class CrawlerController
     @Autowired
     private ICrawlerApplication crawlerApplication;
     
-    @RequestMapping("/index")
+    @RequestMapping({"", "/", "/index"})
     public ModelAndView index(HttpServletRequest request, ModelAndView mv, Crawler crawler, Pagination pagination)
     {
-        return this.listCrawlers(request, mv, crawler, pagination);
+        return this.list(request, mv, crawler, pagination);
     }
     
     @RequestMapping("/list")
-    public ModelAndView listCrawlers(HttpServletRequest request, ModelAndView mv, Crawler crawler,
-        Pagination pagination)
+    public ModelAndView list(HttpServletRequest request, ModelAndView mv, Crawler crawler, Pagination pagination)
     {
         Map<String, Object> criteria = new HashMap<String, Object>();
         criteria.put("contentType", crawler.getContentType());
         pagination = crawlerApplication.listEntities(criteria, pagination);
         
-        mv.setViewName("/crawler/list");
+        mv.setViewName(Views.LIST_VIEW);
         mv.addObject(Keys.KEY_PARAM, crawler);
         mv.addObject(Keys.KEY_PAGE, pagination);
         if (null != pagination)
@@ -61,20 +63,36 @@ public class CrawlerController
     }
     
     @RequestMapping("/add")
-    public String goAddCrawler()
+    public String add()
     {
-        return "/crawler/edit";
+        return Views.ADD_VIEW;
     }
     
     @RequestMapping("/edit")
-    public String goEditCrawler()
+    public ModelAndView edit(HttpServletRequest request, ModelAndView mv, Crawler crawler)
     {
-        return "/crawler/edit";
+        if (null == crawler || null == crawler.getId())
+        {
+            throw new UnifyException(SystemErrorNo.DATA_NOT_EXIST_ERROR);
+        }
+        
+        Map<String, Object> criteria = new HashMap<String, Object>();
+        criteria.put("id", crawler.getId());
+        crawler = this.crawlerApplication.findEntity(criteria);
+        if (null == crawler || null == crawler.getId())
+        {
+            throw new UnifyException(SystemErrorNo.DATA_NOT_EXIST_ERROR);
+        }
+        
+        mv.setViewName(Views.EDIT_VIEW);
+        mv.addObject(Keys.KEY_PARAM, crawler);
+        
+        return mv;
     }
     
     @RequestMapping("/edit/exec")
     @ResponseBody
-    public Result<?> doEditCrawler(HttpServletRequest request, Crawler crawler)
+    public Result<?> doEdit(HttpServletRequest request, Crawler crawler)
     {
         Result<?> result = new Result<Object>();
         if (null != crawler)
@@ -85,15 +103,16 @@ public class CrawlerController
                 result.setResultCode(CrawlerErrorNo.CRAWLER_TITLE_UNIQUE);
                 return result;
             }
+            
             crawlerApplication.persistentEntity(crawler);
-            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
     }
     
     @RequestMapping("/delete/exec")
     @ResponseBody
-    public Result<?> doDeleteCrawler(HttpServletRequest request, Crawler crawler)
+    public Result<?> doDelete(HttpServletRequest request, Crawler crawler)
     {
         Result<?> result = new Result<Object>();
         if (null != crawler)
@@ -101,7 +120,7 @@ public class CrawlerController
             Map<String, Object> criteria = new HashMap<String, Object>();
             criteria.put("id", crawler.getId());
             crawlerApplication.removeEntity(criteria);
-            result.setResultCode(org.anttribe.cas.base.infra.constants.Constants.Common.DEFAULT_RESULT_CODE);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
     }
@@ -115,5 +134,18 @@ public class CrawlerController
             return crawlerApplication.validateTitleUnique(crawler);
         }
         return false;
+    }
+    
+    class Views
+    {
+        
+        public static final String INDEX_VIEW = "/crawler/list";
+        
+        public static final String LIST_VIEW = "/crawler/list";
+        
+        public static final String ADD_VIEW = "/crawler/edit";
+        
+        public static final String EDIT_VIEW = "/crawler/edit";
+        
     }
 }

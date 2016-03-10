@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.anttribe.cas.base.core.entity.ContentAttribute">
+<mapper namespace="org.anttribe.cas.base.core.dao.IContentAttributeDao">
 	<cache readOnly="true" />
 	<resultMap id="ContentAttribute-resultMap"
 		type="org.anttribe.cas.base.core.entity.ContentAttribute">
@@ -53,9 +53,9 @@
 		</where>
 	</sql>
 
-	<!-- orderBy -->
-	<sql id="orderBy">
-	    <![CDATA[]]>
+	<!-- order-by -->
+	<sql id="order-by">
+	    <![CDATA[ ORDER BY t.id ]]>
 	</sql>
 
 	<!-- limit -->
@@ -79,15 +79,11 @@
 	<!-- batchInsert: 批量插入数据 -->
 	<insert id="batchInsert" parameterType="java.util.List">
 		<![CDATA[
-		    INSERT INTO cas_t_core_content_attr(id, name, attr_value_type, content_type)
+		    INSERT INTO cas_t_core_content_attr(name, attr_value_type, content_type)
 		        VALUES
 		]]>
-		<foreach collection="list" item="item" open="(" close=")"
-			separator=", ">
-			#{id},
-			#{name},
-			#{attrValueType},
-			#{contentType}
+		<foreach collection="list" item="item" separator=", ">
+			(#{item.name}, #{item.attrValueType}, #{item.contentType})
 		</foreach>
 	</insert>
 
@@ -109,87 +105,41 @@
         ]]>
 	</update>
 
-	<!-- batchUpdate: 批量更新数据 -->
-	<update id="batchUpdate" parameterType="java.util.List">
-		<![CDATA[
-            UPDATE cas_t_core_content_attr t
-        ]]>
-		<trim prefix="set" suffixOverrides=",">
-			<trim prefix="name = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != name and name != ''">
-						when #{item.id} then #{name}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="attr_value_type = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != attrValueType and attrValueType != ''">
-						when #{item.id} then #{attrValueType}
-					</if>
-				</foreach>
-			</trim>
-			<trim prefix="content_type = case id" suffix="end,">
-				<foreach collection="list" item="item">
-					<if test="null != contentType and contentType != ''">
-						when #{item.id} then #{contentType}
-					</if>
-				</foreach>
-			</trim>
-		</trim>
-		<![CDATA[
-            WHERE id IN 
-        ]]>
-		<foreach collection="list" separator=", " item="item" open="("
-			close=")">
-			#{item.id}
-		</foreach>
-	</update>
-
 	<!-- delete: 删除单条数据 -->
-	<delete id="delete" parameterType="org.anttribe.cas.base.core.entity.ContentAttribute">
+	<delete id="delete" parameterType="Map">
 	    <![CDATA[
             DELETE FROM cas_t_core_content_attr
         ]]>
 		<include refid="where-no-alias"></include>
 	</delete>
 
-	<!-- queryAll: 查询所有数据 -->
-	<select id="queryAll" resultMap="ContentAttribute-resultMap">
+	<!-- findAll: 查询所有数据 -->
+	<select id="findAll" resultMap="ContentAttribute-resultMap">
 		<include refid="select"></include>
-		<include refid="orderBy"></include>
+		<include refid="order-by"></include>
 	</select>
 
-	<!-- queryById: 根据id查询单条数据 -->
-	<select id="queryById" resultMap="ContentAttribute-resultMap">
+	<!-- findById: 根据id查询单条数据 -->
+	<select id="findById" resultMap="ContentAttribute-resultMap">
 		<include refid="select"></include>
 		<include refid="where"></include>
 	</select>
 
-	<!-- queryByCriteria: 根据条件查询数据 -->
-	<select id="queryByCriteria" resultMap="ContentAttribute-resultMap"
+	<!-- find: 根据条件查询数据 -->
+	<select id="find" resultMap="ContentAttribute-resultMap"
 		parameterType="Map">
 		<include refid="select"></include>
 		<include refid="where"></include>
-		<include refid="orderBy"></include>
+		<include refid="order-by"></include>
 	</select>
 
-	<!-- queryDataCount: 根据条件查询数据条数 -->
-	<select id="queryDataCount" resultType="int" parameterType="Map">
+	<!-- count: 根据条件查询数据条数 -->
+	<select id="count" resultType="int" parameterType="Map">
 		<![CDATA[
             SELECT COUNT(1)
               FROM cas_t_core_content_attr t
         ]]>
 		<include refid="where"></include>
-	</select>
-
-	<!-- queryByPagination: 根据分页条件查询数据 -->
-	<select id="queryByPagination" resultMap="ContentAttribute-resultMap"
-		parameterType="Map">
-		<include refid="select"></include>
-		<include refid="where"></include>
-		<include refid="orderBy"></include>
-		<include refid="limit"></include>
 	</select>
 
 </mapper>

@@ -93,6 +93,10 @@
 
 		<dependency>
 			<groupId>org.anttribe.cas</groupId>
+			<artifactId>cas-base-infra</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.anttribe.cas</groupId>
 			<artifactId>cas-base-core</artifactId>
 		</dependency>
 		<dependency>
@@ -101,7 +105,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.anttribe.cas</groupId>
-			<artifactId>cas-base-infra</artifactId>
+			<artifactId>cas-base-runtime</artifactId>
 		</dependency>
 
 		<dependency>

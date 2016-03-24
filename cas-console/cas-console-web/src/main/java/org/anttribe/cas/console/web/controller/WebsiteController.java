@@ -22,6 +22,7 @@ import org.anttribe.vigor.infra.common.constants.Constants;
 import org.anttribe.vigor.infra.common.constants.Keys;
 import org.anttribe.vigor.infra.common.entity.Result;
 import org.anttribe.vigor.infra.common.errorno.SystemErrorNo;
+import org.anttribe.vigor.infra.common.exception.ServiceException;
 import org.anttribe.vigor.infra.common.exception.UnifyException;
 import org.anttribe.vigor.infra.common.web.controller.AbstractController;
 import org.anttribe.vigor.infra.persist.entity.Pagination;
@@ -73,6 +74,28 @@ public class WebsiteController extends AbstractController
         List<Category> categorys = this.categoryApplication.listEntities(new HashMap<String, Object>());
         mv.addObject("categorys", categorys);
         return mv;
+    }
+    
+    @ResponseBody
+    @RequestMapping("/list/exec")
+    public Result<?> doList(HttpServletRequest request, Website website)
+    {
+        Result<List<Website>> result = new Result<List<Website>>();
+        
+        try
+        {
+            Map<String, Object> criteria = new HashMap<String, Object>();
+            criteria.put("category", website.getCategory());
+            criteria.put("siteName", website.getSiteName());
+            List<Website> websites = websiteApplication.listEntities(criteria);
+            result.setData(websites);
+            result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
+        }
+        catch (ServiceException e)
+        {
+            result.setResultCode(e.getErrorNo());
+        }
+        return result;
     }
     
     @RequestMapping("/add")

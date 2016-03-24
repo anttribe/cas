@@ -21,6 +21,7 @@ import org.anttribe.vigor.infra.common.constants.Keys;
 import org.anttribe.vigor.infra.common.entity.Result;
 import org.anttribe.vigor.infra.common.errorno.SystemErrorNo;
 import org.anttribe.vigor.infra.common.exception.UnifyException;
+import org.anttribe.vigor.infra.common.web.controller.AbstractController;
 import org.anttribe.vigor.infra.persist.entity.Pagination;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/contentType")
-public class ContentTypeController
+public class ContentTypeController extends AbstractController
 {
     @Autowired
     private IContentTypeApplication contentTypeApplication;

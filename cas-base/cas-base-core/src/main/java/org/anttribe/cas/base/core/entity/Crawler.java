@@ -41,6 +41,16 @@ public class Crawler extends Entity
     private String crawlerUrl;
     
     /**
+     * 字符集
+     */
+    private String charset;
+    
+    /**
+     * 用户代理
+     */
+    private String userAgent;
+    
+    /**
      * 处理2个page之间的间隔时间
      */
     private Integer intervalTime;
@@ -63,7 +73,12 @@ public class Crawler extends Entity
     /**
      * 内容规则
      */
-    List<CrawlerRegular> regulars;
+    private List<CrawlerRegular> regulars;
+    
+    /**
+     * 固定规则
+     */
+    private CrawlerConstantRegular constantRegular;
     
     /**
      * 爬取数据时间
@@ -117,6 +132,26 @@ public class Crawler extends Entity
         this.crawlerUrl = crawlerUrl;
     }
     
+    public String getCharset()
+    {
+        return charset;
+    }
+    
+    public void setCharset(String charset)
+    {
+        this.charset = charset;
+    }
+    
+    public String getUserAgent()
+    {
+        return userAgent;
+    }
+    
+    public void setUserAgent(String userAgent)
+    {
+        this.userAgent = userAgent;
+    }
+    
     public Integer getIntervalTime()
     {
         return intervalTime;
@@ -165,6 +200,16 @@ public class Crawler extends Entity
     public void setRegulars(List<CrawlerRegular> regulars)
     {
         this.regulars = regulars;
+    }
+    
+    public CrawlerConstantRegular getConstantRegular()
+    {
+        return constantRegular;
+    }
+    
+    public void setConstantRegular(CrawlerConstantRegular constantRegular)
+    {
+        this.constantRegular = constantRegular;
     }
     
     public Date getCrawlTime()

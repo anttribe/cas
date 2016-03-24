@@ -7,9 +7,10 @@ $.extend(cas, {
 	        	async: false,
 	        	url: contextPath + '/website/list/exec',
 	        	data: criteria || {},
-	        	success: function(websites){
-	        		if(websites && callback){
-	        			callback.call(this, $.parseJSON(websites));
+	        	success: function(result){
+	        		if(result && callback){
+	        			var r = $.parseJSON(result);
+	        			callback.call(this, r['data']);
 	        		}
 	        	}
 	        });

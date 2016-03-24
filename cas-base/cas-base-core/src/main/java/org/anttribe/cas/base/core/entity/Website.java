@@ -37,16 +37,6 @@ public class Website extends Entity
     private String logo;
     
     /**
-     * 字符集
-     */
-    private String charset;
-    
-    /**
-     * 用户代理
-     */
-    private String userAgent;
-    
-    /**
      * 站点所属分类
      */
     private Category category;
@@ -86,26 +76,6 @@ public class Website extends Entity
     public void setLogo(String logo)
     {
         this.logo = logo;
-    }
-    
-    public String getCharset()
-    {
-        return charset;
-    }
-    
-    public void setCharset(String charset)
-    {
-        this.charset = charset;
-    }
-    
-    public String getUserAgent()
-    {
-        return userAgent;
-    }
-    
-    public void setUserAgent(String userAgent)
-    {
-        this.userAgent = userAgent;
     }
     
     public Category getCategory()

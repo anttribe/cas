@@ -36,14 +36,6 @@
                                     <input type="text" class="form-control" id="categorySelect" name="categorySelect" value="${PARAM.category.name}" placeholder="<spring:message code="app.website.placeholder.category" />" />
                                 </div>
 							    <div class="form-group">
-								    <label for="charset" class="control-label"><spring:message code="app.website.title.charset" /></label>
-								    <input type="text" class="form-control" id="charset" name="charset" maxLength="30" value="${PARAM.charset}" placeholder="<spring:message code="app.website.placeholder.charset" />" />
-							    </div>
-							    <div class="form-group">
-								    <label for="userAgent" class="control-label"><spring:message code="app.website.title.userAgent" /></label>
-								    <input type="text" class="form-control" id="userAgent" name="userAgent" maxLength="200" value="${PARAM.userAgent}" placeholder="<spring:message code="app.website.placeholder.userAgent" />" />
-							    </div>
-							    <div class="form-group">
 							        <button type="submit" class="btn btn-primary"><spring:message code="app.common.action.submit" /></button>
 							        <a href="${contextPath}/website/index" class="btn btn-default"><spring:message code="app.common.action.cancel" /></a>
 						        </div>

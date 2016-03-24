@@ -6,8 +6,10 @@
 		<id property="id" column="id" />
 		<result property="title" column="title" />
 		<result property="crawlerUrl" column="crawler_url" />
+		<result property="charset" column="charset" />
+		<result property="userAgent" column="user_agent" />
 		<result property="intervalTime" column="interval_time" />
-		<result property="retryTimes" column="retry_imes" />
+		<result property="retryTimes" column="retry_times" />
 		<result property="timeout" column="timeout" />
 		<result property="createTime" column="create_time" />
 		<result property="crawlTime" column="crawl_time" />
@@ -24,40 +26,16 @@
 			<id property="id" column="content_type_id" />
 			<id property="name" column="content_type_name" />
 		</association>
-	</resultMap>
-
-	<resultMap id="Crawler-detail-resultMap" type="org.anttribe.cas.base.core.entity.Crawler">
-		<id property="id" column="id" />
-		<result property="title" column="title" />
-		<result property="crawlerUrl" column="crawler_url" />
-		<result property="intervalTime" column="interval_time" />
-		<result property="retryTimes" column="retry_imes" />
-		<result property="timeout" column="timeout" />
-		<result property="createTime" column="create_time" />
-		<result property="crawlTime" column="crawl_time" />
-		<result property="available" column="available" />
-		<result property="state" column="state"
-			javaType="org.anttribe.cas.base.core.type.CrawlerState" />
-		<association property="website"
-			javaType="org.anttribe.cas.base.core.entity.Website">
-			<id property="id" column="website_id" />
-			<result property="name" column="website_name" />
-		</association>
-		<association property="contentType"
-			javaType="org.anttribe.cas.base.core.entity.ContentType">
-			<id property="id" column="content_type_id" />
-			<id property="name" column="content_type_name" />
-		</association>
-		<collection property="regulars"
-			javaType="org.anttribe.cas.base.core.entity.CrawlerRegular" ofType="java.lang.List"
-			column="{crawler = id}" select="">
+		<collection property="regulars" javaType="java.util.ArrayList"
+			ofType="org.anttribe.cas.base.core.entity.CrawlerRegular" column="{crawler.id = id}"
+			select="org.anttribe.cas.base.core.dao.ICrawlerRegularDao.find">
 		</collection>
 	</resultMap>
 
 	<!-- select -->
 	<sql id="select">
         <![CDATA[
-            SELECT t.id, t.title, t.website, t.crawler_url, t.interval_time, t.retry_times, t.timeout, t.content_type, t.create_time, t.crawl_time, t.state, t.available, t1.id as website_id, t1.site_name as website_name, t2.id as content_type_id, t2.name as content_type_name
+            SELECT t.id, t.title, t.website, t.crawler_url, t.charset, t.user_agent, t.interval_time, t.retry_times, t.timeout, t.content_type, t.create_time, t.crawl_time, t.state, t.available, t1.id as website_id, t1.site_name as website_name, t2.id as content_type_id, t2.name as content_type_name
               FROM cas_t_core_crawler t
             LEFT JOIN cas_t_core_website t1 on t1.id = t.website
             LEFT JOIN cas_t_core_content_type t2 on t2.id = t.content_type
@@ -111,60 +89,61 @@
 		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
 		</selectKey>
 		<![CDATA[
-		    INSERT INTO cas_t_core_crawler(title, website, crawler_url, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
-		        VALUES(#{title}, #{website.id}, #{crawlerUrl}, #{intervalTime}, #{retryTimes}, #{timeout}, #{contentType.id}, #{createTime}, #{crawlTime}, #{state}, #{available})
+		    INSERT INTO cas_t_core_crawler(title, website, crawler_url, charset, user_agent, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
+		        VALUES(#{title}, #{website.id}, #{crawlerUrl}, #{charset}, #{userAgent}, #{intervalTime}, #{retryTimes}, #{timeout}, #{contentType.id}, #{createTime}, #{crawlTime}, #{state}, #{available})
 		]]>
 	</insert>
 
 	<!-- batchInsert: 批量插入数据 -->
 	<insert id="batchInsert" parameterType="java.util.List">
 		<![CDATA[
-		    INSERT INTO cas_t_core_crawler(title, website, crawler_url, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
+		    INSERT INTO cas_t_core_crawler(title, website, crawler_url, charset, user_agent, interval_time, retry_times, timeout, content_type, create_time, crawl_time, state, available)
 		        VALUES
 		]]>
 		<foreach collection="list" item="item" separator=", ">
-			(#{title},
-			#{website.id}, #{crawlerUrl}, #{intervalTime}, #{retryTimes},
-			#{timeout}, #{contentType.id}, #{createTime}, #{crawlTime}, #{state},
-			#{available})
+			<![CDATA[
+			    (#{title}, #{website.id}, #{crawlerUrl}, #{item.charset}, #{item.userAgent}, #{intervalTime}, #{retryTimes}, #{timeout}, #{contentType.id}, #{createTime}, #{crawlTime}, #{state}, #{available})
+			]]>
 		</foreach>
 	</insert>
 
 	<!-- update: 更新单条数据 -->
 	<update id="update" parameterType="org.anttribe.cas.base.core.entity.Crawler">
         <![CDATA[
-            UPDATE cas_t_core_crawler t
+            UPDATE cas_t_core_crawler
         ]]>
 		<set>
 			<if test="null != title and title != ''">
-				t.title = #{title}
+				title = #{title},
 			</if>
 			<if test="null != crawlerUrl and crawlerUrl != ''">
-				t.crawler_url = #{crawlerUrl}
+				crawler_url = #{crawlerUrl},
 			</if>
+			charset = #{charset},
+			user_agent = #{userAgent},
 			<if test="null != intervalTime and intervalTime != ''">
-				t.interval_time = #{intervalTime}
+				interval_time = #{intervalTime},
 			</if>
 			<if test="null != retryTimes and retryTimes != ''">
-				t.retry_times = #{retryTimes}
+				retry_times = #{retryTimes},
 			</if>
 			<if test="null != timeout and timeout != ''">
-				t.timeout = #{timeout}
+				timeout = #{timeout},
 			</if>
 			<if test="null != contentType and contentType.id != ''">
-				t.content_type = #{contentType.id}
+				content_type = #{contentType.id},
 			</if>
 			<if test="null != crawlTime and crawlTime != ''">
-				t.crawl_time = #{crawlTime}
+				crawl_time = #{crawlTime},
 			</if>
 			<if test="null != state and state != ''">
-				t.state = #{state}
+				state = #{state},
 			</if>
 			<if test="null != available and available != ''">
-				t.available = #{available}
+				available = #{available},
 			</if>
 		</set>
-		<include refid="where"></include>
+		<include refid="where-no-alias"></include>
 	</update>
 
 	<!-- delete: 删除单条数据 -->

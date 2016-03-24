@@ -7,8 +7,6 @@
 		<result property="siteName" column="site_name" />
 		<result property="domain" column="domain" />
 		<result property="logo" column="logo" />
-		<result property="charset" column="charset" />
-		<result property="userAgent" column="user_agent" />
 		<result property="createTime" column="create_time" />
 		<association property="category"
 			javaType="org.anttribe.cas.base.core.entity.Category" column="{id=category_id}"
@@ -19,7 +17,7 @@
 	<!-- select -->
 	<sql id="select">
         <![CDATA[
-            SELECT t.id, t.site_name, t.domain, t.logo, t.charset, t.user_agent, t.category_id, t.create_time
+            SELECT t.id, t.site_name, t.domain, t.logo, t.category_id, t.create_time
               FROM cas_t_core_website t
         ]]>
 	</sql>
@@ -84,20 +82,21 @@
 		    <![CDATA[ SELECT LAST_INSERT_ID() ]]>
 		</selectKey>
 		<![CDATA[
-		    INSERT INTO cas_t_core_website(site_name, domain, logo, charset, user_agent, category_id, create_time)
-		        VALUES(#{siteName}, #{domain}, #{logo}, #{charset}, #{userAgent}, #{category.id}, #{createTime})
+		    INSERT INTO cas_t_core_website(site_name, domain, logo, category_id, create_time)
+		        VALUES(#{siteName}, #{domain}, #{logo}, #{category.id}, #{createTime})
 		]]>
 	</insert>
 
 	<!-- batchInsert: 批量插入数据 -->
 	<insert id="batchInsert" parameterType="java.util.List">
 		<![CDATA[
-		    INSERT INTO cas_t_core_website(site_name, domain, logo, charset, user_agent, category_id, create_time)
+		    INSERT INTO cas_t_core_website(site_name, domain, logo, category_id, create_time)
 		        VALUES
 		]]>
 		<foreach collection="list" item="item" separator=", ">
-			(#{item.siteName}, #{item.domain}, #{item.logo}, #{item.charset},
-			#{item.userAgent}, #{item.category.id}, #{item.createTime})
+			<![CDATA[
+			    (#{item.siteName}, #{item.domain}, #{item.logo}, #{item.category.id}, #{item.createTime})
+			]]>
 		</foreach>
 	</insert>
 
@@ -114,8 +113,6 @@
 				t.domain = #{domain},
 			</if>
 			t.logo = #{logo},
-			t.charset = #{charset},
-			t.user_agent = #{userAgent},
 			<if test="null != category and null != category.id and category.id != ''">
 				t.category_id = #{category.id},
 			</if>

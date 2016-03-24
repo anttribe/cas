@@ -31,6 +31,7 @@
 		<mysql.version>5.1.22</mysql.version>
 		<jstl.version>1.2</jstl.version>
 		<junit.version>4.11</junit.version>
+		<webmagic.version>0.5.2</webmagic.version>
 	</properties>
 
 	<build>
@@ -177,6 +178,13 @@
 				<version>${mysql.version}</version>
 			</dependency>
 
+			<!-- webmagic -->
+			<dependency>
+				<groupId>us.codecraft</groupId>
+				<artifactId>webmagic-core</artifactId>
+				<version>${webmagic.version}</version>
+			</dependency>
+
 			<!-- vigor-framework -->
 			<dependency>
 				<groupId>org.anttribe.vigor.vigor-infra</groupId>
@@ -208,6 +216,28 @@
 				<groupId>org.anttribe.vigor.vigor-defensor</groupId>
 				<artifactId>vigor-defensor-auth</artifactId>
 				<version>${vigor.version}</version>
+			</dependency>
+
+			<!-- cas -->
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-infra</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-application</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.anttribe.cas</groupId>
+				<artifactId>cas-base-runtime</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>

@@ -63,10 +63,10 @@
                                                 <td>
                                                     <a href="#none" class="text-primary action-edit" title="<spring:message code="app.common.action.edit" />"><i class="fa fa-edit"></i></a>
                                                     <c:if test="${crawler.state == 'INIT' or crawler.state == 'STOP'}">
-                                                        <a href="#none" class="pl10 text-success startup" title="<spring:message code="app.common.action.startup" />"><i class="fa fa-play"></i></a>
+                                                        <a href="#none" class="pl10 text-success action-startup" title="<spring:message code="app.common.action.startup" />"><i class="fa fa-play"></i></a>
                                                     </c:if>
                                                     <c:if test="${crawler.state == 'RUNNING'}">
-                                                        <a href="#none" class="pl10 text-warning pause" title="<spring:message code="app.common.action.pause" />"><i class="fa fa-pause"></i></a>
+                                                        <a href="#none" class="pl10 text-warning action-stop" title="<spring:message code="app.common.action.stop" />"><i class="fa fa-pause"></i></a>
                                                     </c:if>
                                                     <a href="#none" class="pl10 text-danger action-delete" title="<spring:message code="app.common.action.delete" />"><i class="fa fa-trash-o"></i></a>
                                                 </td>
@@ -139,6 +139,26 @@
                 	            }
                 	        });
                 		}
+	            	}
+	        	});
+	        	$('.action-startup').click(function(e){
+	        		e.preventDefault();
+	        		var nTr = $(this).parents('tr');
+	            	if(nTr){
+	            		var crawlerId = $(this).parents('tr').attr('data-id');
+	            		if(crawlerId){
+	            			cas.crawler.startup({id: crawlerId});
+	            		}
+	            	}
+	        	});
+	        	$('.action-stop').click(function(e){
+	        		e.preventDefault();
+	        		var nTr = $(this).parents('tr');
+	            	if(nTr){
+	            		var crawlerId = $(this).parents('tr').attr('data-id');
+	            		if(crawlerId){
+	            			cas.crawler.stop({id: crawlerId});
+	            		}
 	            	}
 	        	});
 	        });

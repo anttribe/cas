@@ -14,12 +14,10 @@ import java.util.Map;
 import org.anttribe.cas.base.application.IWebsiteApplication;
 import org.anttribe.cas.base.core.dao.IWebsiteDao;
 import org.anttribe.cas.base.core.entity.Website;
-import org.anttribe.cas.base.infra.constants.Constants;
 import org.anttribe.vigor.infra.common.service.AbstractServiceImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author zhaoyong
@@ -28,18 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class WebsiteApplicationImpl extends AbstractServiceImpl<IWebsiteDao, Website> implements IWebsiteApplication
 {
-    
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void persistentEntity(Website entity)
-    {
-        if (StringUtils.isEmpty(entity.getCharset()))
-        {
-            entity.setCharset(Constants.Website.DEFAULT_CHARSET);
-        }
-        
-        super.persistentEntity(entity);
-    }
     
     @Override
     public boolean validateNameUnique(Website website)

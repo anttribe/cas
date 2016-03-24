@@ -15,6 +15,7 @@
 		<module>cas-base-core</module>
 		<module>cas-base-infra</module>
 		<module>cas-base-application</module>
+		<module>cas-base-runtime</module>
 	</modules>
 
 	<properties>

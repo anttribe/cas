@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2016/3/9 14:51:35                            */
+/* Created on:     2016/3/21 15:43:26                           */
 /*==============================================================*/
 
 
@@ -102,6 +102,8 @@ create table cas_t_core_crawler
    title                varchar(128) comment '名称，描述性文字',
    website              varchar(8) comment '所属站点',
    crawler_url          varchar(512) not null comment '爬虫url地址',
+   charset              varchar(16) comment '字符集',
+   user_agent           varchar(128) comment '用户代理',
    content_type         varchar(16) comment '内容类型',
    interval_time        int comment '处理2个page之间的间隔时间',
    retry_times          int comment '处理失败之后的重复次数',
@@ -138,8 +140,6 @@ create table cas_t_core_website
    site_name            varchar(128) not null comment '站点名称',
    domain               varchar(512) comment '网站域名',
    logo                 varchar(64) comment '图标',
-   charset              varchar(16) comment '字符集',
-   user_agent           varchar(128) comment '用户代理',
    category_id          varchar(32) comment '站点所属分类',
    create_time          datetime comment '创建时间',
    primary key (id)

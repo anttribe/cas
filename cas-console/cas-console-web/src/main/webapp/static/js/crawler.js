@@ -51,7 +51,7 @@ $.extend(cas, {
 						$html += '<div class="form-group">'
 							   + '<label class="control-label">' + (regular['attribute'] && regular['attribute']['name']) + '</label>'
 							   + '<input type="hidden" name="regulars[' + i + '].id" value="' + (regular['id'] || '') + '" />'
-							   + '<input type="hidden" name="regulars[' + i + '].attribute" value="' + (regular['attribute'] && regular['attribute']['id']) + '" />'
+							   + '<input type="hidden" name="regulars[' + i + '].contentAttr.id" value="' + (regular['attribute'] && regular['attribute']['id']) + '" />'
 							   + '<input type="text" class="form-control" name="regulars[' + i + '].regular" value="' + (regular['regular'] || '') + '" placeholder="" />'
 							   + '</div>';
 					}
@@ -61,6 +61,42 @@ $.extend(cas, {
 			$('#contentAttrRegulars').empty();
 			if($html){
 				$('#contentAttrRegulars').append($html);
+			}
+		},
+		startup: function(_crawler){
+			if(_crawler && _crawler['id']){
+				$.ajax({
+            		type: 'POST',
+            		url: contextPath + '/crawler/startup/exec',
+            		data: {id: _crawler['id']},
+            		success: function(r){
+            			var result = $.parseJSON(r);
+            			if(result && result.resultCode){
+    				    	if(result.resultCode == '000000'){
+    				    		location.href = contextPath + '/crawler/list';
+    				    	}
+    				    }
+            		}
+            	});
+			}
+		},
+		stop: function(_crawler){
+			if(_crawler && _crawler['id']){
+				$.ajax({
+            		type: 'POST',
+            		url: contextPath + '/crawler/stop/exec',
+            		data: {id: _crawler['id']},
+            		success: function(r){
+            			var result = $.parseJSON(r);
+            			if(result && result.resultCode){
+    				    	if(result.resultCode == '000000'){
+    				    		location.href = contextPath + '/crawler/list';
+    				    	} else{
+    				    	}
+    				    } else{
+    				    }
+            		}
+            	});
 			}
 		}
 	}

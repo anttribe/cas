@@ -14,12 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.anttribe.cas.base.application.ICrawlerApplication;
 import org.anttribe.cas.base.core.entity.Crawler;
+import org.anttribe.cas.base.core.type.CrawlerState;
 import org.anttribe.cas.base.infra.errorno.CrawlerErrorNo;
+import org.anttribe.cas.base.runtime.SpiderManager;
 import org.anttribe.vigor.infra.common.constants.Constants;
 import org.anttribe.vigor.infra.common.constants.Keys;
 import org.anttribe.vigor.infra.common.entity.Result;
 import org.anttribe.vigor.infra.common.errorno.SystemErrorNo;
 import org.anttribe.vigor.infra.common.exception.UnifyException;
+import org.anttribe.vigor.infra.common.web.controller.AbstractController;
 import org.anttribe.vigor.infra.persist.entity.Pagination;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +37,13 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/crawler")
-public class CrawlerController
+public class CrawlerController extends AbstractController
 {
     @Autowired
     private ICrawlerApplication crawlerApplication;
+    
+    @Autowired
+    private SpiderManager spiderManager;
     
     @RequestMapping({"", "/", "/index"})
     public ModelAndView index(HttpServletRequest request, ModelAndView mv, Crawler crawler, Pagination pagination)
@@ -105,6 +111,9 @@ public class CrawlerController
             }
             
             crawlerApplication.persistentEntity(crawler);
+            // 添加爬虫
+            spiderManager.addSpider(crawler);
+            
             result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
         }
         return result;
@@ -120,7 +129,57 @@ public class CrawlerController
             Map<String, Object> criteria = new HashMap<String, Object>();
             criteria.put("id", crawler.getId());
             crawlerApplication.removeEntity(criteria);
+            // 移除爬虫
+            spiderManager.removeSprider(crawler);
+            
             result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
+        }
+        return result;
+    }
+    
+    @RequestMapping("/startup/exec")
+    @ResponseBody
+    public Result<?> doStartup(HttpServletRequest request, Crawler crawler)
+    {
+        Result<?> result = new Result<Object>();
+        if (null != crawler)
+        {
+            // 启动爬虫
+            boolean r = spiderManager.startSprider(crawler);
+            if (r)
+            {
+                // 启动成功之后，更改爬虫状态
+                crawler.setState(CrawlerState.RUNNING);
+                crawlerApplication.persistentEntity(crawler);
+                
+                result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
+                return result;
+            }
+            result.setResultCode(CrawlerErrorNo.CRAWLER_STARTUP_ERROR);
+        }
+        return result;
+    }
+    
+    @RequestMapping("/stop/exec")
+    @ResponseBody
+    public Result<?> doStop(HttpServletRequest request, Crawler crawler)
+    {
+        Result<?> result = new Result<Object>();
+        if (null != crawler)
+        {
+            // 停止爬虫
+            boolean r = spiderManager.stopSprider(crawler);
+            if (r)
+            {
+                // 停止成功之后，更改爬虫状态
+                crawler.setState(CrawlerState.STOP);
+                crawlerApplication.persistentEntity(crawler);
+                
+                result.setResultCode(Constants.Common.DEFAULT_RESULT_CODE);
+                
+                return result;
+            }
+            result.setResultCode(CrawlerErrorNo.CRAWLER_STOP_ERROR);
         }
         return result;
     }

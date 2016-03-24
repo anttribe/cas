@@ -28,7 +28,7 @@
                                     <legend><spring:message code="app.crawler.wizard.foundation.legend" /></legend>
                                     <div class="form-group">
                                         <label for="title" class="control-label"><spring:message code="app.crawler.title.title" /></label>
-                                        <input type="text" class="form-control" id="title" name="title" maxLength="30" placeholder="" />
+                                        <input type="text" class="form-control" id="title" name="title" value="${PARAM.title}" maxLength="30" placeholder="" />
                                     </div>
                                     <div class="form-group">
                                         <label for="website" class="control-label"><spring:message code="app.crawler.title.website" /></label>
@@ -40,6 +40,14 @@
                                         <label for="title" class="control-label"><spring:message code="app.crawler.title.crawlerUrl" /></label>
                                         <input type="text" class="form-control" id="crawlerUrl" name="crawlerUrl" maxLength="500" placeholder="" />
                                     </div>
+                                    <div class="form-group">
+								        <label for="charset" class="control-label"><spring:message code="app.website.title.charset" /></label>
+								        <input type="text" class="form-control" id="charset" name="charset" maxLength="30" value="${PARAM.charset}" placeholder="<spring:message code="app.website.placeholder.charset" />" />
+							        </div>
+							        <div class="form-group">
+								        <label for="userAgent" class="control-label"><spring:message code="app.website.title.userAgent" /></label>
+								        <input type="text" class="form-control" id="userAgent" name="userAgent" maxLength="200" value="${PARAM.userAgent}" placeholder="<spring:message code="app.website.placeholder.userAgent" />" />
+							        </div>
                                 </fieldset>
                                 <fieldset title="<spring:message code="app.crawler.wizard.contentAttrRegulars" />">
                                     <legend><spring:message code="app.crawler.wizard.contentAttrRegulars.legend" /></legend>

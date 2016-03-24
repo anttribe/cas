@@ -31,10 +31,6 @@ public class Constants
      */
     public class Website
     {
-        /**
-         * 默认字符集
-         */
-        public static final String DEFAULT_CHARSET = "UTF-8";
     }
     
     /**
@@ -45,6 +41,11 @@ public class Constants
      */
     public class Crawler
     {
+        /**
+         * 默认字符集
+         */
+        public static final String DEFAULT_CHARSET = "UTF-8";
+        
         /**
          * 默认处理2个page之间的间隔时间
          */

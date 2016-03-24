@@ -1,9 +1,0 @@
-@charset "utf-8";
-#sidebar { width: 80px!important; height: 100%!important; min-height: 0; overflow-y: auto; position: fixed; border-radius: 0 !important; margin-bottom: 0; padding-bottom: 0; background: #333; }
-
-.nav-canvas { width: 100%; height: 100%; }
-.nav-canvas li { float: none; -webkit-transition: .3s; -moz-transition: .3s; -ms-transition: .3s; -o-transition: .3s; transition: .3s; }
-.nav-canvas li a { height: 60px!important; text-align: center; margin: 0 auto; padding: 10px; vertical-align: middle; border-radius: 0 !important; color: rgba(255,255,255,.8); }
-.nav-canvas>li>a>i.icon{ display: block; margin: 4px auto; font-size: 16px; font-weight: 400; color: #fff; vertical-align: middle; text-align: center; }
-.nav-canvas>li>a>span{ padding: 0 6px; color: rgba(255,255,255,.8); }
-.nav-canvas li a:hover,.nav-canvas li a.active,.nav-canvas li.active { background-color: rgba(255,255,255,.3); }

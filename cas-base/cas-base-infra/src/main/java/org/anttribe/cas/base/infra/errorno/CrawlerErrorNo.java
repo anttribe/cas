@@ -24,4 +24,15 @@ public final class CrawlerErrorNo
      * 爬虫名唯一
      */
     public static final String CRAWLER_TITLE_UNIQUE = MODULE_NO + "0001";
+    
+    /**
+     * 启动爬虫失败
+     */
+    public static final String CRAWLER_STARTUP_ERROR = MODULE_NO + "0002";
+    
+    /**
+     * 停止爬虫失败
+     */
+    public static final String CRAWLER_STOP_ERROR = MODULE_NO + "0003";
+    
 }
